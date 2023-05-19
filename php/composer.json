@@ -9,19 +9,21 @@
   ],
   "type": "application",
   "require": {
-    "oxil/kinikit-cli": "dev-main"
+    "oxil/kinikit-cli": "dev-main",
+    "asm/php-ansible": "dev-main",
+    "mathieuviossat/arraytotexttable": "dev-master"
   },
   "config": {
     "source-directory": "src",
     "test-directory": "test"
   },
   "scripts": {
-    "dev": "rm -rf vendor/oxil/kini*; ln -s ../../../kinikit/kinikit-core vendor/oxil/kinikit-core; ln -s ../../../kinikit/kinikit-cli vendor/oxil/kinikit-cli;"
+    "dev": "rm -rf vendor/oxil/kini*; ln -s ../../../../kinikit/kinikit-core vendor/oxil/kinikit-core; ln -s ../../../../kinikit/kinikit-cli vendor/oxil/kinikit-cli;"
   },
   "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
-      "resolvertest\\": "src/"
+      "resolvertest\\": "php/src/"
     }
   }
 }

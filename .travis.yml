@@ -1,5 +1,5 @@
 language: php
 php:
   - '8.1'
-before_script: composer install; composer update; cd test
+before_script: cd php; composer install; composer update; cd test
 script: phpunit .
