@@ -55,6 +55,8 @@ class Test {
     const STATUS_PENDING = "Pending";
     const STATUS_ACTIVE = "Active";
     const STATUS_COMPLETED = "Completed";
+    const STATUS_INSTALLING = "Installing";
+    const STATUS_UNINSTALLING = "Uninstalling";
 
     /**
      * @param string $key

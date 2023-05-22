@@ -73,7 +73,12 @@ class TestService {
      */
     public function createTest($test) {
 
+        // Validate the test for general correctness
         $test->validate();
+
+        // Validate the configuration using the manager instance
+        $manager = Container::instance()->getInterfaceImplementation(TestManager::class, $test->getType());
+        $manager->validateConfig($test);
 
         // Ensure start is not in the past
         if ($test->getStarts() < date("Y-m-d H:i:s")) {
@@ -165,6 +170,9 @@ class TestService {
                 $testManager = Container::instance()->getInterfaceImplementation(TestManager::class, $test->getType());
                 $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
 
+                $test->setStatus(Test::STATUS_INSTALLING);
+                $this->updateTest($test);
+
                 $server->performOperations($testManager->install($test));
 
                 $test->setStatus(Test::STATUS_ACTIVE);
@@ -175,6 +183,9 @@ class TestService {
 
                 $testManager = Container::instance()->getInterfaceImplementation(TestManager::class, $test->getType());
                 $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
+
+                $test->setStatus(Test::STATUS_UNINSTALLING);
+                $this->updateTest($test);
 
                 $server->performOperations($testManager->uninstall($test));
 

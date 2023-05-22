@@ -98,6 +98,8 @@ class TestServiceTest extends TestCase {
         $test = new Test("testKey", "testType", "oxil.co.uk", null, $date1, $date2, null, ["arg1" => "this", "arg2" => "that"]);
         $this->testService->createTest($test);
 
+        $this->assertTrue($this->testManager->methodWasCalled("validateConfig"));
+
         $this->assertTrue(file_exists($path));
         $this->assertEquals('{"key":"testKey","type":"testType","domainName":"oxil.co.uk","description":null,"starts":"'.$date1.'","expires":"'.$date2.'","status":"Pending","testData":{"arg1":"this","arg2":"that"}}', file_get_contents($path));
     }

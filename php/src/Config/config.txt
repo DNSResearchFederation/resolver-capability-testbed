@@ -3,7 +3,8 @@
 application.name = Resolver Test
 application.namespace = ResolverTest
 
+config.root = /usr/local/etc
+
 search.paths = ../vendor/oxil/kinikit-cli/php/src;
 
 storage.root = /var/lib/resolvertest
-

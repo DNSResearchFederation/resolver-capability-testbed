@@ -1,3 +1,5 @@
+config.root = Storage
+
 storage.root = Storage
 
 server.key = test

@@ -27,3 +27,5 @@ rm -f /usr/local/bin/resolvertest
 ln -s /usr/local/src/resolvertest/src/resolvertest-linux.php /usr/local/bin/resolvertest
 mkdir -p /var/lib/resolvertest/tests
 chmod 777 /var/lib/resolvertest/tests
+mkdir -p /usr/local/etc
+chmod 777 /usr/local/etc

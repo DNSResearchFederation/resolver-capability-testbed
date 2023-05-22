@@ -18,4 +18,10 @@ interface TestManager {
      */
     public function uninstall($test);
 
+    /**
+     * @param Test $test
+     * @return mixed
+     */
+    public function validateConfig($test);
+
 }
