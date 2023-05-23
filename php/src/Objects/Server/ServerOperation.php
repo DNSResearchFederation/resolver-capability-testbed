@@ -2,6 +2,8 @@
 
 namespace ResolverTest\Objects\Server;
 
+use ResolverTest\Objects\Server\Config\OperationConfig;
+
 class ServerOperation {
 
     /**
@@ -10,20 +12,20 @@ class ServerOperation {
     private $mode;
 
     /**
-     * @var mixed
+     * @var OperationConfigq
      */
-    private $object;
+    private $config;
 
     const OPERATION_ADD = "add";
     const OPERATION_REMOVE = "remove";
 
     /**
      * @param string $mode
-     * @param mixed $object
+     * @param OperationConfig $config
      */
-    public function __construct($mode, $object) {
+    public function __construct($mode, $config) {
         $this->mode = $mode;
-        $this->object = $object;
+        $this->config = $config;
     }
 
     /**
@@ -41,17 +43,17 @@ class ServerOperation {
     }
 
     /**
-     * @return mixed
+     * @return OperationConfig
      */
-    public function getObject() {
-        return $this->object;
+    public function getConfig() {
+        return $this->config;
     }
 
     /**
-     * @param mixed $object
+     * @param OperationConfig $config
      */
-    public function setObject($object) {
-        $this->object = $object;
+    public function setConfig($config) {
+        $this->config = $config;
     }
 
 }

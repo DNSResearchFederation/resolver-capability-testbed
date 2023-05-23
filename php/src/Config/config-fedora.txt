@@ -1,0 +1,14 @@
+# Config file for Resolver Test
+
+application.name = Resolver Test
+application.namespace = ResolverTest
+
+search.paths = ../vendor/oxil/kinikit-cli/php/src;
+
+# resolver test config options
+config.root = /usr/local/etc
+storage.root = /var/lib/resolvertest
+
+server.key = linux
+server.bind.config.dir =
+server.httpd.config.dir = /etc/httpd/conf.d

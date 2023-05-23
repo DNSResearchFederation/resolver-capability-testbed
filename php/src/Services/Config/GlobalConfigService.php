@@ -25,7 +25,16 @@ class GlobalConfigService extends ConfigFile {
     }
 
     public function setIPv6Address($value) {
-        $this->addParameter("ipv4.address", $value);
+        $this->addParameter("ipv6.address", $value);
+        $this->save();
+    }
+
+    public function getNameservers() {
+        return explode(",", $this->getParameter("nameservers"));
+    }
+
+    public function setNameservers($value) {
+        $this->addParameter("nameservers", $value);
         $this->save();
     }
 }

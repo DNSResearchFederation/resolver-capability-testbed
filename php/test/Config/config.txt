@@ -1,5 +1,8 @@
 config.root = Storage
-
 storage.root = Storage
 
+search.paths = ../src
+
 server.key = test
+server.bind.config.dir = Storage/bind
+server.httpd.config.dir = Storage/httpd
