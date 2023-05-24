@@ -1,0 +1,4 @@
+<VirtualHost *:80>
+  ServerName *.{{operationConfig.hostname}}
+  DocumentRoot {{serverWebRoot}}/{{operationConfig.hostname}}
+</VirtualHost>

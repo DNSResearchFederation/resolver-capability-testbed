@@ -2,6 +2,8 @@
 
 namespace ResolverTest\Objects\Server\Config;
 
+use Kinikit\CLI\Commands\Pull;
+
 class DNSRecord {
 
     /**
@@ -83,7 +85,13 @@ class DNSRecord {
      * @return string
      */
     public function getData() {
-        return $this->data;
+        if ($this->getType() == "TXT") {
+            return "\"{$this->data}\"";
+        } else if (preg_match("/[a-z]/", $this->data)) {
+            return $this->data . ".";
+        } else {
+            return $this->data;
+        }
     }
 
     /**

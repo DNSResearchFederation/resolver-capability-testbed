@@ -14,10 +14,11 @@ class ConfigUpdate extends BaseConfigCommand {
     /**
      * @param string $ipv4Address @option The IPv6 address
      * @param string $ipv6Address @option The IPv6 address
+     * @param string $nameservers @option Nameservers for the testbed
      *
      * @return void
      */
-    public function handleCommand($ipv4Address = null, $ipv6Address = null) {
+    public function handleCommand($ipv4Address = null, $ipv6Address = null, $nameservers = null) {
 
         if ($ipv4Address) {
             if (!filter_var($ipv4Address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
@@ -33,6 +34,9 @@ class ConfigUpdate extends BaseConfigCommand {
             $this->configService->setIPv6Address($ipv6Address);
         }
 
+        if ($nameservers) {
+            $this->configService->setNameservers($nameservers);
+        }
     }
 
 }

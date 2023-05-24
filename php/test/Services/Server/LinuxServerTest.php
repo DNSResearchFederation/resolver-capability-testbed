@@ -7,6 +7,7 @@ use Kinikit\Core\DependencyInjection\Container;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Objects\Server\Config\DNSRecord;
 use ResolverTest\Objects\Server\Config\DNSZone;
+use ResolverTest\Objects\Server\Config\WebServerVirtualHost;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
 
@@ -36,9 +37,10 @@ class LinuxServerTest extends TestCase {
         $this->configService->setIPv6Address("2001::1234");
 
         $dnsRecords = [
-            new DNSRecord("*", 200, "AAAA", "2001::1234"),
-            new DNSRecord("*", 300, "A", "1.2.3.4"),
-            new DNSRecord("*", 250, "MX", "mai.testdomain.com")
+            new DNSRecord("", 300, "A", "1.2.3.4"),
+            new DNSRecord("", 200, "AAAA", "2001::1234"),
+            new DNSRecord("", 250, "MX", "mail.testdomain.com"),
+            new DNSRecord("www", 200, "CNAME", "testdomain.com")
         ];
 
         $dnsZone = new DNSZone("testdomain.com", $dnsRecords);
@@ -46,7 +48,7 @@ class LinuxServerTest extends TestCase {
 
         $this->server->performOperations([$operation]);
 
-        $path = Configuration::readParameter("server.bind.config.dir") . "/conf.d/testdomain.com.conf";
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
 
         $this->assertTrue(file_exists($path));
         $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux.com"), file_get_contents($path));
@@ -55,7 +57,7 @@ class LinuxServerTest extends TestCase {
 
     public function testCanUninstallDNSZoneCorrectly() {
 
-        $path = Configuration::readParameter("server.bind.config.dir") . "/conf.d/1.com.conf";
+        $path = Configuration::readParameter("server.bind.config.dir") . "/1.com.conf";
         file_put_contents($path, "contents");
 
         $dnsZone = new DNSZone("1.com");
@@ -69,9 +71,39 @@ class LinuxServerTest extends TestCase {
 
     public function testCanInstallWebServerVirtualHostCorrectly() {
 
+        $content = "Hello World!";
+
+        $webServerVirtualHost = new WebServerVirtualHost("testdomain.com", $content);
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $webServerVirtualHost);
+
+        $this->server->performOperations([$operation]);
+
+        $path = Configuration::readParameter("server.httpd.config.dir") . "/testdomain.com.conf";
+
+        $this->assertTrue(file_exists($path));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-httpd-linux.com"), file_get_contents($path));
+
+        $contentPath = Configuration::readParameter("server.httpd.webroot.dir") . "/testdomain.com/index.html";
+        $this->assertTrue(file_exists($contentPath));
+        $this->assertEquals($content, file_get_contents($contentPath));
+
     }
 
     public function testCanUninstallWebServerVirtualHostCorrectly() {
+
+        $path = Configuration::readParameter("server.httpd.config.dir") . "/1.com.conf";
+        $contentPath = Configuration::readParameter("server.httpd.webroot.dir") . "/1.com/index.html";
+
+        file_put_contents($path, "content");
+        file_put_contents($contentPath, "Hello!");
+
+        $webServerVirtualHost = new WebServerVirtualHost("1.com");
+        $operation = new ServerOperation(ServerOperation::OPERATION_REMOVE, $webServerVirtualHost);
+
+        $this->server->performOperations([$operation]);
+
+        $this->assertFalse(file_exists($path));
+        $this->assertFalse(file_exists($contentPath));
 
     }
 

@@ -33,6 +33,10 @@ class GlobalConfigService extends ConfigFile {
         return explode(",", $this->getParameter("nameservers"));
     }
 
+    public function getFirstNameserver() {
+        return explode(",", $this->getParameter("nameservers"))[0];
+    }
+
     public function setNameservers($value) {
         $this->addParameter("nameservers", $value);
         $this->save();

@@ -34,7 +34,7 @@ class LinuxServer implements Server {
 
     const TARGET_LOCATION_PARAM = [
         DNSZone::class => "server.bind.config.dir",
-        WebServerVirtualHost::class => "sever.httpd.config.dir"
+        WebServerVirtualHost::class => "server.httpd.config.dir"
     ];
 
     /**
@@ -55,11 +55,27 @@ class LinuxServer implements Server {
 
             switch ($operation->getMode()) {
                 case ServerOperation::OPERATION_ADD:
-                    $this->installTemplateFile($operation);
+                    switch (get_class($operation->getConfig())) {
+                        case DNSZone::class:
+                            $this->installBind($operation);
+                            break;
+
+                        case WebServerVirtualHost::class:
+                            $this->installHttpd($operation);
+                            break;
+                    }
                     break;
 
                 case ServerOperation::OPERATION_REMOVE:
-                    $this->removeTemplateFile($operation);
+                    switch (get_class($operation->getConfig())) {
+                        case DNSZone::class:
+                            $this->uninstallBind($operation);
+                            break;
+
+                        case WebServerVirtualHost::class:
+                            $this->uninstallHttpd($operation);
+                            break;
+                    }
                     break;
             }
 
@@ -67,25 +83,61 @@ class LinuxServer implements Server {
 
     }
 
+    // Install bind
+    private function installBind($operation) {
+        $this->installTemplateFile($operation, "bind-zonefile.txt", Configuration::readParameter("server.bind.config.dir"));
+    }
+
+    // Uninstall bind
+    private function uninstallBind($operation) {
+        $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
+    }
+
+    // Install httpd
+    private function installHttpd($operation) {
+
+        $config = $operation->getConfig();
+
+        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getHostname();
+        if (!file_exists($contentDir)) {
+            mkdir($contentDir);
+        }
+        file_put_contents($contentDir . "/index.html", $config->getContent());
+
+        $model = [
+            "serverWebRoot" => Configuration::readParameter("server.httpd.webroot.dir")
+        ];
+
+        $this->installTemplateFile($operation, "httpd-virtualhost.txt", Configuration::readParameter("server.httpd.config.dir"), $model);
+    }
+
+    private function uninstallHttpd($operation) {
+
+        $config = $operation->getConfig();
+        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getHostname();
+        passthru("rm -rf $contentDir");
+
+        $this->removeTemplateFile($operation, Configuration::readParameter("server.httpd.config.dir"));
+    }
+
+
     /**
      * @param ServerOperation $operation
      * @return void
      */
-    private function installTemplateFile($operation) {
+    private function installTemplateFile($operation, $template, $targetDirectory, $model = []) {
 
         $config = $operation->getConfig();
-        $class = get_class($config);
 
-        $templateFile = $this->fileResolver->resolveFile("Config/templates/linux/" . self::TEMPLATES[$class]);
-        $model = [
-            "config" => $config,
-            "globalConfig" => $this->configService->getAllParameters()
-        ];
+        $templateFile = $this->fileResolver->resolveFile("Config/templates/linux/$template");
+        $model = array_merge($model, [
+            "operationConfig" => $config,
+            "resolverConfig" => $this->configService
+        ]);
 
         $text = $this->templateParser->parseTemplateText(file_get_contents($templateFile), $model);
 
-        $targetDirectory = Configuration::readParameter(self::TARGET_LOCATION_PARAM[$class]);
-        file_put_contents($targetDirectory . "/conf.d/{$config->getIdentifier()}.conf", $text);
+        file_put_contents($targetDirectory . "/{$config->getIdentifier()}.conf", $text);
 
     }
 
@@ -93,11 +145,11 @@ class LinuxServer implements Server {
      * @param ServerOperation $operation
      * @return void
      */
-    private function removeTemplateFile($operation) {
+    private function removeTemplateFile($operation, $targetDirectory) {
 
         $config = $operation->getConfig();
-        $configDir = self::TARGET_LOCATION_PARAM[get_class($config)];
-        $path = Configuration::readParameter($configDir) . "/conf.d/{$config->getIdentifier()}.conf";
+
+        $path = $targetDirectory . "/{$config->getIdentifier()}.conf";
 
         if (file_exists($path)) {
             unlink($path);

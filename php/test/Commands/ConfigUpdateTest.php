@@ -27,6 +27,9 @@ class ConfigUpdateTest extends TestCase {
         $this->assertTrue($configService->methodWasCalled("setIPv4Address", ["9.8.7.6"]));
         $this->assertTrue($configService->methodWasCalled("setIPv6Address", ["2002::"]));
 
+        $command->handleCommand(null, null, "ns1.test.com");
+        $this->assertTrue($configService->methodWasCalled("setNameservers", ["ns1.test.com"]));
+
     }
 
     /**

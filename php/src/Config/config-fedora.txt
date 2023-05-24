@@ -10,5 +10,6 @@ config.root = /usr/local/etc
 storage.root = /var/lib/resolvertest
 
 server.key = linux
-server.bind.config.dir =
+server.bind.config.dir = /etc/named
 server.httpd.config.dir = /etc/httpd/conf.d
+server.httpd.webroot.dir = /var/www
