@@ -29,7 +29,7 @@ class TestUninstallTest extends TestCase {
 
     public function testCanRemoveTestWhenCommandExecuted() {
 
-        $command = new TestUninstall($this->testService);
+        $command = new TestDelete($this->testService);
 
         file_put_contents($this->basePath . "/someKey.json", "some content");
 

@@ -4,6 +4,12 @@ storage.root = Storage
 search.paths = ../src
 
 server.key = test
+
 server.bind.config.dir = Storage/bind/conf.d
+server.bind.service.command = echo 'bind'
+server.bind.service.user = `whoami`
+
 server.httpd.config.dir = Storage/httpd/conf.d
 server.httpd.webroot.dir = Storage/httpd/www
+server.httpd.service.command = echo 'httpd'
+server.httpd.service.user = `whoami`

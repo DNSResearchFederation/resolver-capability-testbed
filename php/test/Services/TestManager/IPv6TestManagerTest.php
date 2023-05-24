@@ -63,7 +63,7 @@ class IPv6TestManagerTest extends TestCase {
         $dnsRecord = new DNSRecord("*", 200, "AAAA", "test.com");
         $expectedOperations = [
             new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.com", [$dnsRecord])),
-            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("*.test.com", "Hello World!"))
+            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.com", "Hello World!"))
         ];
 
         $this->assertEquals($expectedOperations, $operations);
@@ -77,7 +77,7 @@ class IPv6TestManagerTest extends TestCase {
 
         $expectedOperations = [
             new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.com")),
-            new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("*.test.com"))
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("test.com"))
         ];
 
         $this->assertEquals($expectedOperations, $operations);

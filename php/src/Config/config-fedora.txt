@@ -10,6 +10,13 @@ config.root = /usr/local/etc
 storage.root = /var/lib/resolvertest
 
 server.key = linux
+server.selinux = true
+
 server.bind.config.dir = /etc/named
+server.bind.service.command = service named
+server.bind.service.user = named
+
 server.httpd.config.dir = /etc/httpd/conf.d
 server.httpd.webroot.dir = /var/www
+server.httpd.service.command = service httpd
+server.httpd.service.user = root

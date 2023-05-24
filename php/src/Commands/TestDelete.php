@@ -5,10 +5,10 @@ namespace ResolverTest\Commands;
 use ResolverTest\Framework\BaseTestCommand;
 
 /**
- * @name uninstall
- * @description Uninstall a test
+ * @name delete
+ * @description Delete a test and remove all relevant files
  */
-class TestUninstall extends BaseTestCommand {
+class TestDelete extends BaseTestCommand {
 
     /**
      * @param string $testKey @argument @required The test to be uninstalled
@@ -16,6 +16,8 @@ class TestUninstall extends BaseTestCommand {
      * @return void
      */
     public function handleCommand($testKey) {
+
+        // Are you sure?
 
         $this->testService->deleteTest($testKey);
 

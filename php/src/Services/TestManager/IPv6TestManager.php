@@ -21,7 +21,7 @@ class IPv6TestManager implements TestManager {
         $aaaaRecord = new DNSRecord("*", "200", "AAAA", $domain);
         $dnsZone = new DNSZone($domain, [$aaaaRecord]);
 
-        $webServerVirtualHost = new WebServerVirtualHost("*." . $domain, "Hello World!");
+        $webServerVirtualHost = new WebServerVirtualHost($domain, "Hello World!");
 
         return [
             new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone),
@@ -34,7 +34,7 @@ class IPv6TestManager implements TestManager {
 
         $domain = $test->getDomainName();
         $dnsZone = new DNSZone($domain);
-        $webServerVirtualHost = new WebServerVirtualHost("*." . $domain);
+        $webServerVirtualHost = new WebServerVirtualHost($domain);
 
         return [
             new ServerOperation(ServerOperation::OPERATION_REMOVE, $dnsZone),

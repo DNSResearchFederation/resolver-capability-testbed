@@ -17,7 +17,7 @@ class ConfigShow extends BaseConfigCommand {
 
         print("IPv4 Address: " . $this->configService->getIPv4Address() . "\n");
         print("IPv6 Address: " . $this->configService->getIPv6Address() . "\n");
-        print("Nameservers: " . $this->configService->getNameservers() . "\n");
+        print("Nameservers: " . implode(", ", $this->configService->getNameservers()) . "\n");
 
     }
 

@@ -3,7 +3,9 @@
 namespace ResolverTest\Services\Server;
 
 use Kinikit\Core\Configuration\Configuration;
+use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
+use Kinikit\Core\Template\MustacheTemplateParser;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Objects\Server\Config\DNSRecord;
 use ResolverTest\Objects\Server\Config\DNSZone;
@@ -27,7 +29,8 @@ class LinuxServerTest extends TestCase {
 
     public function setUp(): void {
         $this->configService = Container::instance()->get(GlobalConfigService::class);
-        $this->server = Container::instance()->get(LinuxServer::class);
+        $this->server = new LinuxServer($this->configService, Container::instance()->get(MustacheTemplateParser::class),
+            Container::instance()->get(FileResolver::class), "");
     }
 
     public function testCanInstallDNSZoneCorrectly() {
@@ -94,7 +97,9 @@ class LinuxServerTest extends TestCase {
         $path = Configuration::readParameter("server.httpd.config.dir") . "/1.com.conf";
         $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/1.com";
 
-        mkdir($contentDir);
+        if (!file_exists($contentDir)) {
+            mkdir($contentDir);
+        }
         file_put_contents($path, "content");
         file_put_contents($contentDir . "/index.html", "Hello!");
 

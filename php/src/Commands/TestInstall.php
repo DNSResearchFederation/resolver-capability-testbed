@@ -13,7 +13,7 @@ class TestInstall extends BaseTestCommand {
 
     /**
      * @param string $test @argument @required The test to be installed for the session
-     * @param string $domain @option @required The domain name to use for the test
+     * @param string $domain @argument @required The domain name to use for the test
      * @param string $description @option The description of the test
      * @param string $starts @option Start time for the test
      * @param string $expires @option End time for the test
