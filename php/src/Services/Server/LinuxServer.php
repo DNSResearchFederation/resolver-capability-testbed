@@ -140,7 +140,7 @@ class LinuxServer implements Server {
 
         $config = $operation->getConfig();
         $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getHostname();
-        print_r($contentDir);
+
         passthru("{$this->sudoPrefix} rm -rf $contentDir");
 
         $this->removeTemplateFile($operation, Configuration::readParameter("server.httpd.config.dir"));

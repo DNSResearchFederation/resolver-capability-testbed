@@ -148,12 +148,40 @@ class TestService {
      */
     public function deleteTest($key) {
 
+        $test = $this->getTest($key);
+        if ($test->getStatus() == Test::STATUS_ACTIVE) {
+            $this->stopTest($key);
+        }
+
         $path = Configuration::readParameter("storage.root") . "/tests/$key.json";
         if (file_exists($path)) {
             unlink($path);
         } else {
             throw new NonExistentTestException($key);
         }
+    }
+
+    public function startTest($key) {
+
+        $test = $this->getTest($key);
+
+        if ($test->getStatus() == Test::STATUS_PENDING) {
+            $test->setStarts(date("Y-m-d H:i:s"));
+            $this->updateTest($test);
+            $this->synchroniseTests();
+        } else {
+
+        }
+
+    }
+
+    public function stopTest($key) {
+
+        $test = $this->getTest($key);
+        $test->setExpires(date("Y-m-d H:i:s"));
+        $this->updateTest($test);
+        $this->synchroniseTests();
+
     }
 
     public function synchroniseTests() {

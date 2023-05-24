@@ -101,7 +101,7 @@ class TestServiceTest extends TestCase {
         $this->assertTrue($this->testManager->methodWasCalled("validateConfig"));
 
         $this->assertTrue(file_exists($path));
-        $this->assertEquals('{"key":"testKey","type":"testType","domainName":"oxil.co.uk","description":null,"starts":"'.$date1.'","expires":"'.$date2.'","status":"Pending","testData":{"arg1":"this","arg2":"that"}}', file_get_contents($path));
+        $this->assertEquals('{"key":"testKey","type":"testType","domainName":"oxil.co.uk","description":null,"starts":"' . $date1 . '","expires":"' . $date2 . '","status":"Pending","testData":{"arg1":"this","arg2":"that"}}', file_get_contents($path));
     }
 
     /**
@@ -321,6 +321,22 @@ class TestServiceTest extends TestCase {
 
         // Check the server was updated
         $this->assertTrue($this->server->methodWasCalled("performOperations", [$installOperations]));
+
+    }
+
+    public function testDoesStartTestCorrectlyIfTypeIsPending() {
+
+        // Pending test, hit start and check status and start time
+
+        // Competed test, check nothing happened
+
+    }
+
+    public function testDoesStopTestCorrectlyIfTypeIsActive() {
+
+        // Active test, hit stop and check status and expires time
+
+        // Non-active test, check nothing happens to it
 
     }
 
