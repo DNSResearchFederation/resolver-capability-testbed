@@ -92,10 +92,11 @@ class LinuxServerTest extends TestCase {
     public function testCanUninstallWebServerVirtualHostCorrectly() {
 
         $path = Configuration::readParameter("server.httpd.config.dir") . "/1.com.conf";
-        $contentPath = Configuration::readParameter("server.httpd.webroot.dir") . "/1.com/index.html";
+        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/1.com";
 
+        mkdir($contentDir);
         file_put_contents($path, "content");
-        file_put_contents($contentPath, "Hello!");
+        file_put_contents($contentDir . "/index.html", "Hello!");
 
         $webServerVirtualHost = new WebServerVirtualHost("1.com");
         $operation = new ServerOperation(ServerOperation::OPERATION_REMOVE, $webServerVirtualHost);
@@ -103,7 +104,7 @@ class LinuxServerTest extends TestCase {
         $this->server->performOperations([$operation]);
 
         $this->assertFalse(file_exists($path));
-        $this->assertFalse(file_exists($contentPath));
+        $this->assertFalse(file_exists($contentDir));
 
     }
 
