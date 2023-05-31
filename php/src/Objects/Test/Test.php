@@ -52,11 +52,11 @@ class Test {
     private $testData;
 
     // Status constants
-    const STATUS_PENDING = "Pending";
-    const STATUS_ACTIVE = "Active";
-    const STATUS_COMPLETED = "Completed";
-    const STATUS_INSTALLING = "Installing";
-    const STATUS_UNINSTALLING = "Uninstalling";
+    const STATUS_PENDING = "PENDING";
+    const STATUS_ACTIVE = "ACTIVE";
+    const STATUS_COMPLETED = "COMPLETED";
+    const STATUS_INSTALLING = "INSTALLING";
+    const STATUS_UNINSTALLING = "UNINSTALLING";
 
     /**
      * @param string $key

@@ -135,7 +135,6 @@ class TestService {
             throw new NonExistentTestException($key);
         }
 
-        $test->validate();
         $testJSON = $this->objectToJSONConverter->convert($test);
         file_put_contents($path, $testJSON);
 
@@ -178,9 +177,12 @@ class TestService {
     public function stopTest($key) {
 
         $test = $this->getTest($key);
-        $test->setExpires(date("Y-m-d H:i:s"));
-        $this->updateTest($test);
-        $this->synchroniseTests();
+
+        if ($test->getStatus() == Test::STATUS_ACTIVE) {
+            $test->setExpires(date("Y-m-d H:i:s"));
+            $this->updateTest($test);
+            $this->synchroniseTests();
+        }
 
     }
 

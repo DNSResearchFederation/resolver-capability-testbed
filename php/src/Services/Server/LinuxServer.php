@@ -97,6 +97,11 @@ class LinuxServer implements Server {
         $targetUser = Configuration::readParameter("server.bind.service.user");
         $this->installTemplateFile($operation, "bind-zonefile.txt", Configuration::readParameter("server.bind.config.dir"), $targetUser);
 
+        $model = ["domainName" => $operation->getConfig()->getIdentifier()];
+        $templateFile = $this->fileResolver->resolveFile("Config/templates/linux/bind-zones-entry.txt");
+        $text = $this->templateParser->parseTemplateText(file_get_contents($templateFile), $model);
+        file_put_contents(Configuration::readParameter("server.bind.zones.path"), $text, FILE_APPEND);
+
         // Reload bind
         $serviceCommand = Configuration::readParameter("server.bind.service.command");
         passthru("{$this->sudoPrefix} $serviceCommand reload");
@@ -106,6 +111,9 @@ class LinuxServer implements Server {
     private function uninstallBind($operation) {
 
         $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
+
+        $remainingZones = preg_replace("/zone \"" . $operation->getConfig()->getDomainName() ."\"[a-zA-Z0-9\s;\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        file_put_contents(Configuration::readParameter("server.bind.zones.path"), $remainingZones);
 
         // Reload bind
         $serviceCommand = Configuration::readParameter("server.bind.service.command");

@@ -41,4 +41,30 @@ class GlobalConfigService extends ConfigFile {
         $this->addParameter("nameservers", $value);
         $this->save();
     }
+
+    public function isClientIpAddressLogging() {
+        return $this->getParameter("client.ip.address.logging");
+    }
+
+    public function setClientIpAddressLogging($value) {
+        $this->addParameter("client.ip.address.logging", $value);
+        $this->save();
+    }
+
+    public function getDapApiKey() {
+        $this->getParameter("dap.api.key");
+    }
+
+    public function setDapApiKey($value) {
+        $this->addParameter("dap.api.key", $value);
+    }
+
+    public function getDapApiSecret() {
+        $this->getParameter("dap.api.secret");
+    }
+
+    public function setDapApiSecret($value) {
+        $this->addParameter("dap.api.secret", $value);
+        $this->save();
+    }
 }
