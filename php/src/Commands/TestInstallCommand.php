@@ -9,7 +9,7 @@ use ResolverTest\Objects\Test\Test;
  * @name install
  * @description Install a test
  */
-class TestInstall extends BaseTestCommand {
+class TestInstallCommand extends BaseTestCommand {
 
     /**
      * @param string $test @argument @required The test to be installed for the session

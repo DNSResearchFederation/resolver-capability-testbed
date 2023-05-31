@@ -13,7 +13,7 @@ use ResolverTest\Services\TestService;
 
 include_once "autoloader.php";
 
-class TestInstallTest extends TestCase {
+class TestInstallCommandTest extends TestCase {
 
     /**
      * @var MockObject
@@ -33,7 +33,7 @@ class TestInstallTest extends TestCase {
 
     public function testCanCreateANewTestWithDefaultTestKey() {
 
-        $command = new TestInstall($this->testService);
+        $command = new TestInstallCommand($this->testService);
         $defaultKey = "test-" . date("U");
 
         $command->handleCommand("test", "test.com");
@@ -44,7 +44,7 @@ class TestInstallTest extends TestCase {
 
     public function testCanCreateANewTestWithCustomTestKey() {
 
-        $command = new TestInstall($this->testService);
+        $command = new TestInstallCommand($this->testService);
 
         $command->handleCommand("test", "test.com", null, null, null, "key");
         $this->assertTrue($this->testService->methodWasCalled("createTest", [new Test("key", "test", "test.com")]));

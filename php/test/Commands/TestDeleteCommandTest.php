@@ -3,6 +3,7 @@
 namespace ResolverTest\Commands;
 
 use Kinikit\Core\Configuration\Configuration;
+use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
@@ -11,7 +12,7 @@ use ResolverTest\Services\TestService;
 
 include_once "autoloader.php";
 
-class TestStartAllTest extends TestCase {
+class TestDeleteCommandTest extends TestCase {
 
     /**
      * @var MockObject
@@ -29,9 +30,18 @@ class TestStartAllTest extends TestCase {
         passthru("rm -rf {$this->basePath}/*");
     }
 
-    public function testStopFunctionCalledByCommand() {
+    public function testCanRemoveTestWhenCommandExecuted() {
 
-        $command = new TestStartAll($this->testService);
+        $command = new TestDeleteCommand($this->testService);
+
+        $command->handleCommand("someKey");
+
+        $this->assertTrue($this->testService->methodWasCalled("deleteTest", ["someKey"]));
+    }
+
+    public function testCanDeleteAllTests() {
+
+        $command = new TestDeleteCommand($this->testService);
 
         $testOne = new Test("one", "type", "test.com");
         $testTwo = new Test("two", "type", "test.com");
@@ -39,10 +49,11 @@ class TestStartAllTest extends TestCase {
 
         $this->testService->returnValue("listTests", [$testOne,$testTwo, $testThree]);
 
-        $command->handleCommand();
-        $this->assertTrue($this->testService->methodWasCalled("startTest", ["one"]));
-        $this->assertTrue($this->testService->methodWasCalled("startTest", ["two"]));
-        $this->assertTrue($this->testService->methodWasCalled("startTest", ["three"]));
+        $command->handleCommand(null, true);
+        $this->assertTrue($this->testService->methodWasCalled("deleteTest", ["one"]));
+        $this->assertTrue($this->testService->methodWasCalled("deleteTest", ["two"]));
+        $this->assertTrue($this->testService->methodWasCalled("deleteTest", ["three"]));
 
     }
+
 }

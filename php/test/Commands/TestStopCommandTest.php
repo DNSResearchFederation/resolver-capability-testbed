@@ -11,27 +11,32 @@ use ResolverTest\Services\TestService;
 
 include_once "autoloader.php";
 
-class TestStopAllTest extends TestCase {
+class TestStopCommandTest extends TestCase {
 
     /**
      * @var MockObject
      */
     private $testService;
 
-    /**
-     * @var string
-     */
-    private $basePath;
-
     public function setUp(): void {
         $this->testService = MockObjectProvider::instance()->getMockInstance(TestService::class);
-        $this->basePath = Configuration::readParameter("storage.root") . "/tests";
-        passthru("rm -rf {$this->basePath}/*");
+        $basePath = Configuration::readParameter("storage.root") . "/tests";
+        passthru("rm -rf $basePath/*");
     }
 
     public function testStopFunctionCalledByCommand() {
 
-        $command = new TestStopAll($this->testService);
+        $command = new TestStopCommand($this->testService);
+
+        $command->handleCommand("testKey");
+
+        $this->assertTrue($this->testService->methodWasCalled("stopTest", ["testKey"]));
+
+    }
+
+    public function testCanStopAllTests() {
+
+        $command = new TestStopCommand($this->testService);
 
         $testOne = new Test("one", "type", "test.com");
         $testTwo = new Test("two", "type", "test.com");
@@ -39,11 +44,10 @@ class TestStopAllTest extends TestCase {
 
         $this->testService->returnValue("listTests", [$testOne,$testTwo, $testThree]);
 
-        $command->handleCommand();
+        $command->handleCommand(null, true);
         $this->assertTrue($this->testService->methodWasCalled("stopTest", ["one"]));
         $this->assertTrue($this->testService->methodWasCalled("stopTest", ["two"]));
         $this->assertTrue($this->testService->methodWasCalled("stopTest", ["three"]));
 
     }
-
 }

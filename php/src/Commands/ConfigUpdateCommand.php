@@ -9,7 +9,7 @@ use ResolverTest\Framework\BaseConfigCommand;
  * @name config-update
  * @description Update the configuration
  */
-class ConfigUpdate extends BaseConfigCommand {
+class ConfigUpdateCommand extends BaseConfigCommand {
 
     /**
      * @param string $ipv4Address @option The IPv6 address
@@ -18,7 +18,7 @@ class ConfigUpdate extends BaseConfigCommand {
      *
      * @return void
      */
-    public function handleCommand($ipv4Address = null, $ipv6Address = null, $nameservers = null) {
+    public function handleCommand($ipv4Address = null, $ipv6Address = null, $nameservers = null, $clientIpAddressLogging = null, $dapApiKey = null, $dapApiSecret = null) {
 
         if ($ipv4Address) {
             if (!filter_var($ipv4Address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
@@ -36,6 +36,18 @@ class ConfigUpdate extends BaseConfigCommand {
 
         if ($nameservers) {
             $this->configService->setNameservers($nameservers);
+        }
+
+        if (is_bool($clientIpAddressLogging)) {
+            $this->configService->setClientIpAddressLogging($clientIpAddressLogging);
+        }
+
+        if ($dapApiKey) {
+            $this->configService->setDapApiKey($dapApiKey);
+        }
+
+        if ($dapApiSecret) {
+            $this->configService->setDapApiSecret($dapApiSecret);
         }
     }
 

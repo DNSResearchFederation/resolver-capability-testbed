@@ -9,7 +9,7 @@ use ResolverTest\Framework\BaseTestCommand;
  * @name list
  * @description List the active tests for a given session
  */
-class TestList extends BaseTestCommand {
+class TestListCommand extends BaseTestCommand {
 
     /**
      * @return void
@@ -20,6 +20,7 @@ class TestList extends BaseTestCommand {
 
         foreach ($this->testService->listTests() as $test) {
             $newItem["Key"] = $test->getKey();
+            $newItem["Description"] = $test->getDescription() ?? "";
             $newItem["Type"] = $test->getType();
             $newItem["Domain Name"] = $test->getDomainName();
             $newItem["Status"] = $test->getStatus() ;

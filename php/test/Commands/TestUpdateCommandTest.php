@@ -15,7 +15,7 @@ use ResolverTest\Services\TestService;
 
 include_once "autoloader.php";
 
-class TestUpdateTest extends TestCase {
+class TestUpdateCommandTest extends TestCase {
 
     /**
      * @var TestService
@@ -50,7 +50,7 @@ class TestUpdateTest extends TestCase {
 
     public function testDoesUpdateExistingTest() {
 
-        $command = new TestUpdate($this->testService);
+        $command = new TestUpdateCommand($this->testService);
         $now = date("Y-m-d H:i:s");
 
         $test = new Test("ourKey", "testType", "test.com");
@@ -78,7 +78,7 @@ class TestUpdateTest extends TestCase {
      */
     public function testCannotUpdateNonExistentTest() {
 
-        $command = new TestUpdate($this->testService);
+        $command = new TestUpdateCommand($this->testService);
 
         try {
             $command->handleCommand("blah blah blah", "blah");
