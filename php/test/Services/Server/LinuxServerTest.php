@@ -31,6 +31,8 @@ class LinuxServerTest extends TestCase {
         $this->configService = Container::instance()->get(GlobalConfigService::class);
         $this->server = new LinuxServer($this->configService, Container::instance()->get(MustacheTemplateParser::class),
             Container::instance()->get(FileResolver::class), "");
+
+        file_put_contents(Configuration::readParameter("server.bind.zones.path"), "");
     }
 
     public function testCanInstallDNSZoneCorrectly() {
@@ -56,6 +58,8 @@ class LinuxServerTest extends TestCase {
         $this->assertTrue(file_exists($path));
         $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux.com"), file_get_contents($path));
 
+        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
     }
 
     public function testCanUninstallDNSZoneCorrectly() {
@@ -63,12 +67,18 @@ class LinuxServerTest extends TestCase {
         $path = Configuration::readParameter("server.bind.config.dir") . "/1.com.conf";
         file_put_contents($path, "contents");
 
+        file_put_contents(Configuration::readParameter("server.bind.zones.path"), "zone \"1.com\" IN {\n
+        type master;\n
+        file \"testdomain.com.hosts\";\n
+        };");
+
         $dnsZone = new DNSZone("1.com");
         $operation = new ServerOperation(ServerOperation::OPERATION_REMOVE, $dnsZone);
 
+        $this->assertTrue(file_exists($path));
         $this->server->performOperations([$operation]);
-
         $this->assertFalse(file_exists($path));
+        $this->assertStringNotContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
     }
 

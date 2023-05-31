@@ -81,7 +81,7 @@ class TestServiceTest extends TestCase {
         $this->testService->createTest($test);
 
         $this->assertTrue(file_exists($path));
-        $this->assertEquals('{"key":"testKey","type":"test","domainName":"oxil.co.uk","description":null,"starts":"' . $now . '","expires":null,"status":"Active","testData":[]}', file_get_contents($path));
+        $this->assertEquals('{"key":"testKey","type":"test","domainName":"oxil.co.uk","description":null,"starts":"' . $now . '","expires":null,"status":"ACTIVE","testData":[]}', file_get_contents($path));
 
     }
 
@@ -101,7 +101,7 @@ class TestServiceTest extends TestCase {
         $this->assertTrue($this->testManager->methodWasCalled("validateConfig"));
 
         $this->assertTrue(file_exists($path));
-        $this->assertEquals('{"key":"testKey","type":"testType","domainName":"oxil.co.uk","description":null,"starts":"' . $date1 . '","expires":"' . $date2 . '","status":"Pending","testData":{"arg1":"this","arg2":"that"}}', file_get_contents($path));
+        $this->assertEquals('{"key":"testKey","type":"testType","domainName":"oxil.co.uk","description":null,"starts":"' . $date1 . '","expires":"' . $date2 . '","status":"PENDING","testData":{"arg1":"this","arg2":"that"}}', file_get_contents($path));
     }
 
     /**
@@ -152,7 +152,7 @@ class TestServiceTest extends TestCase {
         $this->testService->createTest($test);
 
         $this->assertTrue(file_exists($path));
-        $this->assertEquals('{"key":"testKey","type":"test","domainName":"oxil.co.uk","description":null,"starts":"' . $now . '","expires":null,"status":"Active","testData":[]}', file_get_contents($path));
+        $this->assertEquals('{"key":"testKey","type":"test","domainName":"oxil.co.uk","description":null,"starts":"' . $now . '","expires":null,"status":"ACTIVE","testData":[]}', file_get_contents($path));
 
         $reTest = $this->testService->getTest("testKey");
 
@@ -160,7 +160,7 @@ class TestServiceTest extends TestCase {
         $reTest->setDomainName("kinikit.com");
         $this->testService->updateTest($reTest);
 
-        $this->assertEquals('{"key":"testKey","type":"test","domainName":"kinikit.com","description":null,"starts":"' . $now . '","expires":"2023-08-15 00:00:00","status":"Active","testData":[]}', file_get_contents($path));
+        $this->assertEquals('{"key":"testKey","type":"test","domainName":"kinikit.com","description":null,"starts":"' . $now . '","expires":"2023-08-15 00:00:00","status":"ACTIVE","testData":[]}', file_get_contents($path));
 
     }
 
@@ -327,16 +327,55 @@ class TestServiceTest extends TestCase {
     public function testDoesStartTestCorrectlyIfTypeIsPending() {
 
         // Pending test, hit start and check status and start time
+        $now = date("Y-m-d H:i:s");
+        $future = (new \DateTime())->add(new \DateInterval("P2M"));
+        $test = new Test("key", "testType", "test.co.uk", null, $future->format("Y-m-d H:i:s"), null, Test::STATUS_PENDING);
+        $this->testService->createTest($test);
 
-        // Competed test, check nothing happened
+        $this->testService->startTest("key");
+        $alteredTest = $this->testService->getTest("key");
+
+        $this->assertEquals($now, $alteredTest->getStarts());
+        $this->assertEquals(Test::STATUS_ACTIVE, $alteredTest->getStatus());
+
+        // Completed test, check nothing happened
+        $past1 = (new \DateTime())->sub(new \DateInterval("P1M"));
+        $past2 = (new \DateTime())->sub(new \DateInterval("P2M"));
+        $test = new Test("key", "testType", "test.co.uk", null, $past2->format("Y-m-d H:i:s"), $past1->format("Y-m-d H:i:s"), Test::STATUS_COMPLETED);
+
+        file_put_contents(Configuration::readParameter("storage.root") . "/tests/key.json" , $this->objectToJSONConverter->convert($test));
+
+        $this->testService->startTest("key");
+        $alteredTest = $this->testService->getTest("key");
+
+        $this->assertEquals($test, $alteredTest);
 
     }
 
     public function testDoesStopTestCorrectlyIfTypeIsActive() {
 
         // Active test, hit stop and check status and expires time
+        $now = date("Y-m-d H:i:s");
+        $past = (new \DateTime())->add(new \DateInterval("P1M"));
+        $test = new Test("key1", "testType", "test.co.uk", null, $past->format("Y-m-d H:i:s"), null, Test::STATUS_ACTIVE);
+
+        file_put_contents(Configuration::readParameter("storage.root") . "/tests/key1.json" , $this->objectToJSONConverter->convert($test));
+
+        $this->testService->stopTest("key1");
+        $alteredTest = $this->testService->getTest("key1");
+
+        $this->assertEquals($now, $alteredTest->getExpires());
+        $this->assertEquals(Test::STATUS_COMPLETED, $alteredTest->getStatus());
 
         // Non-active test, check nothing happens to it
+        $future = (new \DateTime())->add(new \DateInterval("P2M"));
+        $test = new Test("key2", "testType", "test.co.uk", null, $future->format("Y-m-d H:i:s"), null, Test::STATUS_PENDING);
+        $this->testService->createTest($test);
+
+        $this->testService->stopTest("key2");
+        $alteredTest = $this->testService->getTest("key2");
+
+        $this->assertEquals($test, $alteredTest);
 
     }
 
