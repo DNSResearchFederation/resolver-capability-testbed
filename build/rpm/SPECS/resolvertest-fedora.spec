@@ -23,6 +23,7 @@ cp -r %{buildroot}/usr/local/src/resolvertest/src/Config/config-fedora.txt %{bui
 
 
 %post
+grep -qxF 'include "/etc/named.resolvertest.zones"' /etc/named.conf || echo 'include "/etc/named.resolvertest.zones"' >> /etc/named.conf
 (cd /usr/local/src/resolvertest; rm -f composer.lock; composer install; composer update)
 rm -f /usr/local/bin/resolvertest
 ln -s /usr/local/src/resolvertest/src/resolvertest-linux.php /usr/local/bin/resolvertest
@@ -30,5 +31,8 @@ mkdir -p /var/lib/resolvertest/tests
 chmod 777 /var/lib/resolvertest/tests
 mkdir -p /usr/local/etc
 chmod 777 /usr/local/etc
+mkdir -p /var/named/resolvertest
+chmod 777 /var/named/resolvertest
+touch /etc/named.resolvertest.zones
 service named restart
 service httpd restart

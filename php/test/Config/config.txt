@@ -5,7 +5,9 @@ search.paths = ../src
 
 server.key = test
 
-server.bind.config.dir = Storage/bind/conf.d
+server.bind.zones.path = Storage/bind/named.resolvertest.zones
+server.bind.config.dir  = Storage/bind/zonefiles
+server.bind.named.conf.path = Storage/bind/named.conf
 server.bind.service.command = echo 'bind'
 server.bind.service.user = `whoami`
 
