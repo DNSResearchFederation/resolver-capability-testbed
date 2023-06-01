@@ -10,8 +10,8 @@ use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Objects\Test\Test;
-use ResolverTest\Services\TestManager\TestManager;
 use ResolverTest\Services\TestService;
+use ResolverTest\Services\TestType\TestTypeManager;
 
 include_once "autoloader.php";
 
@@ -44,8 +44,8 @@ class TestUpdateCommandTest extends TestCase {
         passthru("rm -rf {$this->basePath}/*");
 
         // Hook up a test manager
-        $this->testManager = MockObjectProvider::instance()->getMockInstance(TestManager::class);
-        Container::instance()->addInterfaceImplementation(TestManager::class, "testType", get_class($this->testManager));
+        $this->testManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
+        Container::instance()->addInterfaceImplementation(TestTypeManager::class, "testType", get_class($this->testManager));
     }
 
     public function testDoesUpdateExistingTest() {

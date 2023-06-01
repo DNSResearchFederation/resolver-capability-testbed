@@ -4,7 +4,6 @@ namespace ResolverTest\Commands;
 
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
-use MathieuViossat\Util\ArrayToTextTable;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Services\Config\GlobalConfigService;
 

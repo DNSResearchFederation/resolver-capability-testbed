@@ -2,12 +2,10 @@
 
 namespace ResolverTest\Objects\Test;
 
-use Kinikit\Core\DependencyInjection\Container;
-use Kinikit\Core\DependencyInjection\MissingInterfaceImplementationException;
 use ResolverTest\Exception\InvalidDateFormatException;
 use ResolverTest\Exception\InvalidTestTypeException;
 use ResolverTest\Exception\StartAfterExpiryException;
-use ResolverTest\Services\TestManager\TestManager;
+use ResolverTest\Services\TestType\TestTypeManager;
 
 class Test {
 
@@ -210,8 +208,10 @@ class Test {
         }
 
         try {
-            Container::instance()->getInterfaceImplementation(TestManager::class, $this->getType());
-        } catch (MissingInterfaceImplementationException $e) {
+            $testTypeManager = new TestTypeManager();
+            $types = $testTypeManager->listTestTypes();
+            $x = $types[$this->getType()];
+        } catch (\Exception $e) {
             throw new InvalidTestTypeException($this->getType());
         }
     }

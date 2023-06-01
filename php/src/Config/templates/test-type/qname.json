@@ -1,0 +1,34 @@
+{
+  "type": "qname-minimisation",
+  "description": "Test QName Minimisation",
+  "config": {
+    "dnsZone": {
+      "records": [
+        {
+          "prefix": "*.a.b.c",
+          "ttl": 200,
+          "type": "A",
+          "data": "IPV4_ADDRESS"
+        }
+      ]
+    },
+    "webVirtualHost": {
+      "wildcard": true,
+      "content": "OK"
+    }
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": 4
+    },
+    "webserver": {
+      "expectedQueries": 0
+    },
+    "relationalKey": "HOSTNAME",
+    "timeoutSeconds": 5
+  },
+  "computedLogFields": {
+    "status": ""
+  }
+
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace ResolverTest\Objects\Server\Config;
+namespace ResolverTest\ValueObjects\TestType\Config;
 
 interface OperationConfig {
 

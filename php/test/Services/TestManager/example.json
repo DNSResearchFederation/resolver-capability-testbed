@@ -1,0 +1,39 @@
+{
+  "type": "example",
+  "description": "An example test type",
+  "config": {
+    "dnsZone": {
+      "records": [
+        {
+          "prefix": "*",
+          "ttl": 200,
+          "type": "AAAA",
+          "data": "IPV6_ADDRESS"
+        },
+        {
+          "prefix": "*",
+          "ttl": 250,
+          "type": "A",
+          "data": "IPV4_ADDRESS"
+        }
+      ]
+    },
+    "webVirtualHost": {
+      "wildcard": true,
+      "content": "OK"
+    }
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": 5
+    },
+    "webserver": {
+      "expectedQueries": 3
+    },
+    "relationalKey": "HOSTNAME",
+    "timeoutSeconds": 3
+  },
+  "computedLogFields": {
+    "status": "dns_response | and webserver_response | ternary 'Success' 'Failed'"
+  }
+}

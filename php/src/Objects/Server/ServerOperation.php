@@ -2,7 +2,7 @@
 
 namespace ResolverTest\Objects\Server;
 
-use ResolverTest\Objects\Server\Config\OperationConfig;
+use ResolverTest\ValueObjects\TestType\Config\OperationConfig;
 
 class ServerOperation {
 

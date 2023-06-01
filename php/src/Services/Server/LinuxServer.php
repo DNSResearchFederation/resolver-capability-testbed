@@ -5,10 +5,10 @@ namespace ResolverTest\Services\Server;
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\Template\MustacheTemplateParser;
-use ResolverTest\Objects\Server\Config\DNSZone;
-use ResolverTest\Objects\Server\Config\WebServerVirtualHost;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\ValueObjects\TestType\Config\DNSZone;
+use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
 
 class LinuxServer implements Server {
 
@@ -112,7 +112,7 @@ class LinuxServer implements Server {
 
         $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
 
-        $remainingZones = preg_replace("/zone \"" . $operation->getConfig()->getDomainName() ."\"[a-zA-Z0-9\s;\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        $remainingZones = preg_replace("/zone \"" . $operation->getConfig()->getDomainName() ."\"[a-zA-Z0-9\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $remainingZones);
 
         // Reload bind
@@ -126,7 +126,7 @@ class LinuxServer implements Server {
         $config = $operation->getConfig();
         $targetUser = Configuration::readParameter("server.httpd.service.user");
 
-        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getHostname();
+        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getPrefix();
         if (!file_exists($contentDir)) {
             passthru("{$this->sudoPrefix} mkdir -p $contentDir");
         }
@@ -147,7 +147,7 @@ class LinuxServer implements Server {
     private function uninstallHttpd($operation) {
 
         $config = $operation->getConfig();
-        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getHostname();
+        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getPrefix();
 
         passthru("{$this->sudoPrefix} rm -rf $contentDir");
 

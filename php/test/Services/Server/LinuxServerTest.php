@@ -7,11 +7,11 @@ use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Template\MustacheTemplateParser;
 use PHPUnit\Framework\TestCase;
-use ResolverTest\Objects\Server\Config\DNSRecord;
-use ResolverTest\Objects\Server\Config\DNSZone;
-use ResolverTest\Objects\Server\Config\WebServerVirtualHost;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\ValueObjects\TestType\Config\DNSRecord;
+use ResolverTest\ValueObjects\TestType\Config\DNSZone;
+use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
 
 include_once "autoloader.php";
 
@@ -69,7 +69,7 @@ class LinuxServerTest extends TestCase {
 
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), "zone \"1.com\" IN {\n
         type master;\n
-        file \"testdomain.com.hosts\";\n
+        file \"testdomain.com.conf\";\n
         };");
 
         $dnsZone = new DNSZone("1.com");
@@ -86,7 +86,7 @@ class LinuxServerTest extends TestCase {
 
         $content = "Hello World!";
 
-        $webServerVirtualHost = new WebServerVirtualHost("testdomain.com", $content);
+        $webServerVirtualHost = new WebServerVirtualHost("testdomain.com", false, $content);
         $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $webServerVirtualHost);
 
         $this->server->performOperations([$operation]);

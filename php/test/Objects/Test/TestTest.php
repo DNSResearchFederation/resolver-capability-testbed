@@ -2,10 +2,8 @@
 
 namespace ResolverTest\Objects\Test;
 
-use Kinikit\Core\DependencyInjection\Container;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Exception\InvalidDateFormatException;
-use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Exception\InvalidTestTypeException;
 use ResolverTest\Exception\StartAfterExpiryException;
 

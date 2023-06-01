@@ -12,7 +12,7 @@ use ResolverTest\Exception\NonExistentTestException;
 use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Server\Server;
-use ResolverTest\Services\TestManager\TestManager;
+use ResolverTest\Services\TestType\TestTypeManager;
 
 class TestService {
 
@@ -27,12 +27,19 @@ class TestService {
     private $objectToJSONConverter;
 
     /**
+     * @var TestTypeManager
+     */
+    private $testTypeManager;
+
+    /**
      * @param JSONToObjectConverter $jsonToObjectConverter
      * @param ObjectToJSONConverter $objectToJSONConverter
+     * @param TestTypeManager $testTypeManager
      */
-    public function __construct($jsonToObjectConverter, $objectToJSONConverter) {
+    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager) {
         $this->jsonToObjectConverter = $jsonToObjectConverter;
         $this->objectToJSONConverter = $objectToJSONConverter;
+        $this->testTypeManager = $testTypeManager;
     }
 
     /**
@@ -74,11 +81,8 @@ class TestService {
     public function createTest($test) {
 
         // Validate the test for general correctness
-        $test->validate();
 
-        // Validate the configuration using the manager instance
-        $manager = Container::instance()->getInterfaceImplementation(TestManager::class, $test->getType());
-        $manager->validateConfig($test);
+        $test->validate();
 
         // Ensure start is not in the past
         if ($test->getStarts() < date("Y-m-d H:i:s")) {
@@ -187,7 +191,6 @@ class TestService {
     }
 
     public function synchroniseTests() {
-
         // Update status according to start/end
         foreach (glob(Configuration::readParameter("storage.root") . "/tests/*") as $file) {
             /**
@@ -196,14 +199,12 @@ class TestService {
             $test = $this->jsonToObjectConverter->convert(file_get_contents($file), Test::class);
 
             if ($test->getStatus() == Test::STATUS_PENDING && $test->getStarts() <= date("Y-m-d H:i:s")) {
-
-                $testManager = Container::instance()->getInterfaceImplementation(TestManager::class, $test->getType());
                 $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
 
                 $test->setStatus(Test::STATUS_INSTALLING);
                 $this->updateTest($test);
 
-                $server->performOperations($testManager->install($test));
+                $server->performOperations($this->testTypeManager->getInstallServerOperations($test));
 
                 $test->setStatus(Test::STATUS_ACTIVE);
                 $this->updateTest($test);
@@ -211,13 +212,12 @@ class TestService {
 
             if ($test->getStatus() == Test::STATUS_ACTIVE && $test->getExpires() && $test->getExpires() <= date("Y-m-d H:i:s")) {
 
-                $testManager = Container::instance()->getInterfaceImplementation(TestManager::class, $test->getType());
                 $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
 
                 $test->setStatus(Test::STATUS_UNINSTALLING);
                 $this->updateTest($test);
 
-                $server->performOperations($testManager->uninstall($test));
+                $server->performOperations($this->testTypeManager->getUninstallServerOperations($test));
 
                 $test->setStatus(Test::STATUS_COMPLETED);
                 $this->updateTest($test);

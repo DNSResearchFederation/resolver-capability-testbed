@@ -1,0 +1,33 @@
+{
+  "type": "ipv6",
+  "description": "IPv6 Records Defined Only for domain name",
+  "config": {
+    "dnsZone": {
+      "records": [
+        {
+          "prefix": "*",
+          "ttl": 200,
+          "type": "AAAA",
+          "data": "IPV6_ADDRESS"
+        }
+      ]
+    },
+    "webVirtualHost": {
+      "wildcard": true,
+      "content": "OK"
+    }
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": 1
+    },
+    "webserver": {
+      "expectedQueries": 1
+    },
+    "relationalKey": "HOSTNAME",
+    "timeoutSeconds": 3
+  },
+  "computedLogFields": {
+    "status": "dns_response | and webserver_response | ternary 'Success' 'Failed'"
+  }
+}

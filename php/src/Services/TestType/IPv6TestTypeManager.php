@@ -4,11 +4,11 @@ namespace ResolverTest\Services\TestManager;
 
 use Kinikit\Core\DependencyInjection\Container;
 use ResolverTest\Exception\NonExistentIPv6AddressException;
-use ResolverTest\Objects\Server\Config\DNSRecord;
-use ResolverTest\Objects\Server\Config\DNSZone;
-use ResolverTest\Objects\Server\Config\WebServerVirtualHost;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\ValueObjects\TestType\Config\DNSRecord;
+use ResolverTest\ValueObjects\TestType\Config\DNSZone;
+use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
 
 class IPv6TestManager implements TestManager {
 
@@ -16,12 +16,13 @@ class IPv6TestManager implements TestManager {
     public function install($test) {
 
         $domain = $test->getDomainName();
+        $globalConfig = new GlobalConfigService();
 
         // Create zone and records
-        $aaaaRecord = new DNSRecord("*", "200", "AAAA", $domain);
+        $aaaaRecord = new DNSRecord("*", "200", "AAAA", $globalConfig->getIPv6Address());
         $dnsZone = new DNSZone($domain, [$aaaaRecord]);
 
-        $webServerVirtualHost = new WebServerVirtualHost($domain, "Hello World!");
+        $webServerVirtualHost = new WebServerVirtualHost($domain, false, "Hello World!");
 
         return [
             new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone),

@@ -1,13 +1,12 @@
 <?php
 
-namespace ResolverTest\Objects\Server\Config;
-
-use Kinikit\CLI\Commands\Pull;
+namespace ResolverTest\ValueObjects\TestType\Config;
 
 class DNSRecord {
 
     /**
      * @var string
+     * @required
      */
     private $prefix;
 
@@ -18,11 +17,13 @@ class DNSRecord {
 
     /**
      * @var string
+     * @required
      */
     private $type;
 
     /**
      * @var string
+     * @required
      */
     private $data;
 

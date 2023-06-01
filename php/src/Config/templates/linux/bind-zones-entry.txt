@@ -1,4 +1,4 @@
 zone "{{domainName}}" IN {
         type master;
-        file "{{domainName}}.hosts";
+        file "resolvertest/{{domainName}}.conf";
 };
