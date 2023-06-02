@@ -1,0 +1,5 @@
+# Run the resolvertest scheduler every minute
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+* * * * * root (cd /usr/local/src/resolvertest/src; php resolvertest-scheduler.php)

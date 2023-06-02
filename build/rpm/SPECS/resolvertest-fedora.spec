@@ -4,23 +4,25 @@ Release: 0.0.2
 Summary: Resolver Capability Testing Framework
 License: MIT
 BuildArch: noarch
-Requires: httpd, bind9-next, php-cli, composer, certbot
+Requires: httpd, bind9-next, php-cli, composer, certbot, crontabs
 
 %description
 Flexible resolver capability testing framework for DNS resolvers.
 
 %install
 mkdir -p %{buildroot}/usr/local/src/resolvertest/src
-cp -r %{buildroot}/../../SOURCES/src/*  %{buildroot}/usr/local/src/resolvertest/src/
-cp -r %{buildroot}/../../SOURCES/composer.json %{buildroot}/usr/local/src/resolvertest/
+cp -r %{buildroot}/../../SOURCES/php/src/*  %{buildroot}/usr/local/src/resolvertest/src/
+cp -r %{buildroot}/../../SOURCES/php/composer.json %{buildroot}/usr/local/src/resolvertest/
 rm %{buildroot}/usr/local/src/resolvertest/src/resolvertest.php
 chmod 755 %{buildroot}/usr/local/src/resolvertest/src/resolvertest-linux.php
 cp -r %{buildroot}/usr/local/src/resolvertest/src/Config/config-fedora.txt %{buildroot}/usr/local/src/resolvertest/src/Config/config.txt
+mkdir -p %{buildroot}/etc/cron.d
+cp -r %{buildroot}/../../SOURCES/cron/resolvertest-scheduler %{buildroot}/etc/cron.d/
 
 %files
 /usr/local/src/resolvertest/src
 /usr/local/src/resolvertest/composer.json
-
+/etc/cron.d/resolvertest-scheduler
 
 %post
 grep -qxF 'include "/etc/named.resolvertest.zones";' /etc/named.conf || echo 'include "/etc/named.resolvertest.zones";' >> /etc/named.conf
@@ -37,3 +39,4 @@ touch /etc/named.resolvertest.zones
 chmod 777 /etc/named.resolvertest.zones
 service named restart
 service httpd restart
+service crond restart
