@@ -10,7 +10,6 @@
   "type": "application",
   "require": {
     "oxil/kinikit-cli": "dev-main",
-    "asm/php-ansible": "dev-main",
     "mathieuviossat/arraytotexttable": "dev-master"
   },
   "config": {

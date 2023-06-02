@@ -6,11 +6,13 @@ use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Serialisation\JSON\JSONToObjectConverter;
 use Kinikit\Core\Serialisation\JSON\ObjectToJSONConverter;
+use ResolverTest\Exception\InvalidConfigException;
 use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Exception\InvalidTestStartDateException;
 use ResolverTest\Exception\NonExistentTestException;
 use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Test\Test;
+use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
 
@@ -32,14 +34,20 @@ class TestService {
     private $testTypeManager;
 
     /**
+     * @var GlobalConfigService
+     */
+    private $globalConfig;
+
+    /**
      * @param JSONToObjectConverter $jsonToObjectConverter
      * @param ObjectToJSONConverter $objectToJSONConverter
      * @param TestTypeManager $testTypeManager
      */
-    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager) {
+    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig) {
         $this->jsonToObjectConverter = $jsonToObjectConverter;
         $this->objectToJSONConverter = $objectToJSONConverter;
         $this->testTypeManager = $testTypeManager;
+        $this->globalConfig = $globalConfig;
     }
 
     /**
@@ -80,8 +88,12 @@ class TestService {
      */
     public function createTest($test) {
 
-        // Validate the test for general correctness
+        // Check the global config is correct
+        if (!($this->globalConfig->isValid())) {
+            throw new InvalidConfigException();
+        }
 
+        // Validate the test for general correctness
         $test->validate();
 
         // Ensure start is not in the past

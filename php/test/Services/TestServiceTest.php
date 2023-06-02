@@ -15,6 +15,7 @@ use ResolverTest\Exception\NonExistentTestException;
 use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Objects\Test\Test;
+use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\ValueObjects\TestType\TestType;
@@ -70,8 +71,10 @@ class TestServiceTest extends TestCase {
         Container::instance()->addInterfaceImplementation(Server::class, "test", get_class($this->server));
         Container::instance()->set(get_class($this->server), $this->server);
 
+        $globalConfig = MockObjectProvider::instance()->getMockInstance(GlobalConfigService::class);
+        $globalConfig->returnValue("isValid", true);
 
-        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager);
+        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager, $globalConfig);
 
     }
 

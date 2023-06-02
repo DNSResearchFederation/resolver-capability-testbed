@@ -15,6 +15,9 @@ class ConfigUpdateCommand extends BaseConfigCommand {
      * @param string $ipv4Address @option The IPv6 address
      * @param string $ipv6Address @option The IPv6 address
      * @param string $nameservers @option Nameservers for the testbed
+     * @param bool $clientIpAddressLogging @option Anonymise IP Addresses in the logs
+     * @param string $dapApiKey @option API Key to connect to the DAP
+     * @param string $dapApiSecret @option API Secret to connect to the DAP
      *
      * @return void
      */

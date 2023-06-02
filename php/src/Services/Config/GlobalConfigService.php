@@ -67,4 +67,12 @@ class GlobalConfigService extends ConfigFile {
         $this->addParameter("dap.api.secret", $value);
         $this->save();
     }
+
+    public function isValid() {
+        if ($this->getIPv4Address() && $this->getIPv6Address() && $this->getNameservers()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
