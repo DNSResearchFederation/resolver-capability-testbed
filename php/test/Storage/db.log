@@ -24502,3 +24502,1125 @@ SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.desc
 Completed in 0 seconds
 SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
 Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+PRAGMA table_info('test')
+Completed in 0 seconds
+SELECT 'is-autoincrement' FROM sqlite_master WHERE tbl_name='test' AND sql LIKE '%AUTOINCREMENT%'
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  ORDER BY _X.starts
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE (_X.key=?)
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
+SELECT _X.key _X__key, _X.type _X__type, _X.domain_name _X__domain_name, _X.description _X__description, _X.starts _X__starts, _X.expires _X__expires, _X.status _X__status, _X.test_data _X__test_data FROM test _X  WHERE _X.key=?
+Completed in 0 seconds
