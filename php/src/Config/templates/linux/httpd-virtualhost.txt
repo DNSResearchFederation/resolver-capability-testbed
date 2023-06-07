@@ -2,4 +2,5 @@
   ServerName {{operationConfig.prefix}}
   ServerAlias *.{{operationConfig.prefix}}
   DocumentRoot {{serverWebRoot}}/{{operationConfig.prefix}}
+  CustomLog "|$php /usr/local/src/resolvertest/src/logger-httpd.php" "%{Host}i %h %l %u %t \"%r\" %>s %b"
 </VirtualHost>
