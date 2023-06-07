@@ -1,7 +1,11 @@
 config.root = Storage
 storage.root = Storage
 
-search.paths = ../src
+search.paths = ../src; ../vendor/oxil/kinikit-cli/php/src; ../vendor/oxil/kinikit-persistence
+
+db.provider = sqlite3
+db.filename = Storage/resolvertest.db
+db.logFile = Storage/db.log
 
 server.key = test
 

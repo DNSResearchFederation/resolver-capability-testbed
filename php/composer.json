@@ -9,6 +9,7 @@
   ],
   "type": "application",
   "require": {
+    "oxil/kinikit-persistence": "dev-master",
     "oxil/kinikit-cli": "dev-main",
     "mathieuviossat/arraytotexttable": "dev-master"
   },
@@ -17,7 +18,8 @@
     "test-directory": "test"
   },
   "scripts": {
-    "dev": "rm -rf vendor/oxil/kini*; ln -s ../../../../kinikit/kinikit-core vendor/oxil/kinikit-core; ln -s ../../../../kinikit/kinikit-cli vendor/oxil/kinikit-cli;"
+    "dev": "rm -rf vendor/oxil/kini*; ln -s ../../../../kinikit/kinikit-core vendor/oxil/kinikit-core; ln -s ../../../../kinikit/kinikit-persistence vendor/oxil/kinikit-persistence; ln -s ../../../../kinikit/kinikit-cli vendor/oxil/kinikit-cli;",
+    "install-database": "Kinikit\\Persistence\\Tools\\DBInstaller::runFromComposer"
   },
   "minimum-stability": "dev",
   "autoload": {

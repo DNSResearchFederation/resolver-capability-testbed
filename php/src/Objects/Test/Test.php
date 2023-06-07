@@ -2,25 +2,33 @@
 
 namespace ResolverTest\Objects\Test;
 
+use Kinikit\Persistence\ORM\ActiveRecord;
 use ResolverTest\Exception\InvalidDateFormatException;
+use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Exception\InvalidTestTypeException;
 use ResolverTest\Exception\StartAfterExpiryException;
 use ResolverTest\Services\TestType\TestTypeManager;
 
-class Test {
+/**
+ * @generate
+ */
+class Test extends ActiveRecord {
 
     /**
      * @var string
+     * @primaryKey
      */
     private $key;
 
     /**
      * @var string
+     * @required
      */
     private $type;
 
     /**
      * @var string
+     * @required
      */
     private $domainName;
 
@@ -30,22 +38,24 @@ class Test {
     private $description;
 
     /**
-     * @var string
+     * @var \DateTime
      */
     private $starts;
 
     /**
-     * @var string
+     * @var \DateTime
      */
     private $expires;
 
     /**
      * @var string
+     * @values PENDING,ACTIVE,COMPLETED,INSTALLING,UNINSTALLING
      */
     private $status;
 
     /**
      * @var mixed
+     * @json
      */
     private $testData;
 
@@ -61,8 +71,8 @@ class Test {
      * @param string $type
      * @param string $domainName
      * @param string $description
-     * @param string $starts
-     * @param string $expires
+     * @param \DateTime $starts
+     * @param \DateTime $expires
      * @param string $status
      * @param mixed $testData
      */
@@ -70,7 +80,7 @@ class Test {
         $this->key = $key;
         $this->type = $type;
         $this->domainName = $domainName;
-        $this->starts = $starts ?? date("Y-m-d H:i:s");
+        $this->starts = $starts ?? (new \DateTime());
         $this->expires = $expires;
         $this->testData = $testData;
         $this->status = $status;
@@ -134,28 +144,28 @@ class Test {
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getStarts() {
         return $this->starts;
     }
 
     /**
-     * @param string $starts
+     * @param \DateTime $starts
      */
     public function setStarts($starts) {
         $this->starts = $starts;
     }
 
     /**
-     * @return string
+     * @return \DateTime
      */
     public function getExpires() {
         return $this->expires;
     }
 
     /**
-     * @param string $expires
+     * @param \DateTime $expires
      */
     public function setExpires($expires) {
         $this->expires = $expires;
@@ -190,19 +200,19 @@ class Test {
     }
 
     public function validate() {
+        if (is_string($this->getStarts()) || is_string($this->getExpires())) {
+            throw new InvalidDateFormatException();
+        }
 
         // Validate date format
-        if (!date_create_from_format("Y-m-d H:i:s", $this->getStarts())) {
+        if (!date_create_from_format("Y-m-d H:i:s", $this->getStarts()->format("Y-m-d H:i:s"))) {
             throw new InvalidDateFormatException();
         }
 
         if ($this->getExpires()) {
-            if (!date_create_from_format("Y-m-d H:i:s", $this->getExpires())) {
-                throw new InvalidDateFormatException();
-            }
 
             // Ensure expiry comes after start
-            if ($this->getStarts() > $this->getExpires()) {
+            if ($this->getStarts()->format("Y-m-d H:i:s") > $this->getExpires()->format("Y-m-d H:i:s")) {
                 throw new StartAfterExpiryException();
             }
         }

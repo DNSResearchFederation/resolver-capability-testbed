@@ -6,6 +6,7 @@ use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Serialisation\JSON\JSONToObjectConverter;
 use Kinikit\Core\Serialisation\JSON\ObjectToJSONConverter;
+use Kinikit\Persistence\ORM\Exception\ObjectNotFoundException;
 use ResolverTest\Exception\InvalidConfigException;
 use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Exception\InvalidTestStartDateException;
@@ -42,6 +43,7 @@ class TestService {
      * @param JSONToObjectConverter $jsonToObjectConverter
      * @param ObjectToJSONConverter $objectToJSONConverter
      * @param TestTypeManager $testTypeManager
+     * @param GlobalConfigService $globalConfig
      */
     public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig) {
         $this->jsonToObjectConverter = $jsonToObjectConverter;
@@ -54,15 +56,7 @@ class TestService {
      * @return Test[]
      */
     public function listTests() {
-
-        $tests = [];
-
-        foreach (glob(Configuration::readParameter("storage.root") . "/tests/*") as $file) {
-            $test = $this->jsonToObjectConverter->convert(file_get_contents($file), Test::class);
-            $tests[] = $test;
-        }
-
-        return $tests;
+        return Test::filter("ORDER BY starts");
     }
 
 
@@ -73,12 +67,19 @@ class TestService {
      * @return Test
      */
     public function getTest($key) {
-        $path = Configuration::readParameter("storage.root") . "/tests/$key.json";
-        if (file_exists($path)) {
-            return $this->jsonToObjectConverter->convert(file_get_contents($path), Test::class);
-        } else {
+        try {
+            return Test::fetch($key);
+        } catch (ObjectNotFoundException $e) {
             throw new InvalidTestKeyException($key);
         }
+    }
+
+    /**
+     * @param string $hostname
+     * @return Test
+     */
+    public function getTestByHostname($hostname) {
+
     }
 
 
@@ -101,15 +102,16 @@ class TestService {
             throw new InvalidTestStartDateException();
         }
 
-        $path = Configuration::readParameter("storage.root") . "/tests/{$test->getKey()}.json";
-
         // Check key is unique
-        if (file_exists($path)) {
+        try {
+            Test::fetch($test->getKey());
             throw new InvalidTestKeyException($test->getKey());
+        } catch (ObjectNotFoundException $e) {
+            // Great
         }
 
         // Ensure start is not in the past
-        if ($test->getStarts() < date("Y-m-d H:i:s")) {
+        if ($test->getStarts()->format("Y-m-d H:i:s") < date("Y-m-d H:i:s")) {
             throw new InvalidTestStartDateException();
         }
 
@@ -131,9 +133,7 @@ class TestService {
         }
 
         $test->setStatus(Test::STATUS_PENDING);
-
-        $testJSON = $this->objectToJSONConverter->convert($test);
-        file_put_contents($path, $testJSON);
+        $test->save();
 
         // Synchronise tests to start this test if required
         $this->synchroniseTests();
@@ -145,15 +145,14 @@ class TestService {
      */
     public function updateTest($test) {
 
-        $key = $test->getKey();
-        $path = Configuration::readParameter("storage.root") . "/tests/$key.json";
-        if (!file_exists($path)) {
+        try {
+            $key = $test->getKey();
+            Test::fetch($key);
+        } catch (ObjectNotFoundException $e) {
             throw new NonExistentTestException($key);
         }
 
-        $testJSON = $this->objectToJSONConverter->convert($test);
-        file_put_contents($path, $testJSON);
-
+        $test->save();
         $this->synchroniseTests();
     }
 
@@ -168,12 +167,7 @@ class TestService {
             $this->stopTest($key);
         }
 
-        $path = Configuration::readParameter("storage.root") . "/tests/$key.json";
-        if (file_exists($path)) {
-            unlink($path);
-        } else {
-            throw new NonExistentTestException($key);
-        }
+        $test->remove();
     }
 
     public function startTest($key) {
@@ -181,13 +175,10 @@ class TestService {
         $test = $this->getTest($key);
 
         if ($test->getStatus() == Test::STATUS_PENDING) {
-            $test->setStarts(date("Y-m-d H:i:s"));
+            $test->setStarts(new \DateTime());
             $this->updateTest($test);
             $this->synchroniseTests();
-        } else {
-
         }
-
     }
 
     public function stopTest($key) {
@@ -195,7 +186,7 @@ class TestService {
         $test = $this->getTest($key);
 
         if ($test->getStatus() == Test::STATUS_ACTIVE) {
-            $test->setExpires(date("Y-m-d H:i:s"));
+            $test->setExpires(new \DateTime());
             $this->updateTest($test);
             $this->synchroniseTests();
         }
@@ -204,13 +195,9 @@ class TestService {
 
     public function synchroniseTests() {
         // Update status according to start/end
-        foreach (glob(Configuration::readParameter("storage.root") . "/tests/*") as $file) {
-            /**
-             * @var Test $test
-             */
-            $test = $this->jsonToObjectConverter->convert(file_get_contents($file), Test::class);
+        foreach (Test::filter() as $test) {
 
-            if ($test->getStatus() == Test::STATUS_PENDING && $test->getStarts() <= date("Y-m-d H:i:s")) {
+            if ($test->getStatus() == Test::STATUS_PENDING && $test->getStarts()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
                 $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
 
                 $test->setStatus(Test::STATUS_INSTALLING);
@@ -222,7 +209,7 @@ class TestService {
                 $this->updateTest($test);
             }
 
-            if ($test->getStatus() == Test::STATUS_ACTIVE && $test->getExpires() && $test->getExpires() <= date("Y-m-d H:i:s")) {
+            if ($test->getStatus() == Test::STATUS_ACTIVE && $test->getExpires() && $test->getExpires()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
 
                 $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
 

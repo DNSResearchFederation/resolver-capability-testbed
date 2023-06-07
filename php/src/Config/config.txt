@@ -3,7 +3,11 @@
 application.name = Resolver Test
 application.namespace = ResolverTest
 
-search.paths = ../vendor/oxil/kinikit-cli/php/src;
+search.paths = ../vendor/oxil/kinikit-cli/php/src; ../vendor/oxil/kinikit-persistence
+
+db.provider = sqlite3
+db.filename = DB/resolvertest.db
+db.logFile = DB/db.log
 
 # resolver test config options
 config.root = /usr/local/etc
