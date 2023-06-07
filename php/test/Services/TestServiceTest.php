@@ -8,7 +8,7 @@ use Kinikit\Core\Serialisation\JSON\JSONToObjectConverter;
 use Kinikit\Core\Serialisation\JSON\ObjectToJSONConverter;
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
-use PHPUnit\Framework\TestCase;
+use Kinikit\Persistence\ORM\Exception\ObjectNotFoundException;
 use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Exception\InvalidTestStartDateException;
 use ResolverTest\Exception\NonExistentTestException;
@@ -19,10 +19,11 @@ use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\ValueObjects\TestType\TestType;
+use ResolverTest\TestBase;
 
 include_once "autoloader.php";
 
-class TestServiceTest extends TestCase {
+class TestServiceTest extends TestBase {
 
     /**
      * @var TestService
@@ -51,11 +52,10 @@ class TestServiceTest extends TestCase {
 
 
     public function setUp(): void {
+        parent::setUp();
+
         $this->jsonToObjectConverter = Container::instance()->get(JSONToObjectConverter::class);
         $this->objectToJSONConverter = Container::instance()->get(ObjectToJSONConverter::class);
-
-        $path = Configuration::readParameter("storage.root") . "/tests";
-        passthru("rm -rf $path/*");
 
         // Hook up a test manager
         $this->testTypeManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
@@ -87,18 +87,11 @@ class TestServiceTest extends TestCase {
 
     public function testCanSaveNewSimpleTest() {
 
-        $path = Configuration::readParameter("storage.root") . "/tests/testKey.json";
-        if (file_exists($path)) {
-            unlink($path);
-        }
-
-        $now = date("Y-m-d H:i:s");
-
         $test = new Test("testKey", "test", "oxil.co.uk");
         $this->testService->createTest($test);
 
-        $this->assertTrue(file_exists($path));
-        $this->assertEquals('{"key":"testKey","type":"test","domainName":"oxil.co.uk","description":null,"starts":"' . $now . '","expires":null,"status":"ACTIVE","testData":[]}', file_get_contents($path));
+        $test->setStatus(Test::STATUS_ACTIVE);
+        $this->assertEquals($test, Test::fetch("testKey"));
 
     }
 
@@ -109,17 +102,13 @@ class TestServiceTest extends TestCase {
             unlink($path);
         }
 
-        $date1 = (new \DateTime())->add(new \DateInterval("P1M"))->format("Y-m-d H:i:s");
-        $date2 = (new \DateTime())->add(new \DateInterval("P2M"))->format("Y-m-d H:i:s");
+        $date1 = (new \DateTime())->add(new \DateInterval("P1M"));
+        $date2 = (new \DateTime())->add(new \DateInterval("P2M"));
 
         $test = new Test("testKey", "testType", "oxil.co.uk", null, $date1, $date2, null, ["arg1" => "this", "arg2" => "that"]);
         $this->testService->createTest($test);
 
-//        $this->assertTrue($this->testManager->methodWasCalled("validateConfig"));
-
-        $this->assertTrue(file_exists($path));
-        $this->assertEquals('{"key":"testKey","type":"testType","domainName":"oxil.co.uk","description":null,"starts":"' . $date1 . '","expires":"' . $date2 . '","status":"PENDING","testData":{"arg1":"this","arg2":"that"}}', file_get_contents($path));
-    }
+        $this->assertEquals($test, Test::fetch("testKey"));}
 
     /**
      * @doesNotPerformAssertions
@@ -127,7 +116,7 @@ class TestServiceTest extends TestCase {
     public function testCannotCreateNewTestWithExistingKey() {
 
         $test = new Test("testKey", "test", "test.co.uk");
-        $this->testService->createTest($test);
+        $test->save();
 
         try {
             $anotherTest = new Test("testKey", "test", "hello.co.uk");
@@ -140,79 +129,57 @@ class TestServiceTest extends TestCase {
 
     public function testCanGetTestByKey() {
 
-        $path = Configuration::readParameter("storage.root") . "/tests/ourTest.json";
-
         $newTest = new Test("ourTest", "testType", "oxil.co.uk");
-
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        file_put_contents($path, $this->objectToJSONConverter->convert($newTest));
+        $newTest->save();
 
         $retrievedTest = $this->testService->getTest("ourTest");
 
-        $this->assertTrue(file_exists($path));
         $this->assertEquals($newTest, $retrievedTest);
 
     }
 
     public function testCanUpdateExistingTest() {
 
-        $path = Configuration::readParameter("storage.root") . "/tests/testKey.json";
-        if (file_exists($path)) {
-            unlink($path);
-        }
-
-        $now = date("Y-m-d H:i:s");
-
         $test = new Test("testKey", "test", "oxil.co.uk");
-        $this->testService->createTest($test);
+        $test->save();
 
-        $this->assertTrue(file_exists($path));
-        $this->assertEquals('{"key":"testKey","type":"test","domainName":"oxil.co.uk","description":null,"starts":"' . $now . '","expires":null,"status":"ACTIVE","testData":[]}', file_get_contents($path));
+        $this->assertEquals($test, Test::fetch("testKey"));
 
         $reTest = $this->testService->getTest("testKey");
 
-        $reTest->setExpires("2023-08-15 00:00:00");
+        $reTest->setExpires((new \DateTime())->add(new \DateInterval("P2M")));
         $reTest->setDomainName("kinikit.com");
         $this->testService->updateTest($reTest);
 
-        $this->assertEquals('{"key":"testKey","type":"test","domainName":"kinikit.com","description":null,"starts":"' . $now . '","expires":"2023-08-15 00:00:00","status":"ACTIVE","testData":[]}', file_get_contents($path));
+        $this->assertEquals($reTest, Test::fetch("testKey"));
 
     }
 
     public function testCanDeleteTest() {
 
-        $path = Configuration::readParameter("storage.root") . "/tests/toBeDeleted.json";
-
         $test = new Test("toBeDeleted", "testType", "oxil.co.uk");
+        $test->save();
 
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        file_put_contents($path, $this->objectToJSONConverter->convert($test));
-
-        $this->assertTrue(file_exists($path));
+        $this->assertEquals($test, Test::fetch("toBeDeleted"));
         $this->testService->deleteTest("toBeDeleted");
-        $this->assertFalse(file_exists($path));
+        try {
+            Test::fetch("toBeDeleted");
+            $this->fail();
+        } catch (ObjectNotFoundException $e) {
+            // Great
+        }
 
     }
 
     public function testCanListAllTests() {
 
-        $basePath = Configuration::readParameter("storage.root") . "/tests";
-
-        foreach (glob($basePath . "/*") as $file) {
-            unlink($file);
-        }
-
         $test1 = new Test("test1", "testType", "domain");
         $test2 = new Test("test2", "testType", "domain");
         $test3 = new Test("test3", "testType", "domain");
 
-        file_put_contents($basePath . "/test1.json", $this->objectToJSONConverter->convert($test1));
-        file_put_contents($basePath . "/test2.json", $this->objectToJSONConverter->convert($test2));
-        file_put_contents($basePath . "/test3.json", $this->objectToJSONConverter->convert($test3));
+        $test1->save();
+        $test2->save();
+        $test3->save();
 
         $testList = $this->testService->listTests();
 
@@ -224,7 +191,7 @@ class TestServiceTest extends TestCase {
      * @doesNotPerformAssertions
      */
     public function testCannotCreateTestWhichStartsInThePast() {
-        $test1 = new Test("test1", "testType", "1.co.uk", null, date("2021-01-01 10:00:00"));
+        $test1 = new Test("test1", "testType", "1.co.uk", null, (new \DateTime())->sub(new \DateInterval("P2M")));
         try {
             $this->testService->createTest($test1);
             $this->fail("Should have thrown here");
@@ -239,7 +206,7 @@ class TestServiceTest extends TestCase {
     public function testCannotCreateNewTestForDomainNameWhichOverlapsAnotherTest() {
 
         $test1 = new Test("test1", "test", "1.co.uk");
-        $this->testService->createTest($test1);
+        $test1->save();
 
         // Confirm obvious overlap for no future time
         $test2 = new Test("test2", "testType", "1.co.uk");
@@ -250,15 +217,14 @@ class TestServiceTest extends TestCase {
             // Great
         }
 
-        $date = new \DateTime();
-        $date->add(new \DateInterval("P2M"));
-        $test3 = new Test("test3", "test", "2.co.uk", null, null, $date->format("Y-m-d H:i:s"));
+        $date = (new \DateTime())->add(new \DateInterval("P2M"));
+        $test3 = new Test("test3", "test", "2.co.uk", null, null, $date);
         $this->testService->createTest($test3);
 
         // Confirm one which starts before end time of same domain
-        $date2 = new \DateTime();
-        $date2->add(new \DateInterval("P1M"));
-        $test4 = new Test("test4", "testType", "2.co.uk", null, $date2->format("Y-m-d H:i:s"));
+        $date2 = (new \DateTime())->add(new \DateInterval("P1M"));
+
+        $test4 = new Test("test4", "testType", "2.co.uk", null, $date2);
         try {
             $this->testService->createTest($test4);
             $this->fail("Should have thrown here");
@@ -267,20 +233,19 @@ class TestServiceTest extends TestCase {
         }
 
         // Confirm one which starts after end time of same domain
-        $date3 = new \DateTime();
-        $date3->add(new \DateInterval("P3M"));
-        $test5 = new Test("test5", "testType", "2.co.uk", null, $date3->format("Y-m-d H:i:s"));
+        $date3 = (new \DateTime())->add(new \DateInterval("P3M"));
+        $test5 = new Test("test5", "testType", "2.co.uk", null, $date3);
         $this->testService->createTest($test5);
 
 
-        $test6 = new Test("test6", "testType", "3.co.uk", null, $date->format("Y-m-d H:i:s"), $date3->format("Y-m-d H:i:s"));
+        $test6 = new Test("test6", "testType", "3.co.uk", null, $date, $date3);
         $this->testService->createTest($test6);
 
         // Non overlapping
-        $test7 = new Test("test7", "testType", "3.co.uk", null, $date2->format("Y-m-d H:i:s"), $date->format("Y-m-d H:i:s"));
+        $test7 = new Test("test7", "testType", "3.co.uk", null, $date2, $date);
         $this->testService->createTest($test7);
 
-        $test8 = new Test("test8", "testType", "3.co.uk", null, $date2->format("Y-m-d H:i:s"), $date3->format("Y-m-d H:i:s"));
+        $test8 = new Test("test8", "testType", "3.co.uk", null, $date2, $date3);
         try {
             $this->testService->createTest($test8);
             $this->fail("Should have thrown here");
@@ -330,7 +295,7 @@ class TestServiceTest extends TestCase {
         $test = new Test("test-me", "test", "hello.co.uk", "A wonderful test");
         $this->testService->createTest($test);
 
-        $now = date("Y-m-d H:i:s");
+        $now = new \DateTime();
         $test->setExpires($now);
         $this->testService->updateTest($test);
 
@@ -345,23 +310,23 @@ class TestServiceTest extends TestCase {
     public function testDoesStartTestCorrectlyIfTypeIsPending() {
 
         // Pending test, hit start and check status and start time
-        $now = date("Y-m-d H:i:s");
+        $now = new \DateTime();
         $future = (new \DateTime())->add(new \DateInterval("P2M"));
-        $test = new Test("key", "testType", "test.co.uk", null, $future->format("Y-m-d H:i:s"), null, Test::STATUS_PENDING);
-        $this->testService->createTest($test);
+        $test = new Test("key", "testType", "test.co.uk", null, $future, null, Test::STATUS_PENDING);
+        $test->save();
 
         $this->testService->startTest("key");
         $alteredTest = $this->testService->getTest("key");
 
-        $this->assertEquals($now, $alteredTest->getStarts());
+        $this->assertEquals($now->format("Y-m-d H:i:s"), $alteredTest->getStarts()->format("Y-m-d H:i:s"));
         $this->assertEquals(Test::STATUS_ACTIVE, $alteredTest->getStatus());
 
         // Completed test, check nothing happened
         $past1 = (new \DateTime())->sub(new \DateInterval("P1M"));
         $past2 = (new \DateTime())->sub(new \DateInterval("P2M"));
-        $test = new Test("key", "testType", "test.co.uk", null, $past2->format("Y-m-d H:i:s"), $past1->format("Y-m-d H:i:s"), Test::STATUS_COMPLETED);
+        $test = new Test("key", "testType", "test.co.uk", null, $past2, $past1, Test::STATUS_COMPLETED);
 
-        file_put_contents(Configuration::readParameter("storage.root") . "/tests/key.json", $this->objectToJSONConverter->convert($test));
+        $test->save();
 
         $this->testService->startTest("key");
         $alteredTest = $this->testService->getTest("key");
@@ -373,21 +338,21 @@ class TestServiceTest extends TestCase {
     public function testDoesStopTestCorrectlyIfTypeIsActive() {
 
         // Active test, hit stop and check status and expires time
-        $now = date("Y-m-d H:i:s");
-        $past = (new \DateTime())->add(new \DateInterval("P1M"));
-        $test = new Test("key1", "testType", "test.co.uk", null, $past->format("Y-m-d H:i:s"), null, Test::STATUS_ACTIVE);
+        $now = new \DateTime();
+        $past = (new \DateTime())->sub(new \DateInterval("P1M"));
+        $test = new Test("key1", "testType", "test.co.uk", null, $past, null, Test::STATUS_ACTIVE);
 
-        file_put_contents(Configuration::readParameter("storage.root") . "/tests/key1.json", $this->objectToJSONConverter->convert($test));
+        $test->save();
 
         $this->testService->stopTest("key1");
         $alteredTest = $this->testService->getTest("key1");
 
-        $this->assertEquals($now, $alteredTest->getExpires());
+        $this->assertEquals($now->format("Y-m-d H:i:s"), $alteredTest->getExpires()->format("Y-m-d H:i:s"));
         $this->assertEquals(Test::STATUS_COMPLETED, $alteredTest->getStatus());
 
         // Non-active test, check nothing happens to it
         $future = (new \DateTime())->add(new \DateInterval("P2M"));
-        $test = new Test("key2", "testType", "test.co.uk", null, $future->format("Y-m-d H:i:s"), null, Test::STATUS_PENDING);
+        $test = new Test("key2", "testType", "test.co.uk", null, $future, null, Test::STATUS_PENDING);
         $this->testService->createTest($test);
 
         $this->testService->stopTest("key2");

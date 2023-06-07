@@ -24,8 +24,8 @@ class TestListCommand extends BaseTestCommand {
             $newItem["Type"] = $test->getType();
             $newItem["Domain Name"] = $test->getDomainName();
             $newItem["Status"] = $test->getStatus() ;
-            $newItem["Start Time"] = $test->getStarts();
-            $newItem["End Time"] = $test->getExpires() ?? "Never";
+            $newItem["Start Time"] = $test->getStarts()->format("Y-m-d H:i:s");
+            $newItem["End Time"] = $test->getExpires() ? $test->getExpires()->format("Y-m-d H:i:s") : "Never";
 
             $data[] = $newItem;
         }

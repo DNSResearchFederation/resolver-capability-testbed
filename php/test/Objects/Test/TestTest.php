@@ -2,14 +2,14 @@
 
 namespace ResolverTest\Objects\Test;
 
-use PHPUnit\Framework\TestCase;
 use ResolverTest\Exception\InvalidDateFormatException;
 use ResolverTest\Exception\InvalidTestTypeException;
 use ResolverTest\Exception\StartAfterExpiryException;
+use ResolverTest\TestBase;
 
 include_once "autoloader.php";
 
-class TestTest extends TestCase {
+class TestTest extends TestBase {
 
     /**
      * @doesNotPerformAssertions
@@ -24,11 +24,11 @@ class TestTest extends TestCase {
         $test2 = new Test("test2", "type", "2.com", null, "4-6-2022");
 
         // Bad expiry format
-        $test3 = new Test("test3", "type", "3.com", null, $date->format("Y-m-d H:i:s"), "wrong");
-        $test4 = new Test("test4", "type", "4.com", null, $date->format("Y-m-d H:i:s"), "2023-04-21");
+        $test3 = new Test("test3", "type", "3.com", null, $date, "wrong");
+        $test4 = new Test("test4", "type", "4.com", null, $date, "2023-04-21");
 
         // Expires before starts
-        $test5 = new Test("test5", "type", "5.com", null, $date2->format("Y-m-d H:i:s"), $date->format("Y-m-d H:i:s"));
+        $test5 = new Test("test5", "type", "5.com", null, $date2, $date);
 
 
         try {

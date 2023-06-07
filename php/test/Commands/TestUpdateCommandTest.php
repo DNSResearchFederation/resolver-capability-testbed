@@ -12,10 +12,12 @@ use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
+use ResolverTest\TestBase;
+use ResolverTest\ValueObjects\TestType\TestType;
 
 include_once "autoloader.php";
 
-class TestUpdateCommandTest extends TestCase {
+class TestUpdateCommandTest extends TestBase {
 
     /**
      * @var TestService
@@ -38,14 +40,23 @@ class TestUpdateCommandTest extends TestCase {
     private $basePath;
 
     public function setUp(): void {
+        parent::setUp();
         $this->testService = Container::instance()->get(TestService::class);
         $this->objectToJSONConverter = Container::instance()->get(ObjectToJSONConverter::class);
-        $this->basePath = Configuration::readParameter("storage.root") . "/tests";
-        passthru("rm -rf {$this->basePath}/*");
 
         // Hook up a test manager
         $this->testManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
-        Container::instance()->addInterfaceImplementation(TestTypeManager::class, "testType", get_class($this->testManager));
+
+        // Sample test type
+        $testType = Container::instance()->get(TestType::class);
+        $testType->setType("testType");
+        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/testType.json", $this->objectToJSONConverter->convert($testType));
+    }
+
+    public function tearDown(): void {
+
+        unlink(Configuration::readParameter("config.root") . "/resolvertest/testType.json");
+
     }
 
     public function testDoesUpdateExistingTest() {
@@ -56,20 +67,27 @@ class TestUpdateCommandTest extends TestCase {
         $test = new Test("ourKey", "testType", "test.com");
         $path = Configuration::readParameter("storage.root") . "/tests/ourKey.json";
 
-        file_put_contents($path, $this->objectToJSONConverter->convert($test));
+        $test->save();
 
         // Check description is updated
         $command->handleCommand("ourKey", "this is our test object");
-        $this->assertEquals("{\"key\":\"ourKey\",\"type\":\"testType\",\"domainName\":\"test.com\",\"description\":\"this is our test object\",\"starts\":\"$now\",\"expires\":null,\"status\":null,\"testData\":[]}", file_get_contents($path));
+        $test->setDescription("this is our test object");
+        $this->assertEquals($test, Test::fetch("ourKey"));
 
         // Check expires is updated and description remains intact
-        $date = (new \DateTime())->add(new \DateInterval("P2M"))->format("Y-m-d H:i:s");
-        $command->handleCommand("ourKey", null,null, $date);
-        $this->assertEquals("{\"key\":\"ourKey\",\"type\":\"testType\",\"domainName\":\"test.com\",\"description\":\"this is our test object\",\"starts\":\"$now\",\"expires\":\"$date\",\"status\":null,\"testData\":[]}", file_get_contents($path));
+        $date = (new \DateTime())->add(new \DateInterval("P2M"));
+        $command->handleCommand("ourKey", null, null, $date->format("Y-m-d H:i:s"));
+        $test->setExpires($date);
+        $alteredTest = Test::fetch("ourKey");
+        $this->assertEquals("this is our test object", $alteredTest->getDescription());
+        $this->assertEquals($date->format("Y-m-d H:i:s"), $alteredTest->getExpires()->format("Y-m-d H:i:s"));
+
 
         // Test re-updating description
         $command->handleCommand("ourKey", "alt description");
-        $this->assertEquals("{\"key\":\"ourKey\",\"type\":\"testType\",\"domainName\":\"test.com\",\"description\":\"alt description\",\"starts\":\"$now\",\"expires\":\"$date\",\"status\":null,\"testData\":[]}", file_get_contents($path));
+        $test->setDescription("alt description");
+        $alteredTest = Test::fetch("ourKey");
+        $this->assertEquals("alt description", $alteredTest->getDescription());
 
     }
 

@@ -26,9 +26,9 @@ class TestListCommandTest extends TestCase {
 
         $command = new TestListCommand($this->testService);
         $this->testService->returnValue("listTests", [
-            new Test("test1", "type", "1.co.uk", "My first test.", "2022-05-01 10:30:20", "2023-07-01 11:00:00", "ACTIVE"),
-            new Test("test2", "type", "2.co.uk", null, "2023-05-01 10:30:20", null, "ACTIVE"),
-            new Test("test3", "type", "3.co.uk", "New Test", "2022-07-01 10:30:20", null, "ACTIVE"),
+            new Test("test1", "type", "1.co.uk", "My first test.", date_create("2022-05-01 10:30:20"), date_create("2023-07-01 11:00:00"), "ACTIVE"),
+            new Test("test2", "type", "2.co.uk", null, date_create("2023-05-01 10:30:20"), null, "ACTIVE"),
+            new Test("test3", "type", "3.co.uk", "New Test", date_create("2022-07-01 10:30:20"), null, "ACTIVE"),
         ]);
 
         ob_start();

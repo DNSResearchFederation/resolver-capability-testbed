@@ -26,9 +26,11 @@ class TestUpdateCommand extends BaseTestCommand {
             $test->setDescription($description);
         }
         if ($starts) {
+            $starts = date_create_from_format("Y-m-d H:i:s", $starts);
             $test->setStarts($starts);
         }
         if ($expires) {
+            $expires = date_create_from_format("Y-m-d H:i:s", $expires);
             $test->setExpires($expires);
         }
 
