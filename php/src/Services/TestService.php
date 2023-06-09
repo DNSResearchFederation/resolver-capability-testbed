@@ -14,6 +14,7 @@ use ResolverTest\Exception\NonExistentTestException;
 use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
 
@@ -142,6 +143,12 @@ class TestService {
         $test->setStatus(Test::STATUS_PENDING);
         $test->save();
 
+        /**
+         * @var LoggingService
+         */
+        $loggingService = Container::instance()->get(LoggingService::class);
+        $loggingService->createLogDatabaseForTest($test);
+
         // Synchronise tests to start this test if required
         $this->synchroniseTests();
     }
@@ -173,6 +180,12 @@ class TestService {
         if ($test->getStatus() == Test::STATUS_ACTIVE) {
             $this->stopTest($key);
         }
+
+        /**
+         * @var LoggingService
+         */
+        $loggingService = Container::instance()->get(LoggingService::class);
+        $loggingService->removeLogDatabaseForTest($test);
 
         $test->remove();
     }

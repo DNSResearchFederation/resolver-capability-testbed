@@ -16,6 +16,7 @@ use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\ValueObjects\TestType\TestType;

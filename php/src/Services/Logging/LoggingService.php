@@ -6,15 +6,10 @@ use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Reflection\ClassInspectorProvider;
-use Kinikit\Core\Validation\Validator;
 use Kinikit\Persistence\Database\Generator\TableDDLGenerator;
 use Kinikit\Persistence\Database\Vendors\SQLite3\SQLite3DatabaseConnection;
 use Kinikit\Persistence\ORM\ORM;
 use Kinikit\Persistence\ORM\Tools\SchemaGenerator;
-use Kinikit\Persistence\TableMapper\Mapper\TableMapper;
-use Kinikit\Persistence\TableMapper\Mapper\TableMapping;
-use Kinikit\Persistence\TableMapper\Mapper\TablePersistenceEngine;
-use Kinikit\Persistence\TableMapper\Mapper\TableQueryEngine;
 use Kinikit\Persistence\Tools\DBInstaller;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Server\Server;
@@ -62,6 +57,16 @@ class LoggingService {
 
     }
 
+    /**
+     * @param Test $test
+     * @return void
+     */
+    public function removeLogDatabaseForTest($test) {
+        $path = Configuration::readParameter("storage.root") . "/logs/{$test->getKey()}.db";
+        if (file_exists($path)) {
+            unlink($path);
+        }
+    }
 
     public function processLog($logString, $service) {
 
