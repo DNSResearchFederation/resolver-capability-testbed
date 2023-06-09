@@ -74,7 +74,7 @@ class TestServiceTest extends TestBase {
         $globalConfig = MockObjectProvider::instance()->getMockInstance(GlobalConfigService::class);
         $globalConfig->returnValue("isValid", true);
 
-        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager, $globalConfig);
+        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager, $globalConfig, $this->server);
 
     }
 
@@ -108,7 +108,8 @@ class TestServiceTest extends TestBase {
         $test = new Test("testKey", "testType", "oxil.co.uk", null, $date1, $date2, null, ["arg1" => "this", "arg2" => "that"]);
         $this->testService->createTest($test);
 
-        $this->assertEquals($test, Test::fetch("testKey"));}
+        $this->assertEquals($test, Test::fetch("testKey"));
+    }
 
     /**
      * @doesNotPerformAssertions
@@ -135,6 +136,16 @@ class TestServiceTest extends TestBase {
         $retrievedTest = $this->testService->getTest("ourTest");
 
         $this->assertEquals($newTest, $retrievedTest);
+
+    }
+
+    public function testCanGetTestByHostname() {
+
+        $test = new Test("someKey", "testType", "website.com", null, null, null, Test::STATUS_ACTIVE);
+        $test->save();
+
+        $retrievedTest = $this->testService->getTestByHostname("website.com");
+        $this->assertEquals($test, $retrievedTest);
 
     }
 

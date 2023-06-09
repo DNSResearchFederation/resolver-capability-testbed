@@ -5,6 +5,8 @@ namespace ResolverTest\Services\Server;
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\Template\MustacheTemplateParser;
+use ResolverTest\Objects\Log\BaseLog;
+use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\ValueObjects\TestType\Config\DNSZone;
@@ -91,6 +93,38 @@ class LinuxServer implements Server {
 
     }
 
+    /**
+     * @param string $logString
+     * @param string $service
+     * @return BaseLog
+     */
+    public function processLog($logString, $service) {
+        switch ($service) {
+            case Server::SERVICE_NAMESERVER:
+
+
+                break;
+
+            case Server::SERVICE_WEBSERVER:
+                $exploded = explode(" ", $logString);
+
+                $hostname = trim(array_shift($exploded), "\"");
+                $ipAddress = array_shift($exploded);
+                $date = date_create(trim(array_shift($exploded) . " " . array_shift($exploded), "[]"));
+                $userAgent = array_pop($exploded);
+
+                while (strpos($userAgent, "\"") > 1) {
+                    $userAgent = array_pop($exploded) . " " . $userAgent;
+                }
+
+                $userAgent = trim($userAgent, "\"");
+
+                return new WebserverLog($hostname, $date, $ipAddress, $userAgent);
+        }
+
+
+    }
+
     // Install bind
     private function installBind($operation) {
 
@@ -112,7 +146,7 @@ class LinuxServer implements Server {
 
         $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
 
-        $remainingZones = preg_replace("/zone \"" . $operation->getConfig()->getDomainName() ."\"[a-zA-Z0-9\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        $remainingZones = preg_replace("/zone \"" . $operation->getConfig()->getDomainName() . "\"[a-zA-Z0-9\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $remainingZones);
 
         // Reload bind

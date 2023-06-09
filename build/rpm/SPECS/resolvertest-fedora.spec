@@ -15,7 +15,7 @@ cp -r %{buildroot}/../../SOURCES/php/src/*  %{buildroot}/usr/local/src/resolvert
 cp -r %{buildroot}/../../SOURCES/php/composer.json %{buildroot}/usr/local/src/resolvertest/
 rm %{buildroot}/usr/local/src/resolvertest/src/resolvertest.php
 chmod 755 %{buildroot}/usr/local/src/resolvertest/src/resolvertest-linux.php
-chmod 755 %{buildroot}/usr/local/src/resolvertest/src/logger.php
+chmod 755 %{buildroot}/usr/local/src/resolvertest/src/logger-httpd.php
 cp -r %{buildroot}/usr/local/src/resolvertest/src/Config/config-fedora.txt %{buildroot}/usr/local/src/resolvertest/src/Config/config.txt
 mkdir -p %{buildroot}/etc/cron.d
 cp -r %{buildroot}/../../SOURCES/cron/resolvertest-scheduler %{buildroot}/etc/cron.d/

@@ -40,16 +40,23 @@ class TestService {
     private $globalConfig;
 
     /**
+     * @var Server
+     */
+    private $server;
+
+    /**
      * @param JSONToObjectConverter $jsonToObjectConverter
      * @param ObjectToJSONConverter $objectToJSONConverter
      * @param TestTypeManager $testTypeManager
      * @param GlobalConfigService $globalConfig
+     * @param Server $server
      */
-    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig) {
+    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig, $server) {
         $this->jsonToObjectConverter = $jsonToObjectConverter;
         $this->objectToJSONConverter = $objectToJSONConverter;
         $this->testTypeManager = $testTypeManager;
         $this->globalConfig = $globalConfig;
+        $this->server = $server;
     }
 
     /**
@@ -79,7 +86,7 @@ class TestService {
      * @return Test
      */
     public function getTestByHostname($hostname) {
-
+        return Test::filter("WHERE domain_name LIKE '$hostname' AND status LIKE 'ACTIVE'")[0];
     }
 
 
@@ -198,12 +205,11 @@ class TestService {
         foreach (Test::filter() as $test) {
 
             if ($test->getStatus() == Test::STATUS_PENDING && $test->getStarts()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
-                $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
 
                 $test->setStatus(Test::STATUS_INSTALLING);
                 $this->updateTest($test);
 
-                $server->performOperations($this->testTypeManager->getInstallServerOperations($test));
+                $this->server->performOperations($this->testTypeManager->getInstallServerOperations($test));
 
                 $test->setStatus(Test::STATUS_ACTIVE);
                 $this->updateTest($test);
@@ -211,12 +217,10 @@ class TestService {
 
             if ($test->getStatus() == Test::STATUS_ACTIVE && $test->getExpires() && $test->getExpires()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
 
-                $server = Container::instance()->getInterfaceImplementation(Server::class, Configuration::readParameter("server.key"));
-
                 $test->setStatus(Test::STATUS_UNINSTALLING);
                 $this->updateTest($test);
 
-                $server->performOperations($this->testTypeManager->getUninstallServerOperations($test));
+                $this->server->performOperations($this->testTypeManager->getUninstallServerOperations($test));
 
                 $test->setStatus(Test::STATUS_COMPLETED);
                 $this->updateTest($test);

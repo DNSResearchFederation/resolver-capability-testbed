@@ -7,6 +7,7 @@ use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Template\MustacheTemplateParser;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\ValueObjects\TestType\Config\DNSRecord;
@@ -120,6 +121,17 @@ class LinuxServerTest extends TestCase {
 
         $this->assertFalse(file_exists($path));
         $this->assertFalse(file_exists($contentDir));
+
+    }
+
+    public function testCanProcessWebserverLogCorrectly() {
+
+        $logString = "\"example.com\" 127.0.0.1 [07/Jun/2023:11:39:57 +0100] \"GET / HTTP/1.1\" 200 \"Mozilla/4.08 [en] (Win98; I ;Nav)\"";
+        $expectedLog = new WebserverLog("example.com", date_create("2023-06-07 11:39:57"), "127.0.0.1", "Mozilla/4.08 [en] (Win98; I ;Nav)");
+
+        $log = $this->server->processLog($logString, Server::SERVICE_WEBSERVER);
+
+        $this->assertEquals($expectedLog, $log);
 
     }
 
