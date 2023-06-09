@@ -46,6 +46,7 @@ mkdir -p /var/named/resolvertest
 chmod 777 /var/named/resolvertest
 touch /etc/named.resolvertest.zones
 chmod 777 /etc/named.resolvertest.zones
+chcon -R -t httpd_sys_rw_content_t /var/lib/resolvertest/
 service named restart
 service httpd restart
 service crond restart

@@ -144,7 +144,7 @@ class TestService {
         $test->save();
 
         /**
-         * @var LoggingService
+         * @var LoggingService $loggingService
          */
         $loggingService = Container::instance()->get(LoggingService::class);
         $loggingService->createLogDatabaseForTest($test);
@@ -182,7 +182,7 @@ class TestService {
         }
 
         /**
-         * @var LoggingService
+         * @var LoggingService $loggingService
          */
         $loggingService = Container::instance()->get(LoggingService::class);
         $loggingService->removeLogDatabaseForTest($test);

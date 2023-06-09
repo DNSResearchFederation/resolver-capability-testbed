@@ -94,6 +94,8 @@ class TestServiceTest extends TestBase {
         $test->setStatus(Test::STATUS_ACTIVE);
         $this->assertEquals($test, Test::fetch("testKey"));
 
+        $this->assertTrue(file_exists(Configuration::readParameter("storage.root") . "/logs/testKey.db"));
+
     }
 
     public function testCanSaveComprehensiveTest() {
@@ -110,6 +112,8 @@ class TestServiceTest extends TestBase {
         $this->testService->createTest($test);
 
         $this->assertEquals($test, Test::fetch("testKey"));
+
+        $this->assertTrue(file_exists(Configuration::readParameter("storage.root") . "/logs/testKey.db"));
     }
 
     /**
