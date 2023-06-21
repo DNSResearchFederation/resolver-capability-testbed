@@ -6,6 +6,7 @@ use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\Template\MustacheTemplateParser;
 use ResolverTest\Objects\Log\BaseLog;
+use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
@@ -101,20 +102,27 @@ class LinuxServer implements Server {
     public function processLog($logString, $service) {
         switch ($service) {
             case Server::SERVICE_NAMESERVER:
+                $components = explode(" ", $logString);
 
+                $date = date_create($components[0] . " " . $components[1]);
+                $ipAddress = explode("#", $components[5])[0];
+                $port = explode("#", $components[5])[1];
+                $hostname = trim($components[6], "():");
+                $request = implode(" ", array_slice($components, 8, 3));
+                $flags = $components[11];
 
-                break;
+                return new NameserverLog($hostname, $date, $ipAddress, $port, $request, $flags);
 
             case Server::SERVICE_WEBSERVER:
-                $exploded = explode(" ", $logString);
+                $components = explode(" ", $logString);
 
-                $hostname = trim(array_shift($exploded), "\"");
-                $ipAddress = array_shift($exploded);
-                $date = date_create(trim(array_shift($exploded) . " " . array_shift($exploded), "[]"));
-                $userAgent = array_pop($exploded);
+                $hostname = trim(array_shift($components), "\"");
+                $ipAddress = array_shift($components);
+                $date = date_create(trim(array_shift($components) . " " . array_shift($components), "[]"));
+                $userAgent = array_pop($components);
 
                 while (strpos($userAgent, "\"") > 1) {
-                    $userAgent = array_pop($exploded) . " " . $userAgent;
+                    $userAgent = array_pop($components) . " " . $userAgent;
                 }
 
                 $userAgent = trim($userAgent, "\"");

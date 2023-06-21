@@ -1,0 +1,6 @@
+logging {
+    channel queries_log {
+        file "/var/named/log/queries" versions 600 size 20m;
+        print-time yes;
+        print-category yes;
+    };

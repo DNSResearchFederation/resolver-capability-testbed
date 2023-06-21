@@ -3,7 +3,7 @@
 namespace ResolverTest\Objects\Log;
 
 /**
- * @table webserver_log
+ * @table webserver_queue
  * @generate
  */
 class WebserverLog extends BaseLog {

@@ -7,6 +7,7 @@ use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Template\MustacheTemplateParser;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
@@ -130,6 +131,17 @@ class LinuxServerTest extends TestCase {
         $expectedLog = new WebserverLog("example.com", date_create("2023-06-07 11:39:57"), "127.0.0.1", "Mozilla/4.08 [en] (Win98; I ;Nav)");
 
         $log = $this->server->processLog($logString, Server::SERVICE_WEBSERVER);
+
+        $this->assertEquals($expectedLog, $log);
+
+    }
+
+    public function testCanProcessNameserverLogCorrectly() {
+
+        $logString = "13-Jun-2023 09:44:19.306 queries: client @0x7f9e980bf990 192.168.0.0#12345 (monkey.a.b.c.resolvertest.xyz): query: monkey.a.b.c.resolvertest.xyz IN A -E(0) (10.128.0.5)";
+        $expectedLog = new NameserverLog("monkey.a.b.c.resolvertest.xyz", date_create("13-Jun-2023 09:44:19.306"), "192.168.0.0", 12345, "monkey.a.b.c.resolvertest.xyz IN A", "-E(0)");
+
+        $log = $this->server->processLog($logString, Server::SERVICE_NAMESERVER);
 
         $this->assertEquals($expectedLog, $log);
 
