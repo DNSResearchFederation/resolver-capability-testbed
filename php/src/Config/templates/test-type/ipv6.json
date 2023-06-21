@@ -19,7 +19,11 @@
   },
   "rules": {
     "dns": {
-      "expectedQueries": 1
+      "expectedQueries": [
+        {
+          "type": "AAAA"
+        }
+      ]
     },
     "webserver": {
       "expectedQueries": 1

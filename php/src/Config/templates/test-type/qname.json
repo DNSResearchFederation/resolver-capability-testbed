@@ -5,7 +5,7 @@
     "dnsZone": {
       "records": [
         {
-          "prefix": "*.a.b.c",
+          "prefix": "*.*.*.*",
           "ttl": 200,
           "type": "A",
           "data": "IPV4_ADDRESS"
@@ -19,12 +19,29 @@
   },
   "rules": {
     "dns": {
-      "expectedQueries": 4
+      "expectedQueries": [
+        {
+          "type": "A",
+          "matches": "[a-z]+"
+        },
+        {
+          "type": "A",
+          "matches": "[a-z]+\\.[a-z]+"
+        },
+        {
+          "type": "A",
+          "matches": "[a-z]+\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "type": "A",
+          "matches": "[a-z]+\\.[a-z]+\\.[a-z]+\\.[a-z]+"
+        }
+      ]
     },
     "webserver": {
-      "expectedQueries": 0
+      "expectedQueries": 1
     },
-    "relationalKey": "HOSTNAME",
+    "relationalKey": "HOSTNAME_LEAF",
     "timeoutSeconds": 5
   },
   "computedLogFields": {
