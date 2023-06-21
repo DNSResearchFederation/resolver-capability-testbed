@@ -4,7 +4,7 @@ Release: 0.0.2
 Summary: Resolver Capability Testing Framework
 License: MIT
 BuildArch: noarch
-Requires: httpd, bind, php-cli, php-pdo, php-json, crontabs, certbot
+Requires: httpd, bind, php-cli, php-pdo, php-json, php-process, crontabs, certbot
 
 %description
 Flexible resolver capability testing framework for DNS resolvers. Centos Version
@@ -17,17 +17,24 @@ rm %{buildroot}/usr/local/src/resolvertest/src/resolvertest.php
 chmod 755 %{buildroot}/usr/local/src/resolvertest/src/resolvertest-linux.php
 cp -r %{buildroot}/usr/local/src/resolvertest/src/Config/config-fedora.txt %{buildroot}/usr/local/src/resolvertest/src/Config/config.txt
 mkdir -p %{buildroot}/etc/cron.d
-cp -r %{buildroot}/../../SOURCES/cron/resolvertest-scheduler %{buildroot}/etc/cron.d/
+cp -r %{buildroot}/../../SOURCES/cron/* %{buildroot}/etc/cron.d/
+mkdir -p %{buildroot}/usr/local/src/resolvertest/scripts
+cp -r %{buildroot}/../../SOURCES/scripts/* %{buildroot}/usr/local/src/resolvertest/scripts/
 
 %files
+/usr/local/src/resolvertest/scripts
 /usr/local/src/resolvertest/src
 /usr/local/src/resolvertest/composer.json
-/etc/cron.d/resolvertest-scheduler
+/etc/cron.d
 
 %post
 dnf module enable php:remi-8.1 -y
 php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');";php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 grep -qxF 'include "/etc/named.resolvertest.zones";' /etc/named.conf || echo 'include "/etc/named.resolvertest.zones";' >> /etc/named.conf
+sed -i -E "s/port 53 \{.+\};/port 53 \{ any; \};/g" /etc/named.conf
+sed -i -E "s/recursion yes;/recursion no;/" /etc/named.conf
+sed -i -E "s/allow-query     \{.+\};/allow-query     { any; };/g" /etc/named.conf
+sed -i -E "s|logging \{|logging {\n    channel queries_log {\n        file \"/var/named/resolvertest/named.log\";\n        print-time yes;\n        print-category yes;\n    };\n     category queries { queries_log; };|" /etc/named.conf
 export COMPOSER_ALLOW_SUPERUSER=1
 (cd /usr/local/src/resolvertest; rm -f composer.lock; /usr/local/bin/composer install; /usr/local/bin/composer update)
 mkdir -p /var/lib/resolvertest/logs

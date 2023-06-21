@@ -27,6 +27,8 @@ cp -r %{buildroot}/../../SOURCES/cron/resolvertest-scheduler %{buildroot}/etc/cr
 
 %post
 grep -qxF 'include "/etc/named.resolvertest.zones";' /etc/named.conf || echo 'include "/etc/named.resolvertest.zones";' >> /etc/named.conf
+sed -i -E "s/port 53 \{.+\};/port 53 \{ any; \};/g" /etc/named.conf
+sed -i -E "s|logging \{|logging {\n    channel queries_log {\n        file \"/tmp/test.fifo\" versions 600 size 20m;\n        print-time yes;\n        print-category yes;\n    };|" /etc/named.conf
 export COMPOSER_ALLOW_SUPERUSER=1
 (cd /usr/local/src/resolvertest; rm -f composer.lock; composer install; composer update)
 mkdir -p /var/lib/resolvertest/logs
