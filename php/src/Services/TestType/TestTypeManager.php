@@ -40,6 +40,14 @@ class TestTypeManager {
         return $this->loadTestTypes();
     }
 
+    /**
+     * @param Test $test
+     * @return TestType
+     */
+    public function getTestTypeForTest($test) {
+        $list = $this->listTestTypes();
+        return $list[$test->getType()] ?? null;
+    }
 
     /**
      * Get the install server operations

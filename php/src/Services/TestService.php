@@ -87,7 +87,7 @@ class TestService {
      * @return Test
      */
     public function getTestByHostname($hostname) {
-        return Test::filter("WHERE domain_name LIKE '$hostname' AND status LIKE 'ACTIVE'")[0];
+        return Test::filter("WHERE '$hostname' LIKE '%' || domain_name AND status LIKE 'ACTIVE'")[0] ?? null;
     }
 
 

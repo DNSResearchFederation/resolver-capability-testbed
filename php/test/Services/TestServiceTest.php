@@ -152,6 +152,9 @@ class TestServiceTest extends TestBase {
         $retrievedTest = $this->testService->getTestByHostname("website.com");
         $this->assertEquals($test, $retrievedTest);
 
+        $retrievedTest = $this->testService->getTestByHostname("subdomain.website.com");
+        $this->assertEquals($test, $retrievedTest);
+
     }
 
     public function testCanUpdateExistingTest() {
