@@ -25,7 +25,11 @@
   },
   "rules": {
     "dns": {
-      "expectedQueries": 5
+      "expectedQueries": [
+        {
+          "type": "AAAA"
+        }
+      ]
     },
     "webserver": {
       "expectedQueries": 3
