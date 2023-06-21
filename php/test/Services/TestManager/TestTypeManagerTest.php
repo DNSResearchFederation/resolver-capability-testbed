@@ -15,6 +15,7 @@ use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
 use ResolverTest\ValueObjects\TestType\TestType;
 use ResolverTest\ValueObjects\TestType\TestTypeConfig;
 use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
+use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;
 use ResolverTest\ValueObjects\TestType\TestTypeRules;
 use ResolverTest\ValueObjects\TestType\TestTypeWebServerRules;
 
@@ -54,7 +55,7 @@ class TestTypeManagerTest extends TestCase {
 
         // Test can add in a custom
         $testTypeManager2 = new TestTypeManager();
-        $customTestType = new TestType("custom", "Custom Test", new TestTypeConfig(new DNSZone("test.com"), new WebServerVirtualHost()), new TestTypeRules(new TestTypeDNSRules(1), new TestTypeWebServerRules(1), "", 5), []);
+        $customTestType = new TestType("custom", "Custom Test", new TestTypeConfig(new DNSZone("test.com"), new WebServerVirtualHost()), new TestTypeRules(new TestTypeDNSRules(new TestTypeExpectedQuery("","")), new TestTypeWebServerRules(1), "", 5), []);
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/custom.json", $this->objectToJSONConverter->convert($customTestType));
         $expected["custom"] = $customTestType;
 
@@ -107,5 +108,22 @@ class TestTypeManagerTest extends TestCase {
         unlink(Configuration::readParameter("config.root") . "/resolvertest/example.json");
 
         $this->assertEquals($expectedOperations, $operations);
+    }
+
+    public function testCanReturnTheTestTypeObjectForAGivenTest() {
+
+        $testTypeManager = new TestTypeManager();
+        $test = new Test("aKey", "example", "test.co.uk");
+
+        // Temp move example.json to the custom directory
+        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example.json", file_get_contents(__DIR__ . "/example.json"));
+
+        $testType = $testTypeManager->getTestTypeForTest($test);
+        $expected = $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/example.json", true), TestType::class);
+
+        unlink(Configuration::readParameter("config.root") . "/resolvertest/example.json");
+
+        $this->assertEquals($expected, $testType);
+
     }
 }

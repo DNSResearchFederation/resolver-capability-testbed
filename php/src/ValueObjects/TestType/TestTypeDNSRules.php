@@ -5,26 +5,26 @@ namespace ResolverTest\ValueObjects\TestType;
 class TestTypeDNSRules {
 
     /**
-     * @var integer
+     * @var TestTypeExpectedQuery
      */
     private $expectedQueries = 1;
 
     /**
-     * @param int $expectedQueries
+     * @param TestTypeExpectedQuery $expectedQueries
      */
     public function __construct($expectedQueries) {
         $this->expectedQueries = $expectedQueries;
     }
 
     /**
-     * @return int
+     * @return TestTypeExpectedQuery
      */
     public function getExpectedQueries() {
         return $this->expectedQueries;
     }
 
     /**
-     * @param int $expectedQueries
+     * @param TestTypeExpectedQuery $expectedQueries
      */
     public function setExpectedQueries($expectedQueries) {
         $this->expectedQueries = $expectedQueries;
