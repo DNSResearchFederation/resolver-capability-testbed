@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <link type="text/css" rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"/>
+</head>
+
+<body>
+
+<div class="p-3">
+    <h1>Resolver capability testing</h1>
+
+    <div class="row">
+        <div class="col-5">
+            <form id="form" action="#">
+                <div class="form-group mt-3">
+                    <label for="testType">Test Type</label>
+                    <input type="text" class="form-control" id="testType">
+                </div>
+                <div class="form-group mt-3">
+                    <label for="domainName">Domain Name</label>
+                    <input type="text" class="form-control" id="domainName">
+                </div>
+                <div class="form-check mt-2">
+                    <input type="checkbox" class="form-check-input" id="insecure">
+                    <label for="insecure" class="form-check-label">Insecure</label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../dist/resolvercapabilitytest.js"></script>
+<script type="text/javascript">
+
+    document.getElementById("form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        let type = document.getElementById("testType").value;
+        let domainName = document.getElementById("domainName").value;
+
+        if (!type || !domainName)
+            alert("You must supply a type and domain name");
+        else
+            new ResolverCapabilityTest(type, domainName, {"insecure": document.getElementById("insecure").checked});
+    });
+
+</script>
+
+
+</body>
+
+
+</html>

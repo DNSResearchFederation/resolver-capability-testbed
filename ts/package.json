@@ -1,0 +1,47 @@
+{
+  "name": "resolver-capability-test",
+  "description": "Open source resolver capability testing framework client side website toolkit",
+  "version": "0.0.1",
+  "author": "DNS Research Federation",
+  "url": "https://github.com/DNSResearchFederation/resolvertest",
+  "files": [
+    "dist",
+    "ts"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/DNSResearchFederation/resolvertest/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DNSResearchFederation/resolvertest"
+  },
+  "scripts": {
+    "build:production": "webpack --config webpack.config.js -p --display-modules",
+    "publish:project": "npm run build:production; bump patch; npm publish",
+    "unit:test": "jasmine-ts --config=jasmine.json"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.5.14",
+    "@types/node": "^10.11.3",
+    "jasmine": "^3.6.1",
+    "jasmine-ts": "^0.3.0",
+    "node-fetch": "^3.3.1",
+    "source-map-loader": "^1.0.1",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2",
+    "uglify-template-string-loader": "^1.1.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "version-bump-prompt": "^6.0.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-lowercase-name": "^1.0.4"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
+}
