@@ -6,3 +6,6 @@ ssh
 php/src/DB
 php/test/Storage/logs
 *.db
+ts/dist
+ts/node_modules
+ts/package-lock.json
