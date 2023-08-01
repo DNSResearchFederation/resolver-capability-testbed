@@ -11,7 +11,13 @@ use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestService;
+use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\TestBase;
+use ResolverTest\ValueObjects\TestType\TestType;
+use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
+use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;
+use ResolverTest\ValueObjects\TestType\TestTypeRules;
+use ResolverTest\ValueObjects\TestType\TestTypeWebServerRules;
 
 include_once "autoloader.php";
 
@@ -32,10 +38,16 @@ class LoggingServiceTest extends TestBase {
      */
     private $testService;
 
+    /**
+     * @var MockObject
+     */
+    private $testTypeManager;
+
     public function setUp(): void {
         $this->server = MockObjectProvider::instance()->getMockInstance(Server::class);
         $this->testService = MockObjectProvider::instance()->getMockInstance(TestService::class);
-        $this->loggingService = new LoggingService($this->server, $this->testService);
+        $this->testTypeManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
+        $this->loggingService = new LoggingService($this->server, $this->testService, $this->testTypeManager);
     }
 
     public function testCanCreateLoggingDatabasesForGivenTest() {
@@ -55,8 +67,8 @@ class LoggingServiceTest extends TestBase {
         $webserverTable = $connection->getTableMetaData("webserver_queue");
         $nameserverTable = $connection->getTableMetaData("nameserver_queue");
 
-        $this->assertEquals(["ip_address", "user_agent", "id", "hostname", "date"], array_keys($webserverTable->getColumns()));
-        $this->assertEquals(["ip_address", "port", "request", "flags", "id", "hostname", "date"], array_keys($nameserverTable->getColumns()));
+        $this->assertEquals(["ip_address", "user_agent", "status_code", "id", "hostname", "date"], array_keys($webserverTable->getColumns()));
+        $this->assertEquals(["ip_address", "port", "request", "record_type", "flags", "id", "hostname", "date"], array_keys($nameserverTable->getColumns()));
 
     }
 
@@ -71,17 +83,20 @@ class LoggingServiceTest extends TestBase {
             unlink($path . "/ourKey.db");
         }
 
-        $sampleWebserverLog = new WebserverLog("test.com", date_create("2023-06-06"), "1.2.3.4", "UserAgent");
-        $sampleNameserverLog = new NameserverLog("test.com", date_create("2023-06-07"), "1.2.3.4", 50, "test.com IN A", "-E(0)D");
+        $sampleWebserverLog = new WebserverLog("abc.test.com", date_create("2023-06-06"), "1.2.3.4", "UserAgent", 200);
+        $sampleNameserverLog = new NameserverLog("abc.test.com", date_create("2023-06-07"), "1.2.3.4", 50, "test.com IN A", "A", "-E(0)D");
         $sampleTest = new Test("ourKey", "testType", "test.com");
 
-        $this->server->returnValue("processLog", $sampleWebserverLog, ["string1", "service1"]);
-        $this->server->returnValue("processLog", $sampleNameserverLog, ["string2", "service2"]);
-        $this->testService->returnValue("getTestByHostname", $sampleTest, ["test.com"]);
+        $sampleTestType = new TestType("testType", "", null, new TestTypeRules(new TestTypeDNSRules([new TestTypeExpectedQuery("A")]), new TestTypeWebServerRules([new TestTypeExpectedQuery()]), "hostname", null), null);
+
+        $this->server->returnValue("processLog", $sampleWebserverLog, ["string1", Server::SERVICE_WEBSERVER]);
+        $this->server->returnValue("processLog", $sampleNameserverLog, ["string2", Server::SERVICE_NAMESERVER]);
+        $this->testService->returnValue("getTestByHostname", $sampleTest, ["abc.test.com"]);
+        $this->testTypeManager->returnValue("getTestTypeForTest", $sampleTestType, [$sampleTest]);
 
         $this->loggingService->createLogDatabaseForTest($sampleTest);
-        $this->loggingService->processLog("string1", "service1");
-        $this->loggingService->processLog("string2", "service2");
+        $this->loggingService->processWebserverLog("string1");
+        $this->loggingService->processNameserverLog("string2");
 
         $connection = new SQLite3DatabaseConnection([
             "filename" => Configuration::readParameter("storage.root") . "/logs/ourKey.db"
@@ -93,8 +108,9 @@ class LoggingServiceTest extends TestBase {
         $this->assertEquals([
             'ip_address' => '1.2.3.4',
             'user_agent' => 'UserAgent',
+            'status_code' => 200,
             'id' => 1,
-            'hostname' => 'test.com',
+            'hostname' => 'abc.test.com',
             'date' => '2023-06-06 00:00:00'
         ], $webserverResultSet->nextRow());
 
@@ -105,9 +121,10 @@ class LoggingServiceTest extends TestBase {
             'ip_address' => '1.2.3.4',
             'port' => 50,
             'request' => 'test.com IN A',
+            'record_type' => 'A',
             'flags' => '-E(0)D',
             'id' => 1,
-            'hostname' => 'test.com',
+            'hostname' => 'abc.test.com',
             'date' => '2023-06-07 00:00:00'
         ], $nameserverResultSet->nextRow());
 
@@ -129,18 +146,18 @@ class LoggingServiceTest extends TestBase {
 
         for ($i = 10; $i < 31; $i++) {
             $date = "2023-06-$i 00:00:00";
-            $sampleConnection->query("INSERT INTO combined_log (`date`, field) VALUES ('$date}', 'content');");
+            $sampleConnection->query("INSERT INTO combined_log (`date`, field) VALUES ('$date', 'content');");
         }
 
         $logs = $this->loggingService->getLogsByDate("testKey", "2023-05-31 00:00:00", "2023-07-01 00:00:00", 10000, "jsonl");
 
         $this->assertEquals(22, sizeof(explode("\n", $logs)));
-        $this->assertEquals("{\"id\":1,\"date\":\"2023-06-10 00:00:00}\",\"field\":\"content\"}", explode("\n", $logs)[0]);
-        $this->assertEquals("{\"id\":21,\"date\":\"2023-06-30 00:00:00}\",\"field\":\"content\"}", explode("\n", $logs)[20]);
+        $this->assertEquals("{\"id\":1,\"date\":\"2023-06-10 00:00:00\",\"field\":\"content\"}", explode("\n", $logs)[0]);
+        $this->assertEquals("{\"id\":21,\"date\":\"2023-06-30 00:00:00\",\"field\":\"content\"}", explode("\n", $logs)[20]);
 
 
         $logs = $this->loggingService->getLogsByDate("testKey", "2023-06-16 00:00:00", "2023-07-01 00:00:00", 2, "json");
-        $expectedLogs = "[{\"id\":7,\"date\":\"2023-06-16 00:00:00}\",\"field\":\"content\"},{\"id\":8,\"date\":\"2023-06-17 00:00:00}\",\"field\":\"content\"}]";
+        $expectedLogs = "[{\"id\":7,\"date\":\"2023-06-16 00:00:00\",\"field\":\"content\"},{\"id\":8,\"date\":\"2023-06-17 00:00:00\",\"field\":\"content\"}]";
 
         $this->assertEquals($expectedLogs, $logs);
 
@@ -170,7 +187,7 @@ class LoggingServiceTest extends TestBase {
         $this->assertEquals("{\"id\":30,\"date\":\"2023-06-30 00:00:00}\",\"field\":\"content\"}", explode("\n", $logs)[29]);
 
 
-        $logs = $this->loggingService->getLogsById("testKey", 14, 17, 2, "json");
+        $logs = $this->loggingService->getLogsById("testKey", 15, 18, 2, "json");
         $expectedLogs = "[{\"id\":15,\"date\":\"2023-06-15 00:00:00}\",\"field\":\"content\"},{\"id\":16,\"date\":\"2023-06-16 00:00:00}\",\"field\":\"content\"}]";
 
         $this->assertEquals($expectedLogs, $logs);

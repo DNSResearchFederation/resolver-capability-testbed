@@ -44,8 +44,8 @@ class LinuxServerTest extends TestCase {
         $this->configService->setIPv6Address("2001::1234");
 
         $dnsRecords = [
-            new DNSRecord("", 300, "A", "1.2.3.4"),
-            new DNSRecord("", 200, "AAAA", "2001::1234"),
+            new DNSRecord("this", 300, "A", "1.2.3.4"),
+            new DNSRecord("that", 200, "AAAA", "2001::1234"),
             new DNSRecord("", 250, "MX", "mail.testdomain.com"),
             new DNSRecord("www", 200, "CNAME", "testdomain.com")
         ];
@@ -128,7 +128,7 @@ class LinuxServerTest extends TestCase {
     public function testCanProcessWebserverLogCorrectly() {
 
         $logString = "\"example.com\" 127.0.0.1 [07/Jun/2023:11:39:57 +0100] \"GET / HTTP/1.1\" 200 \"Mozilla/4.08 [en] (Win98; I ;Nav)\"";
-        $expectedLog = new WebserverLog("example.com", date_create("2023-06-07 11:39:57"), "127.0.0.1", "Mozilla/4.08 [en] (Win98; I ;Nav)");
+        $expectedLog = new WebserverLog("example.com", date_create("2023-06-07 11:39:57"), "127.0.0.1", "Mozilla/4.08 [en] (Win98; I ;Nav)", 200);
 
         $log = $this->server->processLog($logString, Server::SERVICE_WEBSERVER);
 
@@ -139,7 +139,7 @@ class LinuxServerTest extends TestCase {
     public function testCanProcessNameserverLogCorrectly() {
 
         $logString = "13-Jun-2023 09:44:19.306 queries: client @0x7f9e980bf990 192.168.0.0#12345 (monkey.a.b.c.resolvertest.xyz): query: monkey.a.b.c.resolvertest.xyz IN A -E(0) (10.128.0.5)";
-        $expectedLog = new NameserverLog("monkey.a.b.c.resolvertest.xyz", date_create("13-Jun-2023 09:44:19.306"), "192.168.0.0", 12345, "monkey.a.b.c.resolvertest.xyz IN A", "-E(0)");
+        $expectedLog = new NameserverLog("monkey.a.b.c.resolvertest.xyz", date_create("13-Jun-2023 09:44:19.306"), "192.168.0.0", 12345, "monkey.a.b.c.resolvertest.xyz IN A", "A", "-E(0)");
 
         $log = $this->server->processLog($logString, Server::SERVICE_NAMESERVER);
 

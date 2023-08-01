@@ -8,7 +8,8 @@ $ORIGIN testdomain.com.
 
         86400   IN   NS   ns1.testdomain.com.
         86400   IN   NS   ns2.testdomain.com.
-   300   IN   A   1.2.3.4
-   200   IN   AAAA   2001::1234
+@       600     IN   A    1.2.3.4
+this   300   IN   A   1.2.3.4
+that   200   IN   AAAA   2001::1234
    250   IN   MX   mail.testdomain.com.
 www   200   IN   CNAME   testdomain.com.
