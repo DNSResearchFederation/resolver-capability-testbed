@@ -5,7 +5,7 @@
     "dnsZone": {
       "records": [
         {
-          "prefix": "*.*.*.*",
+          "prefix": "*",
           "ttl": 200,
           "type": "A",
           "data": "IPV4_ADDRESS"
@@ -22,19 +22,19 @@
       "expectedQueries": [
         {
           "type": "A",
-          "matches": "[a-z]+"
+          "value": "[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "matches": "[a-z]+\\.[a-z]+"
+          "value": "[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "matches": "[a-z]+\\.[a-z]+\\.[a-z]+"
+          "value": "[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "matches": "[a-z]+\\.[a-z]+\\.[a-z]+\\.[a-z]+"
+          "value": "[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
         }
       ]
     },
