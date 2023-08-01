@@ -26,21 +26,27 @@ class NameserverLog extends BaseLog {
     /**
      * @var string
      */
+    private $recordType;
+
+    /**
+     * @var string
+     */
     private $flags;
 
     /**
      * @param string $hostname
-     * @param \DateTime $date
+     * @param string $date
      * @param string $ipAddress
      * @param integer $port
      * @param string $request
      * @param string $flags
      */
-    public function __construct($hostname, \DateTime $date, $ipAddress, $port, $request, $flags) {
+    public function __construct($hostname, $date, $ipAddress, $port, $request, $recordType, $flags) {
         parent::__construct($hostname, $date);
         $this->ipAddress = $ipAddress;
         $this->port = $port;
         $this->request = $request;
+        $this->recordType = $recordType;
         $this->flags = $flags;
     }
 
@@ -84,6 +90,20 @@ class NameserverLog extends BaseLog {
      */
     public function setRequest($request) {
         $this->request = $request;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecordType() {
+        return $this->recordType;
+    }
+
+    /**
+     * @param string $recordType
+     */
+    public function setRecordType($recordType) {
+        $this->recordType = $recordType;
     }
 
     /**

@@ -19,15 +19,22 @@ class WebserverLog extends BaseLog {
     private $userAgent;
 
     /**
+     * @var integer
+     */
+    private $statusCode;
+
+    /**
      * @param string $hostname
-     * @param \DateTime $date
+     * @param string $date
      * @param string $ipAddress
      * @param string $userAgent
+     * @param int $statusCode
      */
-    public function __construct($hostname, $date, $ipAddress, $userAgent) {
+    public function __construct($hostname, $date, $ipAddress, $userAgent, $statusCode) {
         parent::__construct($hostname, $date);
         $this->ipAddress = $ipAddress;
         $this->userAgent = $userAgent;
+        $this->statusCode = $statusCode;
     }
 
     /**
@@ -56,6 +63,20 @@ class WebserverLog extends BaseLog {
      */
     public function setUserAgent($userAgent) {
         $this->userAgent = $userAgent;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode() {
+        return $this->statusCode;
+    }
+
+    /**
+     * @param int $statusCode
+     */
+    public function setStatusCode($statusCode) {
+        $this->statusCode = $statusCode;
     }
 
 }
