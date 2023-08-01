@@ -109,9 +109,10 @@ class LinuxServer implements Server {
                 $port = explode("#", $components[5])[1];
                 $hostname = trim($components[6], "():");
                 $request = implode(" ", array_slice($components, 8, 3));
+                $recordType = $components[10];
                 $flags = $components[11];
 
-                return new NameserverLog($hostname, $date, $ipAddress, $port, $request, $flags);
+                return new NameserverLog($hostname, $date, $ipAddress, $port, $request, $recordType, $flags);
 
             case Server::SERVICE_WEBSERVER:
                 $components = explode(" ", $logString);
@@ -121,19 +122,23 @@ class LinuxServer implements Server {
                 $date = date_create(trim(array_shift($components) . " " . array_shift($components), "[]"));
                 $userAgent = array_pop($components);
 
-                while (strpos($userAgent, "\"") > 1) {
+                while (strpos($userAgent, "\"") > 0)  {
                     $userAgent = array_pop($components) . " " . $userAgent;
                 }
 
-                $userAgent = trim($userAgent, "\"");
+                $userAgent = trim($userAgent, "\"\t\n\r\0\x0B");
+                $statusCode = intval(array_pop($components));
 
-                return new WebserverLog($hostname, $date, $ipAddress, $userAgent);
+                return new WebserverLog($hostname, $date, $ipAddress, $userAgent, $statusCode);
         }
 
 
     }
 
-    // Install bind
+    /**
+     * @param ServerOperation $operation
+     * @return void
+     */
     private function installBind($operation) {
 
         $targetUser = Configuration::readParameter("server.bind.service.user");
@@ -149,7 +154,10 @@ class LinuxServer implements Server {
         passthru("{$this->sudoPrefix} $serviceCommand reload");
     }
 
-    // Uninstall bind
+    /**
+     * @param ServerOperation $operation
+     * @return void
+     */
     private function uninstallBind($operation) {
 
         $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
@@ -162,7 +170,10 @@ class LinuxServer implements Server {
         passthru("{$this->sudoPrefix} $serviceCommand reload");
     }
 
-    // Install httpd
+    /**
+     * @param ServerOperation $operation
+     * @return void
+     */
     private function installHttpd($operation) {
 
         $config = $operation->getConfig();
@@ -184,8 +195,16 @@ class LinuxServer implements Server {
         // Reload httpd
         $serviceCommand = Configuration::readParameter("server.httpd.service.command");
         passthru("{$this->sudoPrefix} $serviceCommand reload");
+
+        $authHook = Configuration::readParameter("config.root") . "/../src/resolvertest/scripts/certbot-certificate-install.sh";
+        passthru("{$this->sudoPrefix} certbot certonly --webroot-path $contentDir --manual --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory --agree-tos --register-unsafely-without-email --manual-auth-hook $authHook -d *.{$config->getIdentifier()}");
+
     }
 
+    /**
+     * @param ServerOperation $operation
+     * @return void
+     */
     private function uninstallHttpd($operation) {
 
         $config = $operation->getConfig();
@@ -223,6 +242,7 @@ class LinuxServer implements Server {
 
     /**
      * @param ServerOperation $operation
+     * @param string $targetDirectory
      * @return void
      */
     private function removeTemplateFile($operation, $targetDirectory) {
@@ -237,7 +257,12 @@ class LinuxServer implements Server {
 
     }
 
-    // Write a file as sudo
+    /**
+     * @param string $filePath
+     * @param string $content
+     * @param string $targetUser
+     * @return void
+     */
     private function sudoWriteFile($filePath, $content, $targetUser) {
         $tmpFile = tempnam(sys_get_temp_dir(), "file-");
         file_put_contents($tmpFile, $content);
@@ -249,7 +274,10 @@ class LinuxServer implements Server {
         passthru("{$this->sudoPrefix} chmod 755 $filePath");
     }
 
-    // Remove a file aas sudo
+    /**
+     * @param string $filePath
+     * @return void
+     */
     private function sudoRemoveFile($filePath) {
         passthru("{$this->sudoPrefix} rm -rf $filePath");
     }
