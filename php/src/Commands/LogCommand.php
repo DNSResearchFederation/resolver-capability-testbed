@@ -25,21 +25,16 @@ class LogCommand extends BaseLogCommand {
      */
     public function handleCommand($key, $maxAge = 5, $fromDate = null, $toDate = null, $fromId = null, $toId = null, $format = "jsonl", $file = STDOUT, $resultLimit = 10000) {
 
-        // Get Logs
+        // Get the stream for piping logs to
+        $stream = ($file == STDOUT) ? STDOUT : fopen($file, "w");
+
+        // Generate logs to out
         if ($toId || $fromId) {
-            $logs = $this->loggingService->getLogsById($key, $fromId, $toId, $resultLimit, $format);
+            $this->loggingService->generateLogsById($key, $fromId, $toId, $resultLimit, $format, $stream);
         } else {
             $fromDate = $fromDate ? date_create($fromDate) : date_create("now");
             $toDate = $toDate ? date_create($toDate) : (new \DateTime())->add(new \DateInterval("PT{$maxAge}M"));
-            $logs = $this->loggingService->getLogsByDate($key, $fromDate->format("Y-m-d H:i:s"), $toDate->format("Y-m-d H:i:s"), $resultLimit, $format);
-        }
-
-
-        // Output them
-        if ($file != STDOUT) {
-            file_put_contents($file, $logs);
-        } else {
-            fputs(STDOUT, $logs ?? "");
+            $this->loggingService->generateLogsByDate($key, $fromDate->format("Y-m-d H:i:s"), $toDate->format("Y-m-d H:i:s"), $resultLimit, $format, $stream);
         }
 
     }

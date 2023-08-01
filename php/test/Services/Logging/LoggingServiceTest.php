@@ -149,14 +149,18 @@ class LoggingServiceTest extends TestBase {
             $sampleConnection->query("INSERT INTO combined_log (`date`, field) VALUES ('$date', 'content');");
         }
 
-        $logs = $this->loggingService->getLogsByDate("testKey", "2023-05-31 00:00:00", "2023-07-01 00:00:00", 10000, "jsonl");
+        $filename = Configuration::readParameter("storage.root") . "/testOutputLogs.txt";
+
+        $this->loggingService->generateLogsByDate("testKey", "2023-05-31 00:00:00", "2023-07-01 00:00:00", 10000, "jsonl", fopen($filename, "w"));
+        $logs = file_get_contents($filename);
 
         $this->assertEquals(22, sizeof(explode("\n", $logs)));
         $this->assertEquals("{\"id\":1,\"date\":\"2023-06-10 00:00:00\",\"field\":\"content\"}", explode("\n", $logs)[0]);
         $this->assertEquals("{\"id\":21,\"date\":\"2023-06-30 00:00:00\",\"field\":\"content\"}", explode("\n", $logs)[20]);
 
 
-        $logs = $this->loggingService->getLogsByDate("testKey", "2023-06-16 00:00:00", "2023-07-01 00:00:00", 2, "json");
+        $this->loggingService->generateLogsByDate("testKey", "2023-06-16 00:00:00", "2023-07-01 00:00:00", 2, "json", fopen($filename, "w"));
+        $logs = file_get_contents($filename);
         $expectedLogs = "[{\"id\":7,\"date\":\"2023-06-16 00:00:00\",\"field\":\"content\"},{\"id\":8,\"date\":\"2023-06-17 00:00:00\",\"field\":\"content\"}]";
 
         $this->assertEquals($expectedLogs, $logs);
@@ -180,14 +184,18 @@ class LoggingServiceTest extends TestBase {
             $sampleConnection->query("INSERT INTO combined_log (`date`, field) VALUES ('$date}', 'content');");
         }
 
-        $logs = $this->loggingService->getLogsById("testKey", 0, 100, 10000, "jsonl");
+        $filename = Configuration::readParameter("storage.root") . "/testOutputLogs.txt";
+
+        $this->loggingService->generateLogsById("testKey", 0, 100, 10000, "jsonl", fopen($filename, "w"));
+        $logs = file_get_contents($filename);
 
         $this->assertEquals(31, sizeof(explode("\n", $logs)));
         $this->assertEquals("{\"id\":1,\"date\":\"2023-06-1 00:00:00}\",\"field\":\"content\"}", explode("\n", $logs)[0]);
         $this->assertEquals("{\"id\":30,\"date\":\"2023-06-30 00:00:00}\",\"field\":\"content\"}", explode("\n", $logs)[29]);
 
 
-        $logs = $this->loggingService->getLogsById("testKey", 15, 18, 2, "json");
+        $this->loggingService->generateLogsById("testKey", 15, 18, 2, "json", fopen($filename, "w"));
+        $logs = file_get_contents($filename);
         $expectedLogs = "[{\"id\":15,\"date\":\"2023-06-15 00:00:00}\",\"field\":\"content\"},{\"id\":16,\"date\":\"2023-06-16 00:00:00}\",\"field\":\"content\"}]";
 
         $this->assertEquals($expectedLogs, $logs);

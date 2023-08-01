@@ -296,59 +296,73 @@ class LoggingService {
 
     }
 
-
-    public function getLogsByDate($key, $start, $end, $limit, $format) {
+    /**
+     * Generate logs based on passed dates
+     *
+     * @param string $key
+     * @param string $start
+     * @param string $end
+     * @param integer $limit
+     * @param string $format
+     * @return void
+     */
+    public function generateLogsByDate($key, $start, $end, $limit, $format, $stream) {
 
         $connection = new SQLite3DatabaseConnection([
             "filename" => Configuration::readParameter("storage.root") . "/logs/$key.db"
         ]);
 
         $result = $connection->query("SELECT * FROM combined_log WHERE `date` >= '{$start}' AND `date` < '{$end}' LIMIT {$limit};");
-
-        return $this->formatLogs($result, $format);
+        $this->formatLogs($result, $format, $stream);
 
     }
 
-    public function getLogsById($key, $start, $end, $limit, $format) {
+    /**
+     * Generate logs based on passed IDs
+     *
+     * @param string $key
+     * @param integer $start
+     * @param integer $end
+     * @param integer $limit
+     * @param string $format
+     * @return void
+     */
+    public function generateLogsById($key, $start, $end, $limit, $format, $stream) {
 
         $connection = new SQLite3DatabaseConnection([
             "filename" => Configuration::readParameter("storage.root") . "/logs/$key.db"
         ]);
 
         $result = $connection->query("SELECT * FROM combined_log WHERE `id` >= '{$start}' AND `id` < '{$end}' LIMIT {$limit};");
-        return $this->formatLogs($result, $format);
+        $this->formatLogs($result, $format, $stream);
 
     }
 
     /**
      * @param ResultSet $logs
      * @param string $format
-     * @return mixed
+     * @return void
      */
-    private function formatLogs($logs, $format) {
-
-        $output = "";
+    private function formatLogs($logs, $format, $stream) {
 
         switch ($format) {
             case "jsonl":
                 while ($nextLine = $logs->nextRow()) {
-                    $output .= json_encode($nextLine) . "\n";
+                    fputs($stream, json_encode($nextLine) . "\n");
                 }
                 break;
 
             case "json":
                 $output = json_encode($logs->fetchAll());
+                fputs($stream, $output);
                 break;
 
             case "csv":
                 while ($nextLine = $logs->nextRow()) {
-                    $output .= implode(",", $nextLine) . "\n";
+                    fputcsv($stream, $nextLine);
                 }
                 break;
         }
-
-
-        return $output;
     }
 
 }
