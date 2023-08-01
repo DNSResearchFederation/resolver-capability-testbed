@@ -4,7 +4,7 @@ Release: 0.0.2
 Summary: Resolver Capability Testing Framework
 License: MIT
 BuildArch: noarch
-Requires: httpd, bind, php-cli, php-pdo, php-json, php-process, crontabs, certbot
+Requires: httpd, bind, php-cli, php-pdo, php-json, php-process, crontabs, certbot, python3-certbot-apache
 
 %description
 Flexible resolver capability testing framework for DNS resolvers. Centos Version
@@ -28,8 +28,7 @@ cp -r %{buildroot}/../../SOURCES/scripts/* %{buildroot}/usr/local/src/resolverte
 /etc/cron.d
 
 %post
-dnf module enable php:remi-8.1 -y
-php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');";php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');"; php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 grep -qxF 'include "/etc/named.resolvertest.zones";' /etc/named.conf || echo 'include "/etc/named.resolvertest.zones";' >> /etc/named.conf
 sed -i -E "s/port 53 \{.+\};/port 53 \{ any; \};/g" /etc/named.conf
 sed -i -E "s/recursion yes;/recursion no;/" /etc/named.conf
@@ -54,6 +53,7 @@ chmod 777 /var/named/resolvertest
 touch /etc/named.resolvertest.zones
 chmod 777 /etc/named.resolvertest.zones
 chcon -R -t httpd_sys_rw_content_t /var/lib/resolvertest/
+chmod 777 /usr/local/src/resolvertest/scripts/certbot-certificate-install.sh
 service named restart
 service httpd restart
 service crond restart
