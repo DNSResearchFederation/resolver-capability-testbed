@@ -9,6 +9,7 @@ $ORIGIN {{operationConfig.domainName}}.
 {{#resolverConfig.nameservers}}
         86400   IN   NS   {{.}}.
 {{/resolverConfig.nameservers}}
+@       600     IN   A    {{resolverConfig.iPv4Address}}
 {{#operationConfig.records}}
 {{prefix}}   {{ttl}}   IN   {{type}}   {{data}}
 {{/operationConfig.records}}

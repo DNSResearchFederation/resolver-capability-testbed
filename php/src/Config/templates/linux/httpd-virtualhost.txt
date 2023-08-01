@@ -1,6 +1,7 @@
 <VirtualHost *:80>
   ServerName {{operationConfig.prefix}}
   ServerAlias *.{{operationConfig.prefix}}
+  Header set Access-Control-Allow-Origin "*"
   DocumentRoot {{serverWebRoot}}/{{operationConfig.prefix}}
   CustomLog "|$php /usr/local/src/resolvertest/src/logger-httpd.php" "\"%{Host}i\" %h %t \"%r\" %>s \"%{User-agent}i\""
 </VirtualHost>
