@@ -28,6 +28,7 @@ class TestTypeRules {
     private $timeoutSeconds = 5;
 
     const RELATIONAL_KEY_HOSTNAME = "HOSTNAME";
+    const RELATIONAL_KEY_HOSTNAME_LEAF = "HOSTNAME_LEAF";
 
     /**
      * @param TestTypeDNSRules $dns
