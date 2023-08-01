@@ -32,7 +32,7 @@ class LogCommand extends BaseLogCommand {
         if ($toId || $fromId) {
             $this->loggingService->generateLogsById($key, $fromId, $toId, $resultLimit, $format, $stream);
         } else {
-            $fromDate = $fromDate ? date_create($fromDate) : date_create("2000-4-1");
+            $fromDate = $fromDate ? date_create($fromDate) : (new \DateTime())->sub(new \DateInterval("PT{$maxAge}M"));
             $toDate = $toDate ? date_create($toDate) : date_create("now");
             $this->loggingService->generateLogsByDate($key, $fromDate->format("Y-m-d H:i:s"), $toDate->format("Y-m-d H:i:s"), $resultLimit, $format, $stream);
         }

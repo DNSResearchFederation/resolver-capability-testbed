@@ -72,10 +72,6 @@ class LoggingServiceTest extends TestBase {
 
     }
 
-//    public function testCanCreateCombinedLogDatabaseCorrectlyGivenRulesOfTest() {
-//
-//    }
-
     public function testProcessLogCanSaveLogsObtainedFromServer() {
 
         $path = Configuration::readParameter("storage.root") . "/logs";
@@ -199,6 +195,41 @@ class LoggingServiceTest extends TestBase {
         $expectedLogs = "[{\"id\":15,\"date\":\"2023-06-15 00:00:00}\",\"field\":\"content\"},{\"id\":16,\"date\":\"2023-06-16 00:00:00}\",\"field\":\"content\"}]";
 
         $this->assertEquals($expectedLogs, $logs);
+    }
+
+    public function testCanRetrieveLogsWithFormat() {
+
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/testKey.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/testKey.db");
+        }
+
+        $sampleConnection = new SQLite3DatabaseConnection([
+            "filename" => Configuration::readParameter("storage.root") . "/logs/testKey.db"
+        ]);
+
+        $sampleConnection->query("CREATE TABLE combined_log ( id INTEGER PRIMARY KEY, `date` DATETIME, field VARCHAR(255));");
+
+        for ($i = 1; $i < 31; $i++) {
+            $date = "2023-06-$i 00:00:00";
+            $sampleConnection->query("INSERT INTO combined_log (`date`, field) VALUES ('$date}', 'content');");
+        }
+
+        $filename = Configuration::readParameter("storage.root") . "/testOutputLogs.txt";
+
+        $this->loggingService->generateLogsById("testKey", 0, 100, 10000, "csv", fopen($filename, "w"));
+        $logs = file_get_contents($filename);
+
+        $this->assertEquals(31, sizeof(explode("\n", $logs)));
+        $this->assertEquals("1,\"2023-06-1 00:00:00}\",content", explode("\n", $logs)[0]);
+        $this->assertEquals("30,\"2023-06-30 00:00:00}\",content", explode("\n", $logs)[29]);
+
+
+        $this->loggingService->generateLogsById("testKey", 15, 18, 2, "csv", fopen($filename, "w"));
+        $logs = file_get_contents($filename);
+        $expectedLogs = "15,\"2023-06-15 00:00:00}\",content\n16,\"2023-06-16 00:00:00}\",content\n";
+
+        $this->assertEquals($expectedLogs, $logs);
+
     }
 
 }

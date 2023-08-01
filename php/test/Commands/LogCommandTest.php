@@ -26,13 +26,13 @@ class LogCommandTest extends TestCase {
 
     public function testDefaultBehaviourForLogCommand() {
 
-        $now = date_create("2000-4-1");
-        $soon = date_create("now");
+        $from = (new \DateTime())->sub(new \DateInterval("PT5M"));
+        $to = date_create("now");
 
         $this->logCommand->handleCommand("test");
 
         $args = $this->loggingService->getMethodCallHistory("generateLogsByDate")[0];
-        $this->assertTrue($this->loggingService->methodWasCalled("generateLogsByDate", ["test", $now->format("Y-m-d H:i:s"), $soon->format("Y-m-d H:i:s"), 10000, "jsonl", $args[5]]));
+        $this->assertTrue($this->loggingService->methodWasCalled("generateLogsByDate", ["test", $from->format("Y-m-d H:i:s"), $to->format("Y-m-d H:i:s"), 10000, "jsonl", $args[5]]));
 
     }
 
@@ -54,13 +54,13 @@ class LogCommandTest extends TestCase {
 
     public function testCanUseMaxAgeParameter() {
 
-        $now = date_create("2000-4-1");
-        $soon = date_create("now");
+        $from = (new \DateTime())->sub(new \DateInterval("PT40M"));
+        $to = date_create("now");
 
         $this->logCommand->handleCommand("test", 40);
 
         $args = $this->loggingService->getMethodCallHistory("generateLogsByDate")[0];
-        $this->assertTrue($this->loggingService->methodWasCalled("generateLogsByDate", ["test", $now->format("Y-m-d H:i:s"), $soon->format("Y-m-d H:i:s"), 10000, "jsonl", $args[5]]));
+        $this->assertTrue($this->loggingService->methodWasCalled("generateLogsByDate", ["test", $from->format("Y-m-d H:i:s"), $to->format("Y-m-d H:i:s"), 10000, "jsonl", $args[5]]));
 
     }
 
