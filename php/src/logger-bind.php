@@ -17,5 +17,5 @@ Container::instance()->get(Bootstrapper::class);
 $loggingService = Container::instance()->get(LoggingService::class);
 
 while ($f = fgets(STDIN)) {
-    $loggingService->processLog($f, Server::SERVICE_NAMESERVER);
+    $loggingService->processNameserverLog($f);
 }
