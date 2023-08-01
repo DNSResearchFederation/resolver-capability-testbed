@@ -24,6 +24,7 @@ class ConfigUpdateCommand extends BaseConfigCommand {
     public function handleCommand($ipv4Address = null, $ipv6Address = null, $nameservers = null, $clientIpAddressLogging = null, $dapApiKey = null, $dapApiSecret = null) {
 
         if ($ipv4Address) {
+            $ipv4Address = trim($ipv4Address);
             if (!filter_var($ipv4Address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
                 throw new InvalidIPAddressException();
             }
@@ -31,6 +32,7 @@ class ConfigUpdateCommand extends BaseConfigCommand {
         }
 
         if ($ipv6Address) {
+            $ipv6Address = trim($ipv6Address);
             if (!filter_var($ipv6Address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                 throw new InvalidIPAddressException();
             }
