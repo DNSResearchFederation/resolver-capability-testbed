@@ -5,3 +5,16 @@
   DocumentRoot {{serverWebRoot}}/{{operationConfig.prefix}}
   CustomLog "|$php /usr/local/src/resolvertest/src/logger-httpd.php" "\"%{Host}i\" %h %t \"%r\" %>s \"%{User-agent}i\""
 </VirtualHost>
+
+<VirtualHost *:443>
+  ServerName {{operationConfig.prefix}}
+  ServerAlias *.{{operationConfig.prefix}}
+  Header set Access-Control-Allow-Origin "*"
+  DocumentRoot {{serverWebRoot}}/{{operationConfig.prefix}}
+  CustomLog "|$php /usr/local/src/resolvertest/src/logger-httpd.php" "\"%{Host}i\" %h %t \"%r\" %>s \"%{User-agent}i\""
+
+  SSLEngine on
+  SSLCertificateChainFile  /etc/letsencrypt/live/{{operationConfig.prefix}}/fullchain.pem
+  SSLCertificateKeyFile    /etc/letsencrypt/live/{{operationConfig.prefix}}/privkey.pem
+  SSLCertificateFile       /etc/letsencrypt/live/{{operationConfig.prefix}}/cert.pem
+</VirtualHost>
