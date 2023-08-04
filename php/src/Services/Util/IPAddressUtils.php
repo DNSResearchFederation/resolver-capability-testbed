@@ -11,14 +11,14 @@ class IPAddressUtils {
             $components = explode(".", $ipAddress);
             array_pop($components);
 
-            return implode(".", $components) . ".0/24";
+            return implode(".", $components) . ".0";
 
         } else if (filter_var($ipAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
 
             $components = explode(":", $ipAddress);
             $components = array_slice($components, 0, 3);
 
-            return implode(":", $components) . "::/48";
+            return implode(":", $components) . "::";
 
         } else {
             return $ipAddress;
