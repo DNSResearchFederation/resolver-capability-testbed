@@ -9,6 +9,7 @@ use Kinikit\Persistence\Database\Vendors\SQLite3\SQLite3DatabaseConnection;
 use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Test\Test;
+use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
@@ -43,11 +44,16 @@ class LoggingServiceTest extends TestBase {
      */
     private $testTypeManager;
 
+    /**
+     * @var GlobalConfigService
+     */
+    private $configService;
+
     public function setUp(): void {
         $this->server = MockObjectProvider::instance()->getMockInstance(Server::class);
         $this->testService = MockObjectProvider::instance()->getMockInstance(TestService::class);
         $this->testTypeManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
-        $this->loggingService = new LoggingService($this->server, $this->testService, $this->testTypeManager);
+        $this->loggingService = new LoggingService($this->server, $this->testService, $this->testTypeManager, $this->configService);
     }
 
     public function testCanCreateLoggingDatabasesForGivenTest() {

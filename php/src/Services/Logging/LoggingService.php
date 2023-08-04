@@ -15,9 +15,11 @@ use Kinikit\Persistence\Tools\DBInstaller;
 use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Test\Test;
+use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
+use ResolverTest\Services\Util\IPAddressUtils;
 use ResolverTest\ValueObjects\TestType\TestType;
 use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
 use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;
@@ -41,14 +43,21 @@ class LoggingService {
     private $testTypeManager;
 
     /**
+     * @var GlobalConfigService
+     */
+    private $configService;
+
+    /**
      * @param Server $server
      * @param TestService $testService
      * @param TestTypeManager $testTypeManager
+     * @param GlobalConfigService $configService
      */
-    public function __construct($server, $testService, $testTypeManager) {
+    public function __construct($server, $testService, $testTypeManager, $configService) {
         $this->server = $server;
         $this->testService = $testService;
         $this->testTypeManager = $testTypeManager;
+        $this->configService = $configService;
     }
 
     /**
@@ -79,7 +88,7 @@ class LoggingService {
             $columnsClause = "id INTEGER PRIMARY KEY, `date` DATETIME";
 
             for ($i = 1; $i <= sizeof($rules->getDns()->getExpectedQueries()); $i++) {
-                $columnsClause .= ", dnsResolutionTime$i INT, dnsResolvedHostname$i VARCHAR(255), dnsClientIPAddress$i VARCHAR(255), dnsResolverQuery$i VARCHAR(255), dnsResolverAnswer$i VARCHAR(255)";
+                $columnsClause .= ", dnsResolutionTime$i INT, dnsResolvedHostname$i VARCHAR(255), dnsClientIpAddress$i VARCHAR(255), dnsResolverQuery$i VARCHAR(255), dnsResolverAnswer$i VARCHAR(255)";
             }
 
             for ($i = 1; $i <= $rules->getWebserver()->getExpectedQueries(); $i++) {
@@ -175,7 +184,7 @@ class LoggingService {
         $orm->save($log);
 
         // Get corresponding nameserver logs and check against rules
-        $this->compareLogs($connection, $testType, $log->getRelationalKeyValue($testType->getRules()->getRelationalKey()));
+        $this->compareLogs($connection, $testType, $log->getRelationalKeyValue($testType->getRules()->getRelationalKey()), $test->getKey());
     }
 
     /**
@@ -186,7 +195,7 @@ class LoggingService {
      * @param string $relationalKey
      * @return void
      */
-    public function compareLogs($connection, $testType, $relationalKey) {
+    public function compareLogs($connection, $testType, $relationalKey, $sessionKey) {
 
         $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE hostname LIKE '%$relationalKey' ORDER BY `date`;")->fetchAll();
         if (!$webserverLogs)
@@ -196,21 +205,19 @@ class LoggingService {
         if (!$nameserverLogs)
             return;
 
-        print_r("hhmmmm");
-
         $matchedWebserverLogs = $this->validateWebserverLogs($webserverLogs, $testType->getRules()->getWebserver());
         $matchedNameserverLogs = $this->validateNameserverLogs($nameserverLogs, $testType->getRules()->getDns());
 
         if ($matchedWebserverLogs && $matchedNameserverLogs) {
-            $this->writeCombinedLog($connection, $matchedWebserverLogs, $matchedNameserverLogs);
+            $this->writeCombinedLog($connection, $sessionKey, $testType->getType(), $matchedWebserverLogs, $matchedNameserverLogs);
         }
 
     }
 
     /**
-     * @param WebserverLog[] $logs
+     * @param array $logs
      * @param TestTypeWebServerRules $rules
-     * @return WebserverLog[]
+     * @return array
      */
     private function validateWebserverLogs($logs, $rules) {
 
@@ -273,26 +280,43 @@ class LoggingService {
      * @param NameserverLog[] $nameserverLogs
      * @return void
      */
-    private function writeCombinedLog($connection, $webserverLogs = [], $nameserverLogs = []) {
+    private function writeCombinedLog($connection, $key, $type, $webserverLogs = [], $nameserverLogs = []) {
 
         $data = ["date" => date_create()->format("Y-m-d H:i:s")];
 
+        $logFullIp = boolval($this->configService->isClientIpAddressLogging());
+
         for ($i = 1; $i < sizeof($nameserverLogs) + 1; $i++) {
+
+            $ipAddress = $logFullIp ? $nameserverLogs[$i - 1]["ip_address"] : IPAddressUtils::anonymiseIP($nameserverLogs[$i - 1]["ip_address"]);
+
             $data["dnsResolutionTime$i"] = $nameserverLogs[$i - 1]["date"];
             $data["dnsResolvedHostname$i"] = $nameserverLogs[$i - 1]["hostname"];
-            $data["dnsClientIPAddress$i"] = $nameserverLogs[$i - 1]["ip_address"];
+            $data["dnsClientIpAddress$i"] = $ipAddress;
             $data["dnsResolverQuery$i"] = $nameserverLogs[$i - 1]["request"];
             $data["dnsResolverAnswer$i"] = null;
         }
 
         for ($i = 1; $i < sizeof($webserverLogs) + 1; $i++) {
+
+            $ipAddress = $logFullIp ? $webserverLogs[$i - 1]["ip_address"] : IPAddressUtils::anonymiseIP($webserverLogs[$i - 1]["ip_address"]);
+
             $data["webServerRequestTime$i"] = $webserverLogs[$i - 1]["date"];
             $data["webServerRequestHostname$i"] = $webserverLogs[$i - 1]["hostname"];
-            $data["webServerClientIpAddress$i"] = $webserverLogs[$i - 1]["ip_address"];
+            $data["webServerClientIpAddress$i"] = $ipAddress;
             $data["webServerResponseCode$i"] = $webserverLogs[$i - 1]["status_code"];
         }
 
         $connection->getBulkDataManager()->insert("combined_log", $data);
+
+        /**
+         * @var DAPLogger $dapLogger
+         */
+        $dapLogger = Container::instance()->get(DAPLogger::class);
+
+        if ($dapLogger->hasGotCredentials()) {
+            $dapLogger->writeLogToDAP($key, $type, $data);
+        }
 
     }
 

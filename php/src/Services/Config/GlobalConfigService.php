@@ -52,15 +52,16 @@ class GlobalConfigService extends ConfigFile {
     }
 
     public function getDapApiKey() {
-        $this->getParameter("dap.api.key");
+        return $this->getParameter("dap.api.key");
     }
 
     public function setDapApiKey($value) {
         $this->addParameter("dap.api.key", $value);
+        $this->save();
     }
 
     public function getDapApiSecret() {
-        $this->getParameter("dap.api.secret");
+        return $this->getParameter("dap.api.secret");
     }
 
     public function setDapApiSecret($value) {
