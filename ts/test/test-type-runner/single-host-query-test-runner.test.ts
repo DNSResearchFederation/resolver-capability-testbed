@@ -39,4 +39,24 @@ describe("Test single host query test runner tests", function () {
 
     });
 
+    it("Should be able to perform a request with a fixed subdomain", () => {
+
+        let testRunner = new SingleHostQueryTestRunner(0, "some.subdomain");
+        testRunner.runTest("test.com", []);
+        expect(testRunner.getPreviousRequests().length).toEqual(1);
+        expect(testRunner.getPreviousRequests()[0].hostname).toEqual("https://some.subdomain.test.com");
+
+    })
+
+    it("Should be able to perform a request with dynamic subdomains and a fixed subdomain", () => {
+
+        let testRunner = new SingleHostQueryTestRunner(2, "some.subdomain");
+        testRunner.runTest("test.com", {"insecure": true});
+        expect(testRunner.getPreviousRequests().length).toEqual(1);
+        expect(testRunner.getPreviousRequests()[0].hostname).toContain("some.subdomain.test.com");
+        expect(testRunner.getPreviousRequests()[0].hostname).toContain("http://");
+        expect(testRunner.getPreviousRequests()[0].hostname.length).toEqual(104);
+
+    })
+
 });

@@ -3,11 +3,15 @@ import TestTypeRunner from "./test-type-runner";
 export default class SingleHostQueryTestRunner extends TestTypeRunner {
 
     // Number of subdomains
-    private _numberOfSubdomains: number;
+    private _dynamicSubdomains: number;
 
-    constructor(numberOfSubdomains = 1) {
+    // A fixed subdomain to append to
+    private _fixedSubdomains: string;
+
+    constructor(dynamicSubdomains = 1, fixedSubdomain = null) {
         super();
-        this._numberOfSubdomains = numberOfSubdomains;
+        this._dynamicSubdomains = dynamicSubdomains;
+        this._fixedSubdomains = fixedSubdomain;
     }
 
 
@@ -22,7 +26,11 @@ export default class SingleHostQueryTestRunner extends TestTypeRunner {
         let uuid = this.getUUID();
         let hostname = domainName;
 
-        for (let i = 0; i < this._numberOfSubdomains; i++) {
+        if (this._fixedSubdomains) {
+            hostname = this._fixedSubdomains + "." + hostname;
+        }
+
+        for (let i = 0; i < this._dynamicSubdomains; i++) {
             hostname = uuid + '.' + hostname;
         }
 

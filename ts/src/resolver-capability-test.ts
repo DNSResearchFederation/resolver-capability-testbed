@@ -5,7 +5,7 @@ export default class ResolverCapabilityTest {
     // Test type runners
     private testTypeRunners: any = {
         "ipv6": new SingleHostQueryTestRunner(),
-        "qname-minimisation": new SingleHostQueryTestRunner(4)
+        "qname-minimisation": new SingleHostQueryTestRunner(1, "qname.resolver.test")
     };
 
     /**
