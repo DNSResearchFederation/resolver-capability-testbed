@@ -21,6 +21,9 @@
     "dns": {
       "expectedQueries": [
         {
+          "type": "A"
+        },
+        {
           "type": "AAAA"
         }
       ]

@@ -2,11 +2,9 @@
 
 namespace ResolverTest\Services\Logging;
 
-use Kinikit\CLI\Commands\Pull;
 use Kinikit\Core\HTTP\Dispatcher\HttpRequestDispatcher;
 use Kinikit\Core\HTTP\Request\Headers;
 use Kinikit\Core\HTTP\Request\Request;
-use Kinikit\Core\Logging\Logger;
 use Kinikit\Core\Util\StringUtils;
 use ResolverTest\Services\Config\GlobalConfigService;
 

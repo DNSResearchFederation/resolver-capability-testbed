@@ -12,7 +12,7 @@ class ServerOperation {
     private $mode;
 
     /**
-     * @var OperationConfigq
+     * @var OperationConfig
      */
     private $config;
 

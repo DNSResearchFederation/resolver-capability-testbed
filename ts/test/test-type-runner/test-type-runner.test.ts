@@ -15,7 +15,7 @@ describe("Test type runner tests", function () {
         let testTypeRunner = new SingleHostQueryTestRunner();
         let time = Date.now();
         await testTypeRunner.wait(200);
-        expect(Date.now() - time).toBeGreaterThan(200);
+        expect(Date.now() - time).toBeGreaterThanOrEqual(200);
 
     });
 
