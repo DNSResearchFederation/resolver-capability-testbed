@@ -5,6 +5,7 @@ namespace ResolverTest\Services\Logging;
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
+use Kinikit\Core\Logging\Logger;
 use Kinikit\Core\Reflection\ClassInspectorProvider;
 use Kinikit\Persistence\Database\Generator\TableDDLGenerator;
 use Kinikit\Persistence\Database\ResultSet\ResultSet;
@@ -12,6 +13,7 @@ use Kinikit\Persistence\Database\Vendors\SQLite3\SQLite3DatabaseConnection;
 use Kinikit\Persistence\ORM\ORM;
 use Kinikit\Persistence\ORM\Tools\SchemaGenerator;
 use Kinikit\Persistence\Tools\DBInstaller;
+use ResolverTest\Objects\Log\BaseLog;
 use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Test\Test;
@@ -23,6 +25,7 @@ use ResolverTest\Services\Util\IPAddressUtils;
 use ResolverTest\ValueObjects\TestType\TestType;
 use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
 use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;
+use ResolverTest\ValueObjects\TestType\TestTypeRules;
 use ResolverTest\ValueObjects\TestType\TestTypeWebServerRules;
 
 class LoggingService {
@@ -184,7 +187,7 @@ class LoggingService {
         $orm->save($log);
 
         // Get corresponding nameserver logs and check against rules
-        $this->compareLogs($connection, $testType, $log->getRelationalKeyValue($testType->getRules()->getRelationalKey()), $test->getKey());
+        $this->compareLogs($connection, $testType, $log, $test->getKey());
     }
 
     /**
@@ -192,18 +195,43 @@ class LoggingService {
      *
      * @param SQLite3DatabaseConnection $connection
      * @param TestType $testType
-     * @param string $relationalKey
+     * @param BaseLog $triggerLog
      * @return void
      */
-    public function compareLogs($connection, $testType, $relationalKey, $sessionKey) {
+    public function compareLogs($connection, $testType, $triggerLog, $sessionKey) {
 
-        $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE hostname LIKE '%$relationalKey' ORDER BY `date`;")->fetchAll();
-        if (!$webserverLogs)
-            return;
+        if ($testType->getRules()->getRelationalKey() == TestTypeRules::RELATIONAL_KEY_HOSTNAME) {
 
-        $nameserverLogs = $connection->query("SELECT * FROM nameserver_queue WHERE hostname LIKE '%$relationalKey' ORDER BY `date`;")->fetchAll();
-        if (!$nameserverLogs)
-            return;
+            $relationalKey = $triggerLog->getRelationalKeyValue($testType->getRules()->getRelationalKey());
+
+            $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE hostname LIKE '%$relationalKey' ORDER BY `date`;")->fetchAll();
+            if (!$webserverLogs)
+                return;
+
+            $nameserverLogs = $connection->query("SELECT * FROM nameserver_queue WHERE hostname LIKE '%$relationalKey' ORDER BY `date`;")->fetchAll();
+            if (!$nameserverLogs)
+                return;
+
+        } else {
+
+            $hostname = $triggerLog->getRelationalKeyValue(TestTypeRules::RELATIONAL_KEY_HOSTNAME);
+            Logger::log($hostname);
+            $firstLog = $connection->query("SELECT * FROM nameserver_queue WHERE hostname LIKE '%$hostname' ORDER BY `date`;")->fetchAll();
+
+            Logger::log($firstLog);
+            if (!$firstLog) {
+                return;
+            }
+
+            $clientIp = $firstLog[0]["ip_address"];
+            $timeout = $testType->getRules()->getTimeoutSeconds();
+            $recently = date_create("now", new \DateTimeZone("UTC"))->sub(new \DateInterval("PT{$timeout}S"))->format("Y-m-d H:i:s");
+
+            $nameserverLogs = $connection->query("SELECT * FROM nameserver_queue WHERE `date` > '$recently' AND ip_address = '$clientIp' ORDER BY `date` DESC;")->fetchAll();
+            $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE hostname LIKE '%$hostname' ORDER BY `date`;")->fetchAll();
+
+            $nameserverLogs = array_merge($firstLog, $nameserverLogs);
+        }
 
         $matchedWebserverLogs = $this->validateWebserverLogs($webserverLogs, $testType->getRules()->getWebserver());
         $matchedNameserverLogs = $this->validateNameserverLogs($nameserverLogs, $testType->getRules()->getDns());
