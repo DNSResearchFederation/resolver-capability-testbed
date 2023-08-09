@@ -21,14 +21,21 @@ class WebServerVirtualHost implements OperationConfig {
     private $content;
 
     /**
+     * @var array
+     */
+    private $sslCertPrefixes;
+
+    /**
      * @param string $prefix
      * @param bool $wildcard
      * @param string $content
+     * @param array $sslCertPrefixes
      */
-    public function __construct($prefix = null, $wildcard = false, $content = null) {
+    public function __construct($prefix = null, $wildcard = false, $content = null, $sslCertPrefixes = ["*"]) {
         $this->prefix = $prefix;
         $this->wildcard = $wildcard;
         $this->content = $content;
+        $this->sslCertPrefixes = $sslCertPrefixes;
     }
 
     /**
@@ -71,6 +78,20 @@ class WebServerVirtualHost implements OperationConfig {
      */
     public function setContent($content) {
         $this->content = $content;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSslCertPrefixes() {
+        return $this->sslCertPrefixes;
+    }
+
+    /**
+     * @param array $sslCertPrefixes
+     */
+    public function setSslCertPrefixes($sslCertPrefixes) {
+        $this->sslCertPrefixes = $sslCertPrefixes;
     }
 
     public function getIdentifier() {

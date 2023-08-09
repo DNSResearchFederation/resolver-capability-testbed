@@ -14,7 +14,13 @@
     },
     "webVirtualHost": {
       "wildcard": true,
-      "content": "OK"
+      "content": "OK",
+      "sslCertPrefixes": [
+        "*.qname.resolver.test",
+        "qname.resolver.test",
+        "resolver.test",
+        "test"
+      ]
     }
   },
   "rules": {
@@ -22,30 +28,29 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+          "value": "^test\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+          "value": "^resolver\\.test\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+          "value": "^qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+          "value": "^[a-z0-9-]+\\.qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
         }
       ]
     },
     "webserver": {
       "expectedQueries": 1
     },
-    "relationalKey": "HOSTNAME_LEAF",
-    "timeoutSeconds": 5
+    "relationalKey": "HOSTNAME_OR_IPADDRESS",
+    "timeoutSeconds": 3
   },
   "computedLogFields": {
     "status": ""
   }
-
 }

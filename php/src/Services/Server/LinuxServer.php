@@ -176,6 +176,9 @@ class LinuxServer implements Server {
      */
     private function installHttpd($operation) {
 
+        /**
+         * @var WebServerVirtualHost $config
+         */
         $config = $operation->getConfig();
         $targetUser = Configuration::readParameter("server.httpd.service.user");
 
@@ -187,7 +190,10 @@ class LinuxServer implements Server {
         $this->sudoWriteFile($contentDir . "/index.html", $config->getContent(), $targetUser);
 
         $model = [
-            "serverWebRoot" => Configuration::readParameter("server.httpd.webroot.dir")
+            "serverWebRoot" => Configuration::readParameter("server.httpd.webroot.dir"),
+            "serverAliases" => array_map(function ($elt) use ($config) {
+                return $elt . "." . $config->getIdentifier();
+            },  $config->getSslCertPrefixes())
         ];
 
         $this->installTemplateFile($operation, "httpd-virtualhost.txt", Configuration::readParameter("server.httpd.config.dir"), $targetUser, $model);
@@ -196,8 +202,13 @@ class LinuxServer implements Server {
         $serviceCommand = Configuration::readParameter("server.httpd.service.command");
         passthru("{$this->sudoPrefix} $serviceCommand reload");
 
+        foreach ($config->getSslCertPrefixes() as $prefix) {
+            $sslDomains[] = $prefix . "." . $config->getIdentifier();
+        }
+
+        $sslDomainsString = implode(",", $sslDomains);
         $authHook = Configuration::readParameter("config.root") . "/../src/resolvertest/scripts/certbot-certificate-install.sh";
-        passthru("{$this->sudoPrefix} certbot certonly --webroot-path $contentDir --manual --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory --agree-tos --register-unsafely-without-email --manual-auth-hook $authHook -d *.{$config->getIdentifier()}");
+        passthru("{$this->sudoPrefix} certbot certonly --webroot-path $contentDir --manual --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory --agree-tos --register-unsafely-without-email --manual-auth-hook $authHook -d $sslDomainsString");
 
     }
 
