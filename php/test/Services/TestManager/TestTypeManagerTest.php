@@ -55,7 +55,7 @@ class TestTypeManagerTest extends TestCase {
 
         // Test can add in a custom
         $testTypeManager2 = new TestTypeManager();
-        $customTestType = new TestType("custom", "Custom Test", new TestTypeConfig(new DNSZone("test.com"), new WebServerVirtualHost()), new TestTypeRules(new TestTypeDNSRules([new TestTypeExpectedQuery("","")]), new TestTypeWebServerRules(1), "", 5), []);
+        $customTestType = new TestType("custom", "Custom Test", new TestTypeConfig(new DNSZone("test.com"), new WebServerVirtualHost()), new TestTypeRules(new TestTypeDNSRules([new TestTypeExpectedQuery("","")]), new TestTypeWebServerRules(1), false, "", 5), []);
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/custom.json", $this->objectToJSONConverter->convert($customTestType));
         $expected["custom"] = $customTestType;
 

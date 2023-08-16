@@ -89,7 +89,7 @@ class LoggingServiceTest extends TestBase {
         $sampleNameserverLog = new NameserverLog("abc.test.com", date_create("2023-06-07"), "1.2.3.4", 50, "test.com IN A", "A", "-E(0)D");
         $sampleTest = new Test("ourKey", "testType", "test.com");
 
-        $sampleTestType = new TestType("testType", "", null, new TestTypeRules(new TestTypeDNSRules([new TestTypeExpectedQuery("A")]), new TestTypeWebServerRules([new TestTypeExpectedQuery()]), "HOSTNAME", null), null);
+        $sampleTestType = new TestType("testType", "", null, new TestTypeRules(new TestTypeDNSRules([new TestTypeExpectedQuery("A")]), new TestTypeWebServerRules([new TestTypeExpectedQuery()]), false,"HOSTNAME", null), null);
 
         $this->server->returnValue("processLog", $sampleWebserverLog, ["string1", Server::SERVICE_WEBSERVER]);
         $this->server->returnValue("processLog", $sampleNameserverLog, ["string2", Server::SERVICE_NAMESERVER]);

@@ -28,25 +28,26 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "^test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^test\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "^resolver\\.test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^resolver\\.test\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "^qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "^[a-z0-9-]+\\.qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]+\\.qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
         }
       ]
     },
     "webserver": {
       "expectedQueries": 1
     },
+    "webserverOptional": false,
     "relationalKey": "HOSTNAME_OR_IPADDRESS",
     "timeoutSeconds": 3
   },

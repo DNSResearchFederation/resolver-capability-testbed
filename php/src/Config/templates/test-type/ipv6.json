@@ -4,12 +4,6 @@
   "config": {
     "dnsZone": {
       "records": [
-        {
-          "prefix": "*",
-          "ttl": 200,
-          "type": "AAAA",
-          "data": "IPV6_ADDRESS"
-        }
       ]
     },
     "webVirtualHost": {
@@ -31,6 +25,7 @@
     "webserver": {
       "expectedQueries": 1
     },
+    "webserverOptional": true,
     "relationalKey": "HOSTNAME",
     "timeoutSeconds": 3
   },
