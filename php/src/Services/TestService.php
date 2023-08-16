@@ -17,6 +17,7 @@ use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
+use ResolverTest\Services\Whois\WhoisService;
 
 class TestService {
 
@@ -41,6 +42,11 @@ class TestService {
     private $globalConfig;
 
     /**
+     * @var WhoisService
+     */
+    private $whoisService;
+
+    /**
      * @var Server
      */
     private $server;
@@ -50,13 +56,15 @@ class TestService {
      * @param ObjectToJSONConverter $objectToJSONConverter
      * @param TestTypeManager $testTypeManager
      * @param GlobalConfigService $globalConfig
+     * @param WhoisService $whoisService
      * @param Server $server
      */
-    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig, $server) {
+    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig, $whoisService, $server) {
         $this->jsonToObjectConverter = $jsonToObjectConverter;
         $this->objectToJSONConverter = $objectToJSONConverter;
         $this->testTypeManager = $testTypeManager;
         $this->globalConfig = $globalConfig;
+        $this->whoisService = $whoisService;
         $this->server = $server;
     }
 
@@ -101,6 +109,11 @@ class TestService {
         if (!($this->globalConfig->isValid())) {
             throw new InvalidConfigException();
         }
+
+        // Check the nameservers are correct for the domain
+        if ($this->globalConfig->getNameservers() != $this->whoisService->getNameservers($test->getDomainName())) {
+            throw new \Exception("The domain doesn't have the correct nameservers");
+        };
 
         // Validate the test for general correctness
         $test->validate();

@@ -19,6 +19,7 @@ use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
+use ResolverTest\Services\Whois\WhoisService;
 use ResolverTest\ValueObjects\TestType\TestType;
 use ResolverTest\TestBase;
 
@@ -75,7 +76,9 @@ class TestServiceTest extends TestBase {
         $globalConfig = MockObjectProvider::instance()->getMockInstance(GlobalConfigService::class);
         $globalConfig->returnValue("isValid", true);
 
-        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager, $globalConfig, $this->server);
+        $whoisService = MockObjectProvider::instance()->getMockInstance(WhoisService::class);
+
+        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager, $globalConfig, $whoisService, $this->server);
 
     }
 

@@ -11,7 +11,8 @@
   "require": {
     "oxil/kinikit-persistence": "dev-master",
     "oxil/kinikit-cli": "dev-main",
-    "mathieuviossat/arraytotexttable": "dev-master"
+    "mathieuviossat/arraytotexttable": "dev-master",
+    "io-developer/php-whois": "^4.0"
   },
   "config": {
     "source-directory": "src",
