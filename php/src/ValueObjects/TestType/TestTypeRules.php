@@ -16,6 +16,11 @@ class TestTypeRules {
     private $webserver;
 
     /**
+     * @var bool
+     */
+    private $webserverOptional;
+
+    /**
      * @var string
      * @values HOSTNAME
      * @required
@@ -33,12 +38,14 @@ class TestTypeRules {
     /**
      * @param TestTypeDNSRules $dns
      * @param TestTypeWebServerRules $webserver
+     * @param bool $webserverOptional
      * @param string $relationalKey
      * @param int $timeoutSeconds
      */
-    public function __construct($dns, $webserver, $relationalKey, $timeoutSeconds) {
+    public function __construct($dns, $webserver, $webserverOptional, $relationalKey, $timeoutSeconds) {
         $this->dns = $dns;
         $this->webserver = $webserver;
+        $this->webserverOptional = $webserverOptional;
         $this->relationalKey = $relationalKey;
         $this->timeoutSeconds = $timeoutSeconds;
     }
@@ -69,6 +76,20 @@ class TestTypeRules {
      */
     public function setWebserver($webserver) {
         $this->webserver = $webserver;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWebserverOptional() {
+        return $this->webserverOptional;
+    }
+
+    /**
+     * @param bool $webserverOptional
+     */
+    public function setWebserverOptional($webserverOptional) {
+        $this->webserverOptional = $webserverOptional;
     }
 
     /**
