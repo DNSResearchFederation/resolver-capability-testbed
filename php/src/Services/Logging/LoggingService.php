@@ -88,7 +88,7 @@ class LoggingService {
 
         if ($testType) {
             $rules = $testType->getRules();
-            $columnsClause = "id INTEGER PRIMARY KEY, `date` DATETIME";
+            $columnsClause = "id INTEGER PRIMARY KEY, `date` DATETIME, status VARCHAR(50)";
 
             for ($i = 1; $i <= sizeof($rules->getDns()->getExpectedQueries()); $i++) {
                 $columnsClause .= ", dnsResolutionTime$i INT, dnsResolvedHostname$i VARCHAR(255), dnsClientIpAddress$i VARCHAR(255), dnsResolverQuery$i VARCHAR(255), dnsResolverAnswer$i VARCHAR(255)";
@@ -196,6 +196,7 @@ class LoggingService {
      * @param SQLite3DatabaseConnection $connection
      * @param TestType $testType
      * @param BaseLog $triggerLog
+     * @param string $sessionKey
      * @return void
      */
     public function compareLogs($connection, $testType, $triggerLog, $sessionKey) {
@@ -215,10 +216,8 @@ class LoggingService {
         } else {
 
             $hostname = $triggerLog->getRelationalKeyValue(TestTypeRules::RELATIONAL_KEY_HOSTNAME);
-            Logger::log($hostname);
             $firstLog = $connection->query("SELECT * FROM nameserver_queue WHERE hostname LIKE '%$hostname' ORDER BY `date`;")->fetchAll();
 
-            Logger::log($firstLog);
             if (!$firstLog) {
                 return;
             }
@@ -236,7 +235,7 @@ class LoggingService {
         $matchedWebserverLogs = $this->validateWebserverLogs($webserverLogs, $testType->getRules()->getWebserver());
         $matchedNameserverLogs = $this->validateNameserverLogs($nameserverLogs, $testType->getRules()->getDns());
 
-        if ($matchedWebserverLogs && $matchedNameserverLogs) {
+        if ($matchedWebserverLogs && sizeof($matchedNameserverLogs) == sizeof($testType->getRules()->getDns()->getExpectedQueries())) {
             $this->writeCombinedLog($connection, $sessionKey, $testType->getType(), $matchedWebserverLogs, $matchedNameserverLogs);
         }
 
@@ -247,11 +246,13 @@ class LoggingService {
      * @param TestTypeWebServerRules $rules
      * @return array
      */
-    private function validateWebserverLogs($logs, $rules) {
+    public function validateWebserverLogs($logs, $rules) {
 
         $expectedCount = $rules->getExpectedQueries();
         if (sizeof($logs) == $expectedCount) {
             return $logs;
+        } else {
+            return [];
         }
 
     }
@@ -261,23 +262,18 @@ class LoggingService {
      * @param TestTypeDNSRules $rules
      * @return array|bool
      */
-    private function validateNameserverLogs($logs, $rules) {
+    public function validateNameserverLogs($logs, $rules) {
 
         $matchedLogs = [];
 
         foreach ($rules->getExpectedQueries() as $expectedQuery) {
-            $matched = false;
             foreach ($logs as $log) {
                 if ($this->matchRecord($log, $expectedQuery)) {
-                    $matched = true;
                     $matchedLogs[] = $log;
                     break;
                 }
             }
 
-            if (!$matched) {
-                return false;
-            }
         }
 
         return $matchedLogs;
@@ -288,7 +284,7 @@ class LoggingService {
      * @param TestTypeExpectedQuery $expectedQuery
      * @return bool
      */
-    private function matchRecord($log, $expectedQuery) {
+    public function matchRecord($log, $expectedQuery) {
 
         $type = $expectedQuery->getType();
         $value = $expectedQuery->getValue();
@@ -304,13 +300,16 @@ class LoggingService {
 
     /**
      * @param SQLite3DatabaseConnection $connection
-     * @param WebserverLog[] $webserverLogs
-     * @param NameserverLog[] $nameserverLogs
+     * @param string $key
+     * @param string $type
+     * @param array $webserverLogs
+     * @param array $nameserverLogs
+     * @param string $status
      * @return void
      */
-    private function writeCombinedLog($connection, $key, $type, $webserverLogs = [], $nameserverLogs = []) {
+    public function writeCombinedLog($connection, $key, $type, $webserverLogs = [], $nameserverLogs = [], $status = "Success") {
 
-        $data = ["date" => date_create()->format("Y-m-d H:i:s")];
+        $data = ["date" => date_create()->format("Y-m-d H:i:s"), "status" => $status];
 
         $logFullIp = boolval($this->configService->isClientIpAddressLogging());
 
