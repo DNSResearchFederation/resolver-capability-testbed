@@ -21,7 +21,7 @@ export default class SingleHostQueryTestRunner extends TestTypeRunner {
      * @param domainName
      * @param additionalConfig
      */
-    async runTest(domainName, additionalConfig?: any) {
+    async runTest(domainName, additionalConfig?: any, testRunCallback?: any) {
 
         let uuid = this.getUUID();
         let hostname = domainName;
@@ -34,10 +34,13 @@ export default class SingleHostQueryTestRunner extends TestTypeRunner {
             hostname = uuid + '.' + hostname;
         }
 
-        if (additionalConfig.insecure)
-            this.request("http://" + hostname);
-        else
-            this.request("https://" + hostname);
+        // Make a request and call the run callback with array of previous requests
+        this.request("http" + (additionalConfig.insecure ? "" : "s") + "://" + hostname).then(() => {
+            if (testRunCallback)
+                // Pass the array of previous requests
+                testRunCallback(this.getPreviousRequests());
+        });
+
 
     }
 

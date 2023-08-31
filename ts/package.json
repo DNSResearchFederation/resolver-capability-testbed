@@ -19,6 +19,7 @@
     "url": "https://github.com/DNSResearchFederation/resolvertest"
   },
   "scripts": {
+    "watch:ts": "webpack --config webpack.config.js --watch",
     "build:production": "webpack --config webpack.config.js -p --display-modules",
     "publish:project": "npm run build:production; bump patch; npm publish",
     "unit:test": "jasmine-ts --config=jasmine.json"

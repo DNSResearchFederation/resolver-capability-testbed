@@ -17,14 +17,28 @@ export default abstract class TestTypeRunner {
      */
     public async request(hostname: string): Promise<any> {
 
-        // Push request onto stack
-        this._requests.push({
+        let request: any = {
             "hostname": hostname,
             "time": Date.now()
-        });
+        }
+
+        // Push request onto stack
+        this._requests.push(request);
 
         if (typeof window !== 'undefined') {
-            return window.fetch(hostname);
+            try {
+                let response = await window.fetch(hostname);
+                request.status = "sent";
+                request.response = {
+                    status: response.status,
+                    body: await response.text()
+                }
+                return response;
+            } catch (e) {
+                request.status = "failed";
+                request.errorMessage = e.toString()
+            }
+
         } else {
             return "OK";
         }
@@ -62,7 +76,7 @@ export default abstract class TestTypeRunner {
      * @param domainName
      * @param additionalConfig
      */
-    public abstract runTest(domainName, additionalConfig?: any);
+    public abstract runTest(domainName, additionalConfig?: any, testRunCallback?: any);
 
 }
 

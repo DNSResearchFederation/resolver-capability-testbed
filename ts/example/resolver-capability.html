@@ -15,11 +15,11 @@
             <form id="form" action="#">
                 <div class="form-group mt-3">
                     <label for="testType">Test Type</label>
-                    <input type="text" class="form-control" id="testType">
+                    <input type="text" class="form-control" id="testType" value="qname-minimisation">
                 </div>
                 <div class="form-group mt-3">
                     <label for="domainName">Domain Name</label>
-                    <input type="text" class="form-control" id="domainName">
+                    <input type="text" class="form-control" id="domainName" value="resolvertest.xyz">
                 </div>
                 <div class="form-check mt-2">
                     <input type="checkbox" class="form-check-input" id="insecure">
@@ -43,7 +43,9 @@
         if (!type || !domainName)
             alert("You must supply a type and domain name");
         else
-            new ResolverCapabilityTest(type, domainName, {"insecure": document.getElementById("insecure").checked});
+            new ResolverCapabilityTest(type, domainName, {"insecure": document.getElementById("insecure").checked, "multipleRequestsPerSession": true}, (requests) => {
+                console.log(requests);
+            });
     });
 
 </script>

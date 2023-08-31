@@ -1,4 +1,6 @@
 import SingleHostQueryTestRunner from "./test-type-runner/single-host-query-test-runner";
+import TestTypeRunner from "./test-type-runner/test-type-runner";
+import MockSessionStorage from "./util/mock-session-storage";
 
 export default class ResolverCapabilityTest {
 
@@ -8,6 +10,12 @@ export default class ResolverCapabilityTest {
         "qname-minimisation": new SingleHostQueryTestRunner(1, "qname.resolver.test")
     };
 
+    // Export test type runner
+    public static TestTypeRunner = TestTypeRunner;
+
+    // Create mock session storage
+    public static mockSessionStorage = new MockSessionStorage();
+
     /**
      * Construct with a test type, domain name and any other config (if required).
      * Start immediately.
@@ -16,8 +24,20 @@ export default class ResolverCapabilityTest {
      * @param domainName
      * @param additionalTestConfig
      */
-    constructor(testType: string, domainName: string, additionalTestConfig: any) {
-        this.testTypeRunners[testType].runTest(domainName, additionalTestConfig);
+    constructor(testType: string, domainName: string, additionalTestConfig: any, testRunCallback: any) {
+
+        // If multipleRequestsPerSession not set or not first hit from session storage, quit
+        let sessionKey = "resolvertest." + testType + "." + domainName;
+        let singleRequestPerSession = (!additionalTestConfig || !additionalTestConfig.multipleRequestsPerSession);
+        if (singleRequestPerSession) {
+            if (this.sessionStorage.getItem(sessionKey))
+                return;
+            else
+                this.sessionStorage.setItem(sessionKey, "1");
+        }
+
+
+        this.testTypeRunners[testType].runTest(domainName, additionalTestConfig, testRunCallback);
     }
 
     /**
@@ -28,5 +48,15 @@ export default class ResolverCapabilityTest {
     }
 
 
+    /**
+     * Get the session storage object - useful for testing
+     */
+    get sessionStorage(): any {
+        if (typeof sessionStorage !== 'undefined') {
+            return sessionStorage;
+        } else {
+            return ResolverCapabilityTest.mockSessionStorage;
+        }
+    }
 
 }
