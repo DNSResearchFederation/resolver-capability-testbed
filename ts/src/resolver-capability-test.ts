@@ -26,10 +26,13 @@ export default class ResolverCapabilityTest {
      */
     constructor(testType: string, domainName: string, additionalTestConfig: any, testRunCallback: any) {
 
+        // Ensure we create additional test config
+        if (!additionalTestConfig)
+            additionalTestConfig = {};
+
         // If multipleRequestsPerSession not set or not first hit from session storage, quit
         let sessionKey = "resolvertest." + testType + "." + domainName;
-        let singleRequestPerSession = (!additionalTestConfig || !additionalTestConfig.multipleRequestsPerSession);
-        if (singleRequestPerSession) {
+        if (!additionalTestConfig.multipleRequestsPerSession) {
             if (this.sessionStorage.getItem(sessionKey))
                 return;
             else
