@@ -80,7 +80,7 @@ class Test extends ActiveRecord {
         $this->key = $key;
         $this->type = $type;
         $this->domainName = $domainName;
-        $this->starts = $starts ?? (new \DateTime())->add(new \DateInterval("PT5S"));
+        $this->starts = $starts ?? (new \DateTime());
         $this->expires = $expires;
         $this->testData = $testData;
         $this->status = $status;
