@@ -1,13 +1,15 @@
 import SingleHostQueryTestRunner from "./test-type-runner/single-host-query-test-runner";
 import TestTypeRunner from "./test-type-runner/test-type-runner";
 import MockSessionStorage from "./util/mock-session-storage";
+import TtlTestRunner from "./test-type-runner/ttl-test-runner";
 
 export default class ResolverCapabilityTest {
 
     // Test type runners
     private testTypeRunners: any = {
         "ipv6": new SingleHostQueryTestRunner(),
-        "qname-minimisation": new SingleHostQueryTestRunner(1, "qname.resolver.test")
+        "qname-minimisation": new SingleHostQueryTestRunner(1, "qname.resolver.capability"),
+        "minimum-ttl": new TtlTestRunner()
     };
 
     // Export test type runner

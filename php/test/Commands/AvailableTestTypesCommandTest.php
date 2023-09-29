@@ -24,6 +24,10 @@ class AvailableTestTypesCommandTest extends TestCase {
                 "description" => "IPv6 Records Defined Only for domain name"
             ],
             [
+                "name" => "minimum-ttl",
+                "description" => "Minimum TTL Allowed"
+            ],
+            [
                 "name" => "qname-minimisation",
                 "description" => "Test QName Minimisation"
             ]

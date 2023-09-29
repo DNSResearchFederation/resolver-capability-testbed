@@ -18,6 +18,13 @@ describe("Test entry point", function () {
 
     });
 
+    it("Should be able to run the correct test type for minimum-ttl", () => {
+
+        let resolverCapTest = new ResolverCapabilityTest("minimum-ttl", "test.com", [], null);
+        expect(resolverCapTest.installedTestTypeRunners["minimum-ttl"].getPreviousRequests().length).toEqual(2);
+        expect(resolverCapTest.installedTestTypeRunners["minimum-ttl"].getPreviousRequests()[0].hostname).toContain("test.com");
+
+    });
 
     it('Should be able to register a callback on test completion', () => {
         let resolverCapTest = new ResolverCapabilityTest("qname-minimisation", "test3.com", [], (requests) => {
