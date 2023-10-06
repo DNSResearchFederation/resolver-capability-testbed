@@ -95,6 +95,7 @@ class TestServiceTest extends TestBase {
         $this->testService->createTest($test);
 
         $test->setStatus(Test::STATUS_ACTIVE);
+        $test->save();
         $this->assertEquals($test, Test::fetch("testKey"));
 
         $this->assertTrue(file_exists(Configuration::readParameter("storage.root") . "/logs/testKey.db"));
@@ -298,10 +299,10 @@ class TestServiceTest extends TestBase {
         $installOperations = [new ServerOperation(ServerOperation::OPERATION_ADD, "BINGO"), new ServerOperation(ServerOperation::OPERATION_ADD, "BONGO")];
         $this->testTypeManager->returnValue("getInstallServerOperations", $installOperations);
 
-        $test = new Test("test-me", "test", "hello.co.uk", "A wonderful test");
+        $test = new Test("test-this", "test", "hello.org", "A wonderful test");
         $this->testService->createTest($test);
 
-        $reTest = $this->testService->getTest("test-me");
+        $reTest = $this->testService->getTest("test-this");
         $this->assertEquals(Test::STATUS_ACTIVE, $reTest->getStatus());
 
         // Check the server was updated

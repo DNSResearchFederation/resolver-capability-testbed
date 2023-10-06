@@ -48,7 +48,8 @@ class TestTypeManagerTest extends TestCase {
         $testTypeManager1 = new TestTypeManager();
         $expected = [
             "ipv6" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/ipv6.json"), TestType::class),
-            "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname.json"), TestType::class)
+            "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname.json"), TestType::class),
+            "minimum-ttl"=> $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/minimum-ttl.json"), TestType::class)
         ];
 
         $this->assertEquals($expected, $testTypeManager1->listTestTypes());
