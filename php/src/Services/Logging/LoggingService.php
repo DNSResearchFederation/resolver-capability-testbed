@@ -90,8 +90,8 @@ class LoggingService {
             $rules = $testType->getRules();
             $columnsClause = "id INTEGER PRIMARY KEY, `date` DATETIME, status VARCHAR(50)";
 
-            for ($i = 1; $i <= sizeof($rules->getDns()->getExpectedQueries()); $i++) {
-                $columnsClause .= ", dnsResolutionTime$i INT, dnsResolvedHostname$i VARCHAR(255), dnsClientIpAddress$i VARCHAR(255), dnsResolverQuery$i VARCHAR(255), dnsResolverAnswer$i VARCHAR(255)";
+            for ($i = 1; $i <= sizeof($rules->getDns()->getExpectedQueries() ?? []); $i++) {
+                $columnsClause .= ", dnsResolutionTime$i INT, dnsResolvedHostname$i VARCHAR(255), dnsClientIpAddress$i VARCHAR(255), dnsResolverQuery$i VARCHAR(255)";
             }
 
             for ($i = 1; $i <= $rules->getWebserver()->getExpectedQueries(); $i++) {
@@ -187,7 +187,9 @@ class LoggingService {
         $orm->save($log);
 
         // Get corresponding nameserver logs and check against rules
-        $this->compareLogs($connection, $testType, $log, $test->getKey());
+        if ($testType->getRules()->getWebserver()->getExpectedQueries() == 1) {
+            $this->compareLogs($connection, $testType, $log, $test->getKey());
+        }
     }
 
     /**
@@ -309,7 +311,7 @@ class LoggingService {
      */
     public function writeCombinedLog($connection, $key, $type, $webserverLogs = [], $nameserverLogs = [], $status = "Success") {
 
-        $data = ["date" => date_create()->format("Y-m-d H:i:s"), "status" => $status];
+        $data = ["date" => date_create("now", new \DateTimeZone("UTC"))->format("Y-m-d H:i:s"), "status" => $status];
 
         $logFullIp = boolval($this->configService->isClientIpAddressLogging());
 
@@ -321,7 +323,6 @@ class LoggingService {
             $data["dnsResolvedHostname$i"] = $nameserverLogs[$i - 1]["hostname"];
             $data["dnsClientIpAddress$i"] = $ipAddress;
             $data["dnsResolverQuery$i"] = $nameserverLogs[$i - 1]["request"];
-            $data["dnsResolverAnswer$i"] = null;
         }
 
         for ($i = 1; $i < sizeof($webserverLogs) + 1; $i++) {
@@ -335,6 +336,7 @@ class LoggingService {
         }
 
         $connection->getBulkDataManager()->insert("combined_log", $data);
+        $data["id"] = $connection->getLastAutoIncrementId();
 
         /**
          * @var DAPLogger $dapLogger

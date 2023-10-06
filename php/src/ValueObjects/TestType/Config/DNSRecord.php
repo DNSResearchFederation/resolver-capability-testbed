@@ -88,10 +88,10 @@ class DNSRecord {
     public function getData() {
         if ($this->getType() == "TXT") {
             return "\"{$this->data}\"";
-        } else if (preg_match("/[a-z]/", $this->data)) {
-            return $this->data . ".";
-        } else {
+        } else if (filter_var($this->data, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 + FILTER_FLAG_IPV6) || preg_match("/^[A-Z0-9_]+$/", $this->data)) {
             return $this->data;
+        } else {
+            return $this->data . ".";
         }
     }
 
