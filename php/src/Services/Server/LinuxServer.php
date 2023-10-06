@@ -189,7 +189,10 @@ class LinuxServer implements Server {
 
         $this->sudoWriteFile($contentDir . "/index.html", $config->getContent(), $targetUser);
 
+        $secure = boolval($config->getSslCertPrefixes());
+
         $model = [
+            "secure" => $secure,
             "serverWebRoot" => Configuration::readParameter("server.httpd.webroot.dir"),
             "serverAliases" => array_map(function ($elt) use ($config) {
                 return $elt . "." . $config->getIdentifier();
@@ -198,18 +201,19 @@ class LinuxServer implements Server {
 
         $this->installTemplateFile($operation, "httpd-virtualhost.txt", Configuration::readParameter("server.httpd.config.dir"), $targetUser, $model);
 
+        // SSL Certificate
+        if ($secure) {
+            foreach ($config->getSslCertPrefixes() as $prefix) {
+                $sslDomains[] = $prefix . "." . $config->getIdentifier();
+            }
+
+            $sslDomainsString = implode(",", $sslDomains);
+            $authHook = Configuration::readParameter("config.root") . "/../src/resolvertest/scripts/certbot-certificate-install.sh";
+            passthru("{$this->sudoPrefix} certbot certonly --webroot-path $contentDir --manual --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory --agree-tos --register-unsafely-without-email --manual-auth-hook $authHook -d $sslDomainsString");
+        }
         // Reload httpd
         $serviceCommand = Configuration::readParameter("server.httpd.service.command");
         passthru("{$this->sudoPrefix} $serviceCommand reload");
-
-        foreach ($config->getSslCertPrefixes() as $prefix) {
-            $sslDomains[] = $prefix . "." . $config->getIdentifier();
-        }
-
-        $sslDomainsString = implode(",", $sslDomains);
-        $authHook = Configuration::readParameter("config.root") . "/../src/resolvertest/scripts/certbot-certificate-install.sh";
-        passthru("{$this->sudoPrefix} certbot certonly --webroot-path $contentDir --manual --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory --agree-tos --register-unsafely-without-email --manual-auth-hook $authHook -d $sslDomainsString");
-
     }
 
     /**
