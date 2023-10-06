@@ -6,6 +6,7 @@
   CustomLog "|$php /usr/local/src/resolvertest/src/logger-httpd.php" "\"%{Host}i\" %h %t \"%r\" %>s \"%{User-agent}i\""
 </VirtualHost>
 
+{{#secure}}
 <VirtualHost *:443>
   ServerName {{operationConfig.prefix}}
   {{#serverAliases}}
@@ -19,4 +20,4 @@
   SSLCertificateChainFile  /etc/letsencrypt/live/{{operationConfig.prefix}}/fullchain.pem
   SSLCertificateKeyFile    /etc/letsencrypt/live/{{operationConfig.prefix}}/privkey.pem
   SSLCertificateFile       /etc/letsencrypt/live/{{operationConfig.prefix}}/cert.pem
-</VirtualHost>
+</VirtualHost>{{/secure}}

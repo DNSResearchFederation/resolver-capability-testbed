@@ -44,7 +44,7 @@
       "expectedQueries": 4
     },
     "webserverOptional": false,
-    "relationalKey": "HOSTNAME",
+    "relationalKey": "HOSTNAME_OR_IP",
     "timeoutSeconds": 15
   }
 }

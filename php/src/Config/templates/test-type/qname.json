@@ -16,10 +16,10 @@
       "wildcard": true,
       "content": "OK",
       "sslCertPrefixes": [
-        "*.qname.resolver.test",
-        "qname.resolver.test",
-        "resolver.test",
-        "test"
+        "*",
+        "capability",
+        "resolver.capability",
+        "qname.resolver.capability"
       ]
     }
   },
@@ -28,19 +28,19 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "(?i)^test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^capability\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "(?i)^resolver\\.test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^resolver\\.capability\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "(?i)^qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.qname\\.resolver\\.test\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]+\\.qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
         }
       ]
     },
@@ -50,8 +50,5 @@
     "webserverOptional": false,
     "relationalKey": "HOSTNAME_OR_IPADDRESS",
     "timeoutSeconds": 3
-  },
-  "computedLogFields": {
-    "status": ""
   }
 }

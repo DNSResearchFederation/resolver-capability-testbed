@@ -4,6 +4,12 @@
   "config": {
     "dnsZone": {
       "records": [
+        {
+          "prefix": "*",
+          "ttl": 200,
+          "type": "AAAA",
+          "data": "IPV6_ADDRESS"
+        }
       ]
     },
     "webVirtualHost": {
@@ -28,8 +34,5 @@
     "webserverOptional": true,
     "relationalKey": "HOSTNAME",
     "timeoutSeconds": 3
-  },
-  "computedLogFields": {
-    "status": "dns_response | and webserver_response | ternary 'Success' 'Failed'"
   }
 }
