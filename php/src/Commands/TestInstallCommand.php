@@ -27,10 +27,10 @@ class TestInstallCommand extends BaseTestCommand {
         $testKey = $testKey ?? $test . "-" . date("U");
 
         if ($starts) {
-            $starts = date_create_from_format("Y-m-d H:i:s", $starts);
+            $starts = date_create($starts);
         }
         if ($expires) {
-            $expires = date_create_from_format("Y-m-d H:i:s", $expires);
+            $expires = date_create("Y-m-d H:i:s", $expires);
         }
 
         $testObject = new Test($testKey, $test, $domain, $description, $starts, $expires, null, $testArgs);
