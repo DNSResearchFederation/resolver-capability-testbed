@@ -22,7 +22,7 @@ export default class TtlTestRunner extends TestTypeRunner {
 
     async doubleRequest(hostname, additionalConfig, testRunCallback, waitTime): Promise<void> {
 
-        this.request("http" + (additionalConfig.insecure ? "" : "s") + "://" + hostname).then(() => {
+        this.request("http" + (additionalConfig.insecure ? "" : "s") + "://" + hostname + "?request=1").then(() => {
             if (testRunCallback)
                 // Pass the array of previous requests
                 testRunCallback(this.getPreviousRequests());
@@ -30,7 +30,7 @@ export default class TtlTestRunner extends TestTypeRunner {
 
         await this.wait(waitTime);
 
-        this.request("http" + (additionalConfig.insecure ? "" : "s") + "://" + hostname).then(() => {
+        this.request("http" + (additionalConfig.insecure ? "" : "s") + "://" + hostname + "?request=2").then(() => {
             if (testRunCallback)
                 // Pass the array of previous requests
                 testRunCallback(this.getPreviousRequests());
