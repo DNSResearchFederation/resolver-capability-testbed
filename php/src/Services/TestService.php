@@ -111,7 +111,9 @@ class TestService {
         }
 
         // Check the nameservers are correct for the domain
-        if ($this->globalConfig->getNameservers() != $this->whoisService->getNameservers($test->getDomainName())) {
+        $configNameservers = $this->globalConfig->getNameservers() ?? [];
+        $actualNameservers = $this->whoisService->getNameservers($test->getDomainName()) ?? [];
+        if (sort($configNameservers) != sort($actualNameservers)) {
             throw new \Exception("The domain doesn't have the correct nameservers");
         };
 
@@ -171,7 +173,6 @@ class TestService {
      * @return void
      */
     public function updateTest($test) {
-
         try {
             $key = $test->getKey();
             Test::fetch($key);
@@ -180,7 +181,7 @@ class TestService {
         }
 
         $test->save();
-        $this->synchroniseTests();
+        $this->synchroniseTest($test);
     }
 
     /**
@@ -226,31 +227,38 @@ class TestService {
 
     }
 
+    public function synchroniseTest($test) {
+
+        if ($test->getStatus() == Test::STATUS_PENDING && $test->getStarts()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
+
+            $test->setStatus(Test::STATUS_INSTALLING);
+            $this->updateTest($test);
+
+            $this->server->performOperations($this->testTypeManager->getInstallServerOperations($test));
+
+            $test->setStatus(Test::STATUS_ACTIVE);
+            $this->updateTest($test);
+        }
+
+        if ($test->getStatus() == Test::STATUS_ACTIVE && $test->getExpires() && $test->getExpires()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
+
+            $test->setStatus(Test::STATUS_UNINSTALLING);
+            $this->updateTest($test);
+
+            $this->server->performOperations($this->testTypeManager->getUninstallServerOperations($test));
+
+            $test->setStatus(Test::STATUS_COMPLETED);
+            $this->updateTest($test);
+        }
+
+    }
+
     public function synchroniseTests() {
         // Update status according to start/end
         foreach (Test::filter() as $test) {
 
-            if ($test->getStatus() == Test::STATUS_PENDING && $test->getStarts()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
+            $this->synchroniseTest($test);
 
-                $test->setStatus(Test::STATUS_INSTALLING);
-                $this->updateTest($test);
-
-                $this->server->performOperations($this->testTypeManager->getInstallServerOperations($test));
-
-                $test->setStatus(Test::STATUS_ACTIVE);
-                $this->updateTest($test);
-            }
-
-            if ($test->getStatus() == Test::STATUS_ACTIVE && $test->getExpires() && $test->getExpires()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
-
-                $test->setStatus(Test::STATUS_UNINSTALLING);
-                $this->updateTest($test);
-
-                $this->server->performOperations($this->testTypeManager->getUninstallServerOperations($test));
-
-                $test->setStatus(Test::STATUS_COMPLETED);
-                $this->updateTest($test);
-            }
         }
 
     }
