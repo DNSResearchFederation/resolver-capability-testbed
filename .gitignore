@@ -9,3 +9,6 @@ php/test/Storage/logs
 ts/dist
 ts/node_modules
 ts/package-lock.json
+php/test/Storage/db.log
+php/test/Storage/logs/ourKey.db
+php/test/Storage/resolvertest.db
