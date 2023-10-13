@@ -30,24 +30,30 @@ class TestInstallCommandTest extends TestBase {
         $defaultKey = "test-" . date("U");
 
         $command->handleCommand("test", "test.com");
+
+        /**
+         * @var Test $createdTest
+         */
         $createdTest = $this->testService->getMethodCallHistory("createTest")[0][0];
 
         $this->assertEquals($createdTest->getKey(), $defaultKey);
         $this->assertEquals($createdTest->getDomainName(), "test.com");
         $this->assertEquals($createdTest->getType(), "test");
+        $this->assertEquals($createdTest->getNameserversKey(), "default");
 
     }
 
-    public function testCanCreateANewTestWithCustomTestKey() {
+    public function testCanCreateANewTestWithCustomValues() {
 
         $command = new TestInstallCommand($this->testService);
 
-        $command->handleCommand("test", "test.com", null, null, null, "key");
+        $command->handleCommand("test", "test.com", null, null, null, "key", "theseNameservers");
         $createdTest = $this->testService->getMethodCallHistory("createTest")[0][0];
 
         $this->assertEquals($createdTest->getKey(), "key");
         $this->assertEquals($createdTest->getDomainName(), "test.com");
         $this->assertEquals($createdTest->getType(), "test");
+        $this->assertEquals($createdTest->getNameserversKey(), "theseNameservers");
     }
 
 }

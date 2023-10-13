@@ -27,10 +27,7 @@ class ConfigUpdateCommandTest extends TestCase {
         $this->assertTrue($configService->methodWasCalled("setIPv4Address", ["9.8.7.6"]));
         $this->assertTrue($configService->methodWasCalled("setIPv6Address", ["2002::"]));
 
-        $command->handleCommand(null, null, "ns1.test.com");
-        $this->assertTrue($configService->methodWasCalled("setNameservers", ["ns1.test.com"]));
-
-        $command->handleCommand(null, null, null, false, 1234567890, 987654321);
+        $command->handleCommand(null, null, false, 1234567890, 987654321);
         $this->assertTrue($configService->methodWasCalled("setClientIpAddressLogging", [false]));
         $this->assertTrue($configService->methodWasCalled("setDapApiKey", [1234567890]));
         $this->assertTrue($configService->methodWasCalled("setDapApiSecret", [987654321]));

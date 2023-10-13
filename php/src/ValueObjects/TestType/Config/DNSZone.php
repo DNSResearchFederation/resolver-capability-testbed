@@ -13,16 +13,23 @@ class DNSZone implements OperationConfig {
     private $domainName;
 
     /**
+     * @var array
+     */
+    private $nameservers;
+
+    /**
      * @var DNSRecord[]
      */
     private $records;
 
     /**
      * @param string $domainName
+     * @param array $nameservers
      * @param DNSRecord[] $records
      */
-    public function __construct($domainName, $records = []) {
+    public function __construct($domainName, $nameservers = [], $records = []) {
         $this->domainName = $domainName;
+        $this->nameservers = $nameservers;
         $this->records = $records;
     }
 
@@ -33,6 +40,19 @@ class DNSZone implements OperationConfig {
         return $this->domainName;
     }
 
+    /**
+     * @return array
+     */
+    public function getNameservers() {
+        return $this->nameservers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstNameserver() {
+        return $this->nameservers[0] ?? "";
+    }
 
     /**
      * @return DNSRecord[]
@@ -62,6 +82,9 @@ class DNSZone implements OperationConfig {
      */
     public function updateDynamicValues($globalConfig, $test) {
         $this->domainName = $test->getDomainName();
+
+        $nameserversKey = $test->getNameserversKey();
+        $this->nameservers = $globalConfig->getNameserversByKey($nameserversKey);
 
         // Replace Literal IP addresses with values from global config
         foreach ($this->getRecords() as $record) {

@@ -1,14 +1,14 @@
 $ORIGIN {{operationConfig.domainName}}.
-@   3600 SOA  {{resolverConfig.firstNameserver}}.  hostmaster.{{operationConfig.domainName}}. (
+@   3600 SOA  {{operationConfig.firstNameserver}}.  hostmaster.{{operationConfig.domainName}}. (
         2023061509        ; serial number
         3600              ; refresh period
         600               ; retry period
         604800            ; expire time
         1800            ) ; minimum ttl
 
-{{#resolverConfig.nameservers}}
+{{#operationConfig.nameservers}}
         86400   IN   NS   {{.}}.
-{{/resolverConfig.nameservers}}
+{{/operationConfig.nameservers}}
 @       600     IN   A    {{resolverConfig.iPv4Address}}
 {{#operationConfig.records}}
 {{prefix}}   {{ttl}}   IN   {{type}}   {{data}}

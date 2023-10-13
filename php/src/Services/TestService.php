@@ -14,6 +14,7 @@ use ResolverTest\Exception\NonExistentTestException;
 use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\Services\Config\NameserverConfigService;
 use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
@@ -42,6 +43,11 @@ class TestService {
     private $globalConfig;
 
     /**
+     * @var NameserverConfigService
+     */
+    private $nameserverConfig;
+
+    /**
      * @var WhoisService
      */
     private $whoisService;
@@ -56,14 +62,16 @@ class TestService {
      * @param ObjectToJSONConverter $objectToJSONConverter
      * @param TestTypeManager $testTypeManager
      * @param GlobalConfigService $globalConfig
+     * @param NameserverConfigService $nameserverConfig
      * @param WhoisService $whoisService
      * @param Server $server
      */
-    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig, $whoisService, $server) {
+    public function __construct($jsonToObjectConverter, $objectToJSONConverter, $testTypeManager, $globalConfig, $nameserverConfig, $whoisService, $server) {
         $this->jsonToObjectConverter = $jsonToObjectConverter;
         $this->objectToJSONConverter = $objectToJSONConverter;
         $this->testTypeManager = $testTypeManager;
         $this->globalConfig = $globalConfig;
+        $this->nameserverConfig = $nameserverConfig;
         $this->whoisService = $whoisService;
         $this->server = $server;
     }
@@ -111,7 +119,8 @@ class TestService {
         }
 
         // Check the nameservers are correct for the domain
-        $configNameservers = $this->globalConfig->getNameservers() ?? [];
+        $configNameservers = $this->nameserverConfig->getNameserversByKey($test->getNameserversKey()) ?? [];
+
         $actualNameservers = $this->whoisService->getNameservers($test->getDomainName()) ?? [];
         if (sort($configNameservers) != sort($actualNameservers)) {
             throw new \Exception("The domain doesn't have the correct nameservers");

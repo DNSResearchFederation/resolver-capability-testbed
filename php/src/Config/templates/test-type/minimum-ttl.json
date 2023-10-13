@@ -22,8 +22,9 @@
       "wildcard": true,
       "content": "OK",
       "sslCertPrefixes": [
-        "ttl10",
-        "ttl15"
+        "*",
+        "*.ttl10",
+        "*.ttl15"
       ]
     }
   },

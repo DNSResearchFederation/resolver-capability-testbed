@@ -4,11 +4,19 @@ namespace ResolverTest\Services\Config;
 
 use Kinikit\Core\Configuration\ConfigFile;
 use Kinikit\Core\Configuration\Configuration;
+use Kinikit\Core\DependencyInjection\Container;
+use function PHPUnit\Framework\returnValue;
 
 class GlobalConfigService extends ConfigFile {
 
+    /**
+     * @var NameserverConfigService $nameserverConfig
+     */
+    private $nameserverConfig;
+
     public function __construct() {
         parent::__construct(Configuration::readParameter("config.root") . "/resolvertest.conf");
+        $this->nameserverConfig = Container::instance()->get(NameserverConfigService::class);
     }
 
     public function getIPv4Address() {
@@ -30,16 +38,15 @@ class GlobalConfigService extends ConfigFile {
     }
 
     public function getNameservers() {
-        return explode(",", $this->getParameter("nameservers"));
+        return $this->nameserverConfig->getNameservers();
     }
 
-    public function getFirstNameserver() {
-        return explode(",", $this->getParameter("nameservers"))[0];
+    public function getNameserversByKey($key) {
+        return $this->nameserverConfig->getNameserversByKey($key);
     }
 
-    public function setNameservers($value) {
-        $this->addParameter("nameservers", $value);
-        $this->save();
+    public function setNameservers($key, $value) {
+        $this->nameserverConfig->setNameservers($key, $value);
     }
 
     public function isClientIpAddressLogging() {
@@ -70,7 +77,7 @@ class GlobalConfigService extends ConfigFile {
     }
 
     public function isValid() {
-        if ($this->getIPv4Address() && $this->getIPv6Address() && $this->getNameservers()) {
+        if ($this->getIPv4Address() && $this->getIPv6Address()) {
             return true;
         } else {
             return false;

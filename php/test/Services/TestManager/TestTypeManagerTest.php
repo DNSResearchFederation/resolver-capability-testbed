@@ -78,7 +78,7 @@ class TestTypeManagerTest extends TestCase {
         $dnsRecord2 = new DNSRecord("*", 250, "A", "1.2.3.4");
 
         $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [$dnsRecord1, $dnsRecord2])),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2])),
             new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "OK"))
         ];
 
@@ -102,7 +102,7 @@ class TestTypeManagerTest extends TestCase {
         $dnsRecord2 = new DNSRecord("*", 250, "A", "1.2.3.4");
 
         $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.co.uk", [$dnsRecord1, $dnsRecord2])),
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2])),
             new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("test.co.uk", true, "OK"))
         ];
 

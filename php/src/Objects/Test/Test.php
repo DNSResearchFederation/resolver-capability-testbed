@@ -54,6 +54,11 @@ class Test extends ActiveRecord {
     private $status;
 
     /**
+     * @var string
+     */
+    private $nameserversKey;
+
+    /**
      * @var mixed
      * @json
      */
@@ -74,9 +79,10 @@ class Test extends ActiveRecord {
      * @param \DateTime $starts
      * @param \DateTime $expires
      * @param string $status
+     * @param string $nameserversKey
      * @param mixed $testData
      */
-    public function __construct($key, $type, $domainName, $description = null, $starts = null, $expires = null, $status = null, $testData = []) {
+    public function __construct($key, $type, $domainName, $description = null, $starts = null, $expires = null, $status = null, $nameserversKey = "default", $testData = []) {
         $this->key = $key;
         $this->type = $type;
         $this->domainName = $domainName;
@@ -85,6 +91,7 @@ class Test extends ActiveRecord {
         $this->testData = $testData;
         $this->status = $status;
         $this->description = $description;
+        $this->nameserversKey = $nameserversKey;
     }
 
     /**
@@ -183,6 +190,20 @@ class Test extends ActiveRecord {
      */
     public function setStatus($status) {
         $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameserversKey() {
+        return $this->nameserversKey;
+    }
+
+    /**
+     * @param string $nameserversKey
+     */
+    public function setNameserversKey($nameserversKey) {
+        $this->nameserversKey = $nameserversKey;
     }
 
     /**

@@ -39,7 +39,6 @@ class LinuxServerTest extends TestCase {
 
     public function testCanInstallDNSZoneCorrectly() {
 
-        $this->configService->setNameservers("ns1.testdomain.com,ns2.testdomain.com");
         $this->configService->setIPv4Address("1.2.3.4");
         $this->configService->setIPv6Address("2001::1234");
 
@@ -50,7 +49,7 @@ class LinuxServerTest extends TestCase {
             new DNSRecord("www", 200, "CNAME", "testdomain.com")
         ];
 
-        $dnsZone = new DNSZone("testdomain.com", $dnsRecords);
+        $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords);
         $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
 
         $this->server->performOperations([$operation]);
@@ -101,6 +100,27 @@ class LinuxServerTest extends TestCase {
         $contentPath = Configuration::readParameter("server.httpd.webroot.dir") . "/testdomain.com/index.html";
         $this->assertTrue(file_exists($contentPath));
         $this->assertEquals($content, file_get_contents($contentPath));
+
+    }
+
+    public function testCanInstallWebserverVirtualHostWithoutSSLCorrectly() {
+
+        $content = "Hello World!";
+
+        $webServerVirtualHost = new WebServerVirtualHost("testdomain.com", false, $content, []);
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $webServerVirtualHost);
+
+        $this->server->performOperations([$operation]);
+
+        $path = Configuration::readParameter("server.httpd.config.dir") . "/testdomain.com.conf";
+
+        $this->assertTrue(file_exists($path));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-httpd-linux-insecure.com"), file_get_contents($path));
+
+        $contentPath = Configuration::readParameter("server.httpd.webroot.dir") . "/testdomain.com/index.html";
+        $this->assertTrue(file_exists($contentPath));
+        $this->assertEquals($content, file_get_contents($contentPath));
+
 
     }
 

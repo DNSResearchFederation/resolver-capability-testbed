@@ -7,8 +7,8 @@
         {
           "prefix": "*",
           "ttl": 200,
-          "type": "AAAA",
-          "data": "IPV6_ADDRESS"
+          "type": "A",
+          "data": "IPV4_ADDRESS"
         }
       ]
     },
@@ -22,9 +22,6 @@
       "expectedQueries": [
         {
           "type": "A"
-        },
-        {
-          "type": "AAAA"
         }
       ]
     },

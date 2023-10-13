@@ -16,6 +16,7 @@ use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\Services\Config\NameserverConfigService;
 use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestType\TestTypeManager;
@@ -76,9 +77,11 @@ class TestServiceTest extends TestBase {
         $globalConfig = MockObjectProvider::instance()->getMockInstance(GlobalConfigService::class);
         $globalConfig->returnValue("isValid", true);
 
+        $nameserverConfig = MockObjectProvider::instance()->getMockInstance(NameserverConfigService::class);
+
         $whoisService = MockObjectProvider::instance()->getMockInstance(WhoisService::class);
 
-        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager, $globalConfig, $whoisService, $this->server);
+        $this->testService = new TestService($this->jsonToObjectConverter, $this->objectToJSONConverter, $this->testTypeManager, $globalConfig, $nameserverConfig, $whoisService, $this->server);
 
     }
 
@@ -112,7 +115,7 @@ class TestServiceTest extends TestBase {
         $date1 = (new \DateTime())->add(new \DateInterval("P1M"));
         $date2 = (new \DateTime())->add(new \DateInterval("P2M"));
 
-        $test = new Test("testKey", "testType", "oxil.co.uk", null, $date1, $date2, null, ["arg1" => "this", "arg2" => "that"]);
+        $test = new Test("testKey", "testType", "oxil.co.uk", null, $date1, $date2, null, "default", ["arg1" => "this", "arg2" => "that"]);
         $this->testService->createTest($test);
 
         $this->assertEquals($test, Test::fetch("testKey"));
