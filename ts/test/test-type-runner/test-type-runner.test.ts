@@ -27,4 +27,11 @@ describe("Test type runner tests", function () {
 
     });
 
+    it("Should be able to add a suffix to a domain", () => {
+
+        let testTypeRunner = new SingleHostQueryTestRunner();
+        expect(testTypeRunner.addDomainSuffix("test.com", "-second")).toEqual("test-second.com");
+
+    })
+
 });

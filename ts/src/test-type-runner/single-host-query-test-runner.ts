@@ -20,6 +20,7 @@ export default class SingleHostQueryTestRunner extends TestTypeRunner {
      *
      * @param domainName
      * @param additionalConfig
+     * @param testRunCallback
      */
     async runTest(domainName, additionalConfig?: any, testRunCallback?: any) {
 
