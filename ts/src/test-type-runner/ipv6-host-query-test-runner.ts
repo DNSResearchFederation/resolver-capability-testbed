@@ -13,7 +13,7 @@ export default class Ipv6HostQueryTestRunner extends TestTypeRunner {
 
         let uuid = this.getUUID();
         let hostname1 = uuid + "." + domainName;
-        let hostname2 = uuid + "." + this.addDomainSuffix(domainName, "-ipv4")
+        let hostname2 = uuid + "." + this.addDomainPrefix(domainName, "ipv4-")
 
         this.request("http" + (additionalConfig.insecure ? "" : "s") + "://" + hostname1).then(() => {
             if (testRunCallback)

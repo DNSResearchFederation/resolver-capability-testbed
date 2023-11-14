@@ -71,13 +71,10 @@ export default abstract class TestTypeRunner {
     }
 
     /**
-     * Add a suffix to a domain name
+     * Add a prefix to a domain name
      */
-    addDomainSuffix(domain, suffix): string {
-        let parts = domain.split(".", 2);
-        let prefix = parts.shift();
-
-        return prefix + suffix + "." + parts.join(".");
+    addDomainPrefix(domain, prefix): string {
+        return prefix + domain;
     }
 
     /**

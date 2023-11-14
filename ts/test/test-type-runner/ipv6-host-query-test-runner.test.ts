@@ -12,7 +12,7 @@ describe("Test ipv6 host query test runner", function ()  {
         expect(testRunner.getPreviousRequests()[0].hostname).toContain("https://");
         expect(testRunner.getPreviousRequests()[0].hostname.length).toEqual(53);
 
-        expect(testRunner.getPreviousRequests()[1].hostname).toContain("test-ipv4.com");
+        expect(testRunner.getPreviousRequests()[1].hostname).toContain("ipv4-test.com");
         expect(testRunner.getPreviousRequests()[1].hostname).toContain("https://");
         expect(testRunner.getPreviousRequests()[1].hostname.length).toEqual(58);
 
@@ -28,7 +28,7 @@ describe("Test ipv6 host query test runner", function ()  {
         expect(testRunner.getPreviousRequests()[0].hostname).toContain("http://");
         expect(testRunner.getPreviousRequests()[0].hostname.length).toEqual(52);
 
-        expect(testRunner.getPreviousRequests()[1].hostname).toContain("test-ipv4.com");
+        expect(testRunner.getPreviousRequests()[1].hostname).toContain("ipv4-test.com");
         expect(testRunner.getPreviousRequests()[1].hostname).toContain("http://");
         expect(testRunner.getPreviousRequests()[1].hostname.length).toEqual(57);
 

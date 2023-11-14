@@ -7,7 +7,7 @@ describe("Test entry point", function () {
         let resolverCapTest = new ResolverCapabilityTest("ipv6", "test.com", [], null);
         expect(resolverCapTest.installedTestTypeRunners["ipv6"].getPreviousRequests().length).toEqual(2);
         expect(resolverCapTest.installedTestTypeRunners["ipv6"].getPreviousRequests()[0].hostname).toContain("test.com");
-        expect(resolverCapTest.installedTestTypeRunners["ipv6"].getPreviousRequests()[1].hostname).toContain("test-ipv4.com")
+        expect(resolverCapTest.installedTestTypeRunners["ipv6"].getPreviousRequests()[1].hostname).toContain("ipv4-test.com")
 
     });
 
