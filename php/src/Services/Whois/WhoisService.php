@@ -21,7 +21,12 @@ class WhoisService {
      * @return array
      */
     public function getNameservers($domain) {
-        return $this->whois->loadDomainInfo($domain)->getNameServers();
+        $domainInfo = $this->whois->loadDomainInfo($domain);
+        if ($domainInfo) {
+        return $domainInfo->getNameServers();
+            } else {
+            throw new \Exception("Unknown domain\n");
+        }
     }
 
 }
