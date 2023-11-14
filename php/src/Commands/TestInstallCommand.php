@@ -18,12 +18,12 @@ class TestInstallCommand extends BaseTestCommand {
      * @param string $starts @option Start time for the test
      * @param string $expires @option End time for the test
      * @param string $testKey @option The identifying key for the test
-     * @param string $nameserversSet @option The set of nameservers to use. Defaults to 'default'
+     * @param string $nameserverSet @option The set of nameservers to use. Defaults to 'default'
      * @param string[] $testArgs @argument Any additional test specific arguments
      *
      * @return void
      */
-    public function handleCommand($test, $domain, $description = null, $starts = null, $expires = null, $testKey = null, $nameserversSet = "default", ...$testArgs) {
+    public function handleCommand($test, $domain, $description = null, $starts = null, $expires = null, $testKey = null, $nameserverSet = "default", ...$testArgs) {
 
         $testKey = $testKey ?? $test . "-" . date("U");
 
@@ -34,7 +34,7 @@ class TestInstallCommand extends BaseTestCommand {
             $expires = date_create("Y-m-d H:i:s", $expires);
         }
 
-        $testObject = new Test($testKey, $test, $domain, $description, $starts, $expires, null, $nameserversSet, $testArgs);
+        $testObject = new Test($testKey, $test, $domain, $description, $starts, $expires, null, $nameserverSet, $testArgs);
         $this->testService->createTest($testObject);
 
     }
