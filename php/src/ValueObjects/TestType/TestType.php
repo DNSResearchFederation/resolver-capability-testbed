@@ -29,23 +29,16 @@ class TestType {
     private $rules;
 
     /**
-     * @var string[string]
-     */
-    private $computedLogFields = [];
-
-    /**
      * @param string $type
      * @param string $description
      * @param TestTypeConfig $config
      * @param TestTypeRules $rules
-     * @param array $computedLogFields
      */
-    public function __construct($type, $description, $config, $rules, $computedLogFields) {
+    public function __construct($type, $description, $config, $rules) {
         $this->type = $type;
         $this->description = $description;
         $this->config = $config;
         $this->rules = $rules;
-        $this->computedLogFields = $computedLogFields;
     }
 
     /**
@@ -102,20 +95,6 @@ class TestType {
      */
     public function setRules($rules) {
         $this->rules = $rules;
-    }
-
-    /**
-     * @return array
-     */
-    public function getComputedLogFields() {
-        return $this->computedLogFields;
-    }
-
-    /**
-     * @param array $computedLogFields
-     */
-    public function setComputedLogFields($computedLogFields) {
-        $this->computedLogFields = $computedLogFields;
     }
 
 }

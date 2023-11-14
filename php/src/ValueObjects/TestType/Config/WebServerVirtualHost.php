@@ -8,7 +8,7 @@ class WebServerVirtualHost implements OperationConfig {
      * @var string
      * @requiredEither wildcard
      */
-    private $prefix;
+    private $domainName;
 
     /**
      * @var bool
@@ -26,30 +26,37 @@ class WebServerVirtualHost implements OperationConfig {
     private $sslCertPrefixes;
 
     /**
-     * @param string $prefix
+     * @var string
+     */
+    private $prefix;
+
+    /**
+     * @param string $domainName
      * @param bool $wildcard
      * @param string $content
      * @param array $sslCertPrefixes
+     * @param string $prefix
      */
-    public function __construct($prefix = null, $wildcard = false, $content = null, $sslCertPrefixes = ["*"]) {
-        $this->prefix = $prefix;
+    public function __construct($domainName = null, $wildcard = false, $content = null, $sslCertPrefixes = ["*"], $prefix = "") {
+        $this->domainName = $domainName;
         $this->wildcard = $wildcard;
         $this->content = $content;
         $this->sslCertPrefixes = $sslCertPrefixes;
+        $this->prefix = $prefix;
     }
 
     /**
      * @return string
      */
-    public function getPrefix() {
-        return $this->prefix;
+    public function getDomainName() {
+        return $this->domainName;
     }
 
     /**
-     * @param string $prefix
+     * @param string $domainName
      */
-    public function setPrefix($prefix) {
-        $this->prefix = $prefix;
+    public function setDomainName($domainName) {
+        $this->domainName = $domainName;
     }
 
     /**
@@ -94,12 +101,32 @@ class WebServerVirtualHost implements OperationConfig {
         $this->sslCertPrefixes = $sslCertPrefixes;
     }
 
+    /**
+     * @return string
+     */
+    public function getPrefix() {
+        return $this->prefix;
+    }
+
+    /**
+     * @param string $prefix
+     */
+    public function setPrefix($prefix) {
+        $this->prefix = $prefix;
+    }
+
     public function getIdentifier() {
-        return $this->getPrefix();
+        return $this->getDomainName();
     }
 
     public function updateDynamicValues($test) {
-        $this->prefix = $test->getDomainName();
+
+        if ($this->prefix) {
+            $this->domainName = $this->getPrefix() . $test->getDomainName();
+        } else {
+            $this->domainName = $test->getDomainName();
+        }
+
     }
 
 }

@@ -61,16 +61,22 @@ class TestTypeManager {
         $serverOperations = [];
         $config = $testType->getConfig();
 
-        $dnsZone = $config->getDnsZone();
-        if ($dnsZone) {
-            $dnsZone->updateDynamicValues($this->globalConfig, $test);
-            $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
+        $dnsZones = $config->getDnsZones() ?? [$config->getDnsZone()];
+
+        if ($dnsZones) {
+            foreach ($dnsZones as $dnsZone) {
+                $dnsZone->updateDynamicValues($this->globalConfig, $test);
+                $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
+            }
         }
 
-        $webVirtualHost = $config->getWebVirtualHost();
-        if ($webVirtualHost) {
-            $webVirtualHost->updateDynamicValues($test);
-            $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $webVirtualHost);
+        $webVirtualHosts = $config->getWebVirtualHosts() ?? [$config->getWebVirtualHost()];
+
+        if ($webVirtualHosts) {
+            foreach ($webVirtualHosts as $webVirtualHost) {
+                $webVirtualHost->updateDynamicValues($test);
+                $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $webVirtualHost);
+            }
         }
 
         return $serverOperations;
@@ -89,14 +95,15 @@ class TestTypeManager {
         $serverOperations = [];
         $config = $testType->getConfig();
 
-        $dnsZone = $config->getDnsZone();
-        if ($dnsZone) {
+        $dnsZones = $config->getDnsZones() ?? [$config->getDnsZone()];
+
+        foreach ($dnsZones as $dnsZone) {
             $dnsZone->updateDynamicValues($this->globalConfig, $test);
             $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_REMOVE, $dnsZone);
         }
 
-        $webVirtualHost = $config->getWebVirtualHost();
-        if ($webVirtualHost) {
+        $webVirtualHosts = $config->getWebVirtualHosts() ?? [$config->getWebVirtualHost()];
+        foreach ($webVirtualHosts as $webVirtualHost) {
             $webVirtualHost->updateDynamicValues($test);
             $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_REMOVE, $webVirtualHost);
         }

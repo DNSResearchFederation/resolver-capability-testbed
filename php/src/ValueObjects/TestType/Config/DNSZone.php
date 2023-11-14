@@ -23,14 +23,27 @@ class DNSZone implements OperationConfig {
     private $records;
 
     /**
+     * @var string
+     */
+    private $prefix;
+
+    /**
+     * @var string
+     */
+    private $nameserverSet;
+
+    /**
      * @param string $domainName
      * @param array $nameservers
      * @param DNSRecord[] $records
+     * @param string $prefix
      */
-    public function __construct($domainName, $nameservers = [], $records = []) {
+    public function __construct($domainName, $nameservers = [], $records = [], $prefix = "", $nameserverSet = null) {
         $this->domainName = $domainName;
         $this->nameservers = $nameservers;
         $this->records = $records;
+        $this->prefix = $prefix;
+        $this->nameserverSet = $nameserverSet;
     }
 
     /**
@@ -76,14 +89,57 @@ class DNSZone implements OperationConfig {
     }
 
     /**
+     * @return string
+     */
+    public function getPrefix() {
+        return $this->prefix;
+    }
+
+    /**
+     * @param string $prefix
+     */
+    public function setPrefix($prefix) {
+        $this->prefix = $prefix;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameserverSet() {
+        return $this->nameserverSet;
+    }
+
+    /**
+     * @param string $nameserverSet
+     */
+    public function setNameserverSet($nameserverSet) {
+        $this->nameserverSet = $nameserverSet;
+    }
+
+    /**
      * @param GlobalConfigService $globalConfig
      * @param Test $test
      * @return void
      */
     public function updateDynamicValues($globalConfig, $test) {
-        $this->domainName = $test->getDomainName();
 
-        $nameserversKey = $test->getNameserversKey();
+        if ($this->prefix) {
+            $this->domainName = $this->getPrefix() . $test->getDomainName();
+        } else {
+            $this->domainName = $test->getDomainName();
+        }
+
+        switch ($this->getNameserverSet()) {
+            case "DEFAULT":
+                $nameserversKey = "default";
+                break;
+            case "NAMESERVERS_SET":
+                $nameserversKey = $test->getNameserversKey();
+                break;
+            default:
+                $nameserversKey = $test->getNameserversKey();
+        }
+
         $this->nameservers = $globalConfig->getNameserversByKey($nameserversKey);
 
         // Replace Literal IP addresses with values from global config

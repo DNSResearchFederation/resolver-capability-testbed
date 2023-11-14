@@ -1,0 +1,64 @@
+{
+  "type": "example2",
+  "description": "An example test type",
+  "config": {
+    "dnsZones": [
+      {
+        "suffix": "",
+        "records": [
+          {
+            "prefix": "*",
+            "ttl": 250,
+            "type": "A",
+            "data": "IPV4_ADDRESS"
+          },
+          {
+            "prefix": "*",
+            "ttl": 200,
+            "type": "AAAA",
+            "data": "IPV6_ADDRESS"
+          }
+        ],
+        "nameserverSet": "DEFAULT"
+      },
+      {
+        "prefix": "alt-",
+        "records": [
+          {
+            "prefix": "*",
+            "ttl": 250,
+            "type": "A",
+            "data": "IPV4_ADDRESS"
+          }
+        ],
+        "nameserverSet": "NAMESERVER_SET"
+      }
+    ],
+    "webVirtualHosts": [
+      {
+        "prefix": "",
+        "wildcard": true,
+        "content": "OK"
+      },
+      {
+        "prefix": "alt-",
+        "wildcard": true,
+        "content": "OK"
+      }
+    ]
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": [
+        {
+          "type": "A"
+        }
+      ]
+    },
+    "webserver": {
+      "expectedQueries": 3
+    },
+    "relationalKey": "HOSTNAME",
+    "timeoutSeconds": 3
+  }
+}

@@ -2,25 +2,46 @@
   "type": "ipv6",
   "description": "IPv6 Records Defined Only for domain name",
   "config": {
-    "dnsZone": {
-      "records": [
-        {
-          "prefix": "*",
-          "ttl": 200,
-          "type": "A",
-          "data": "IPV4_ADDRESS"
-        }
-      ]
-    },
+    "dnsZones": [
+      {
+        "prefix": "-ipv4",
+        "records": [
+          {
+            "prefix": "*",
+            "ttl": 200,
+            "type": "A",
+            "data": "IPV4_ADDRESS"
+          }
+        ],
+        "nameservers": "DEFAULT"
+      },
+      {
+        "prefix": "",
+        "records": [
+          {
+            "prefix": "*",
+            "ttl": 200,
+            "type": "A",
+            "data": "IPV4_ADDRESS"
+          }
+        ],
+        "nameservers": "NAMESERVERS_SET"
+      }
+    ],
     "webVirtualHost": {
       "wildcard": true,
-      "content": "OK"
+      "content": "OK",
+      "prefix": ""
     }
   },
   "rules": {
     "dns": {
       "expectedQueries": [
         {
+          "type": "A"
+        },
+        {
+          "prefix": "-ipv4",
           "type": "A"
         }
       ]
@@ -29,7 +50,7 @@
       "expectedQueries": 1
     },
     "webserverOptional": true,
-    "relationalKey": "HOSTNAME",
+    "relationalKey": "HOSTNAME_OR_IP",
     "timeoutSeconds": 3
   }
 }

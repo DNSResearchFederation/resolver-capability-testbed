@@ -94,6 +94,10 @@ class TestServiceTest extends TestBase {
 
     public function testCanSaveNewSimpleTest() {
 
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/testKey.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/testKey.db");
+        }
+
         $test = new Test("testKey", "test", "oxil.co.uk");
         $this->testService->createTest($test);
 
@@ -106,6 +110,10 @@ class TestServiceTest extends TestBase {
     }
 
     public function testCanSaveComprehensiveTest() {
+
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/testKey.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/testKey.db");
+        }
 
         $path = Configuration::readParameter("storage.root") . "/tests/testKey.json";
         if (file_exists($path)) {
@@ -231,6 +239,12 @@ class TestServiceTest extends TestBase {
      */
     public function testCannotCreateNewTestForDomainNameWhichOverlapsAnotherTest() {
 
+        for ($i = 1; $i < 9; $i++) {
+            if (file_exists(Configuration::readParameter("storage.root") . "/logs/test$i.db")) {
+                unlink(Configuration::readParameter("storage.root") . "/logs/test$i.db");
+            }
+        }
+
         $test1 = new Test("test1", "test", "1.co.uk");
         $test1->save();
 
@@ -298,6 +312,10 @@ class TestServiceTest extends TestBase {
 
     public function testSynchroniseShouldBeCalledOnCreateToActivatePendingTestsWhichAreStartedAndCallInstallerForReadyTests() {
 
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/test-this.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/test-this.db");
+        }
+
         // Check the server was updated
         $installOperations = [new ServerOperation(ServerOperation::OPERATION_ADD, "BINGO"), new ServerOperation(ServerOperation::OPERATION_ADD, "BONGO")];
         $this->testTypeManager->returnValue("getInstallServerOperations", $installOperations);
@@ -314,6 +332,10 @@ class TestServiceTest extends TestBase {
     }
 
     public function testSynchroniseCallsUninstallerForActiveTestsPastExpiry() {
+
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/test-me.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/test-me.db");
+        }
 
         $uninstallOperations = [new ServerOperation(ServerOperation::OPERATION_ADD, "BINGO"), new ServerOperation(ServerOperation::OPERATION_ADD, "BONGO")];
         $this->testTypeManager->returnValue("getUninstallServerOperations", $uninstallOperations);
@@ -362,6 +384,14 @@ class TestServiceTest extends TestBase {
     }
 
     public function testDoesStopTestCorrectlyIfTypeIsActive() {
+
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/key1.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/key1.db");
+        }
+
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/key2.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/key2.db");
+        }
 
         // Active test, hit stop and check status and expires time
         $now = new \DateTime();

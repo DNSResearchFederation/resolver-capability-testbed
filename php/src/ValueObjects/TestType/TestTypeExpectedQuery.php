@@ -15,12 +15,19 @@ class TestTypeExpectedQuery {
     private $value;
 
     /**
+     * @var string
+     */
+    private $prefix;
+
+    /**
      * @param string $type
      * @param string $value
+     * @param string $prefix
      */
-    public function __construct($type = null, $value = null) {
+    public function __construct($type = null, $value = null, $prefix = null) {
         $this->type = $type;
         $this->value = $value;
+        $this->prefix = $prefix;
     }
 
     /**
@@ -50,4 +57,19 @@ class TestTypeExpectedQuery {
     public function setValue($value) {
         $this->value = $value;
     }
+
+    /**
+     * @return string
+     */
+    public function getPrefix() {
+        return $this->prefix;
+    }
+
+    /**
+     * @param string $prefix
+     */
+    public function setPrefix($prefix) {
+        $this->prefix = $prefix;
+    }
+
 }

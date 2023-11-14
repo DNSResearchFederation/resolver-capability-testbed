@@ -25,4 +25,18 @@ class WhoisServiceTest extends TestCase {
 
     }
 
+    public function testFailsSafelyIfDomainNameBad() {
+
+        $domain = "uiragvfrelhgvewafhuerwbifl.com";
+
+        try {
+            $this->whoisService->getNameservers($domain);
+            $this->fail("Should have thrown here");
+        } catch (\Exception $e) {
+            $this->assertEquals("Unknown domain\n", $e->getMessage());
+            // Success!
+        }
+
+    }
+
 }

@@ -80,11 +80,7 @@ class LoggingService {
         $dbInstaller->run(["Objects/Log"]);
 
         // Manually add combined log table
-        /**
-         * @var TestTypeManager $testTypeManager
-         */
-        $testTypeManager = Container::instance()->get(TestTypeManager::class);
-        $testType = $testTypeManager->getTestTypeForTest($test);
+        $testType = $this->testTypeManager->getTestTypeForTest($test);
 
         if ($testType) {
             $rules = $testType->getRules();

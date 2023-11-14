@@ -49,14 +49,14 @@ class TestTypeManagerTest extends TestCase {
         $expected = [
             "ipv6" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/ipv6.json"), TestType::class),
             "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname.json"), TestType::class),
-            "minimum-ttl"=> $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/minimum-ttl.json"), TestType::class)
+            "minimum-ttl" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/minimum-ttl.json"), TestType::class)
         ];
 
         $this->assertEquals($expected, $testTypeManager1->listTestTypes());
 
         // Test can add in a custom
         $testTypeManager2 = new TestTypeManager();
-        $customTestType = new TestType("custom", "Custom Test", new TestTypeConfig(new DNSZone("test.com"), new WebServerVirtualHost()), new TestTypeRules(new TestTypeDNSRules([new TestTypeExpectedQuery("","")]), new TestTypeWebServerRules(1), false, "", 5), []);
+        $customTestType = new TestType("custom", "Custom Test", new TestTypeConfig(new DNSZone("test.com"), null, new WebServerVirtualHost()), new TestTypeRules(new TestTypeDNSRules([new TestTypeExpectedQuery("", "")]), new TestTypeWebServerRules(1), false, "", 5), []);
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/custom.json", $this->objectToJSONConverter->convert($customTestType));
         $expected["custom"] = $customTestType;
 
@@ -88,6 +88,28 @@ class TestTypeManagerTest extends TestCase {
 
     }
 
+    public function testCanCreateMultipleNameserverServerOperationsForMultipleZonesOrWebserverHosts() {
+
+        $testTypeManager = new TestTypeManager();
+        $test = new Test("aKey", "example2", "test.com");
+
+        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example2.json", file_get_contents(__DIR__ . "/example2.json"));
+
+        $operations = $testTypeManager->getInstallServerOperations($test);
+
+        $expectedOperations = [
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4"), new DNSRecord("*", 200, "AAAA", "2001::1234")], "", "DEFAULT")),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("alt-test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4")], "alt-", "NAMESERVER_SET")),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.com", true, "OK")),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("alt-test.com", true, "OK", ["*"], "alt-"))
+        ];
+
+        unlink(Configuration::readParameter("config.root") . "/resolvertest/example2.json");
+
+        $this->assertEquals($expectedOperations, $operations);
+
+    }
+
     public function testCanCreateCorrectServerOperationsUponUninstall() {
 
         $testTypeManager = new TestTypeManager();
@@ -109,6 +131,29 @@ class TestTypeManagerTest extends TestCase {
         unlink(Configuration::readParameter("config.root") . "/resolvertest/example.json");
 
         $this->assertEquals($expectedOperations, $operations);
+
+    }
+
+    public function testCanCreateMultipleNameserverServerOperationsForMultipleZonesOrWebserverHostsUponUninstall() {
+
+        $testTypeManager = new TestTypeManager();
+        $test = new Test("aKey", "example2", "test.com");
+
+        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example2.json", file_get_contents(__DIR__ . "/example2.json"));
+
+        $operations = $testTypeManager->getUninstallServerOperations($test);
+
+        $expectedOperations = [
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4"), new DNSRecord("*", 200, "AAAA", "2001::1234")], "", "DEFAULT")),
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("alt-test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4")], "alt-", "NAMESERVER_SET")),
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("test.com", true, "OK")),
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("alt-test.com", true, "OK", ["*"], "alt-"))
+        ];
+
+        unlink(Configuration::readParameter("config.root") . "/resolvertest/example2.json");
+
+        $this->assertEquals($expectedOperations, $operations);
+
     }
 
     public function testCanReturnTheTestTypeObjectForAGivenTest() {

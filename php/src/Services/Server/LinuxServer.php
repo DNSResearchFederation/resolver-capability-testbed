@@ -144,7 +144,7 @@ class LinuxServer implements Server {
         $targetUser = Configuration::readParameter("server.bind.service.user");
         $this->installTemplateFile($operation, "bind-zonefile.txt", Configuration::readParameter("server.bind.config.dir"), $targetUser);
 
-        $model = ["domainName" => $operation->getConfig()->getIdentifier(), "nameservers" => $operation->getConfig()->getNameservers()];
+        $model = ["domainName" => $operation->getConfig()->getIdentifier()];
         $templateFile = $this->fileResolver->resolveFile("Config/templates/linux/bind-zones-entry.txt");
         $text = $this->templateParser->parseTemplateText(file_get_contents($templateFile), $model);
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $text, FILE_APPEND);
@@ -182,7 +182,7 @@ class LinuxServer implements Server {
         $config = $operation->getConfig();
         $targetUser = Configuration::readParameter("server.httpd.service.user");
 
-        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getPrefix();
+        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getDomainName();
         if (!file_exists($contentDir)) {
             passthru("{$this->sudoPrefix} mkdir -p $contentDir");
         }
@@ -223,7 +223,7 @@ class LinuxServer implements Server {
     private function uninstallHttpd($operation) {
 
         $config = $operation->getConfig();
-        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getPrefix();
+        $contentDir = Configuration::readParameter("server.httpd.webroot.dir") . "/" . $config->getDomainName();
 
         passthru("{$this->sudoPrefix} rm -rf $contentDir");
 

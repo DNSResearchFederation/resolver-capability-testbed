@@ -36,8 +36,5 @@
     },
     "relationalKey": "HOSTNAME",
     "timeoutSeconds": 3
-  },
-  "computedLogFields": {
-    "status": "dns_response | and webserver_response | ternary 'Success' 'Failed'"
   }
 }
