@@ -3,6 +3,7 @@ import TestTypeRunner from "./test-type-runner/test-type-runner";
 import MockSessionStorage from "./util/mock-session-storage";
 import TtlTestRunner from "./test-type-runner/ttl-test-runner";
 import Ipv6HostQueryTestRunner from "./test-type-runner/ipv6-host-query-test-runner";
+import DNSSECHostQueryTestRunner from "./test-type-runner/dnssec-host-query-test-runner";
 
 export default class ResolverCapabilityTest {
 
@@ -10,7 +11,8 @@ export default class ResolverCapabilityTest {
     private testTypeRunners: any = {
         "ipv6": new Ipv6HostQueryTestRunner(),
         "qname-minimisation": new SingleHostQueryTestRunner(1, "qname.resolver.capability"),
-        "minimum-ttl": new TtlTestRunner()
+        "minimum-ttl": new TtlTestRunner(),
+        "dnssec": new DNSSECHostQueryTestRunner()
     };
 
     // Export test type runner

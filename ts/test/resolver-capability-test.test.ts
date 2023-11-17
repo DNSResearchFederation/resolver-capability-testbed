@@ -27,6 +27,16 @@ describe("Test entry point", function () {
 
     });
 
+    it("Should be able to run the correct test type for DNSSEC", () => {
+
+        let resolverCapTest = new ResolverCapabilityTest("dnssec", "test.com", [], null);
+        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests().length).toEqual(3);
+        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests()[0].hostname).toContain("test.com");
+        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests()[1].hostname).toContain("unsigned-test.com")
+        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests()[2].hostname).toContain("unvalidated-test.com")
+
+    });
+
     it('Should be able to register a callback on test completion', () => {
         let resolverCapTest = new ResolverCapabilityTest("qname-minimisation", "test3.com", [], (requests) => {
             expect(requests.length).toEqual(1);
