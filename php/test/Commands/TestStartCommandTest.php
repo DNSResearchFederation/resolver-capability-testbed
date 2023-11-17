@@ -1,11 +1,12 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\TestStartCommand;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\TestService;
 

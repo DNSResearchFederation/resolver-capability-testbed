@@ -1,0 +1,84 @@
+{
+  "type": "dnssec",
+  "description": "Test DNSSEC Algorithm",
+  "config": {
+    "dnsZones": [
+      {
+        "dnsSecConfig": {
+          "algorithm": "Alg13"
+        },
+        "records": [
+          {
+            "prefix": "*",
+            "ttl": 200,
+            "type": "A",
+            "data": "IPV4_ADDRESS"
+          }
+        ]
+      },
+      {
+        "prefix": "unvalidated-",
+        "dnsSecConfig": {
+          "algorithm": "Alg13"
+        },
+        "records": [
+          {
+            "prefix": "*",
+            "ttl": 200,
+            "type": "A",
+            "data": "IPV4_ADDRESS"
+          }
+        ]
+      },
+      {
+        "prefix": "unsigned-",
+        "records": [
+          {
+            "prefix": "*",
+            "ttl": 200,
+            "type": "A",
+            "data": "IPV4_ADDRESS"
+          }
+        ]
+      }
+    ],
+    "webVirtualHost": {
+      "wildcard": true,
+      "content": "OK",
+      "sslCertPrefixes": [
+        "*",
+        "capability",
+        "resolver.capability",
+        "qname.resolver.capability"
+      ]
+    }
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": [
+        {
+          "type": "A",
+          "value": "(?i)^capability\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "type": "A",
+          "value": "(?i)^resolver\\.capability\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "type": "A",
+          "value": "(?i)^qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]+\\.qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
+        }
+      ]
+    },
+    "webserver": {
+      "expectedQueries": 1
+    },
+    "webserverOptional": false,
+    "relationalKey": "HOSTNAME_OR_IPADDRESS",
+    "timeoutSeconds": 3
+  }
+}

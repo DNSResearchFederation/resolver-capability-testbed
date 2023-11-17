@@ -129,10 +129,6 @@ class TestService {
         // Validate the test for general correctness
         $test->validate();
 
-        // Ensure start is not in the past
-        if ($test->getStarts() < date("Y-m-d H:i:s")) {
-            throw new InvalidTestStartDateException();
-        }
 
         // Check key is unique
         try {
@@ -142,10 +138,6 @@ class TestService {
             // Great
         }
 
-        // Ensure start is not in the past
-        if ($test->getStarts()->format("Y-m-d H:i:s") < date("Y-m-d H:i:s")) {
-            throw new InvalidTestStartDateException();
-        }
 
         // Ensure no overlap with existing test on domain
         foreach ($this->listTests() as $existingTest) {

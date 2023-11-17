@@ -1,8 +1,9 @@
 <?php
 
-namespace ResolverTest\Objects\Log;
+namespace Objects\Log;
 
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\ValueObjects\TestType\TestTypeRules;
 
 include_once "autoloader.php";

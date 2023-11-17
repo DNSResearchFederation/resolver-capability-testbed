@@ -243,6 +243,7 @@ class Test extends ActiveRecord {
             $types = $testTypeManager->listTestTypes();
             $x = $types[$this->getType()];
         } catch (\Exception $e) {
+            print_r($e->getMessage());
             throw new InvalidTestTypeException($this->getType());
         }
     }

@@ -25,3 +25,7 @@ server.httpd.config.dir = /etc/httpd/conf.d
 server.httpd.webroot.dir = /var/www
 server.httpd.service.command = service httpd
 server.httpd.service.user = root
+
+server.temp.dir = /tmp
+server.dnssec.keygen.command = /usr/sbin/dnssec-keygen
+server.dnssec.signzone.command = /usr/sbin/dnssec-signzone

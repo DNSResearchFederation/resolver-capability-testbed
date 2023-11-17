@@ -1,6 +1,6 @@
 <?php
 
-namespace ResolverTest\Services;
+namespace Services;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
@@ -19,10 +19,15 @@ use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Config\NameserverConfigService;
 use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
+use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\Services\Whois\WhoisService;
 use ResolverTest\ValueObjects\TestType\TestType;
-use ResolverTest\TestBase;
+use TestBase;
+use ResolverTest\ValueObjects\TestType\TestTypeConfig;
+use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
+use ResolverTest\ValueObjects\TestType\TestTypeRules;
+use ResolverTest\ValueObjects\TestType\TestTypeWebServerRules;
 
 include_once "autoloader.php";
 
@@ -62,8 +67,8 @@ class TestServiceTest extends TestBase {
 
         // Hook up a test manager
         $this->testTypeManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
-        $testType = Container::instance()->get(TestType::class);
-        $testType->setType("test");
+        $testType = new TestType("test", null, new TestTypeConfig(),new TestTypeRules(new TestTypeDNSRules([]),new TestTypeWebServerRules(1),false,"",30));
+
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/test.json", $this->objectToJSONConverter->convert($testType));
         $testType->setType("testType");
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/testType.json", $this->objectToJSONConverter->convert($testType));
@@ -221,18 +226,7 @@ class TestServiceTest extends TestBase {
 
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testCannotCreateTestWhichStartsInThePast() {
-        $test1 = new Test("test1", "testType", "1.co.uk", null, (new \DateTime())->sub(new \DateInterval("P2M")));
-        try {
-            $this->testService->createTest($test1);
-            $this->fail("Should have thrown here");
-        } catch (InvalidTestStartDateException $e) {
-            // Great
-        }
-    }
+
 
     /**
      * @doesNotPerformAssertions

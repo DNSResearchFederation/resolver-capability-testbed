@@ -1,6 +1,6 @@
 <?php
 
-namespace ResolverTest\Services\TestType;
+namespace Services\TestManager;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
@@ -9,6 +9,7 @@ use Kinikit\Core\Serialisation\JSON\ObjectToJSONConverter;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Objects\Test\Test;
+use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\ValueObjects\TestType\Config\DNSRecord;
 use ResolverTest\ValueObjects\TestType\Config\DNSZone;
 use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
@@ -47,6 +48,7 @@ class TestTypeManagerTest extends TestCase {
         // Test defaults are read
         $testTypeManager1 = new TestTypeManager();
         $expected = [
+            "dnssec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/dnssec.json"), TestType::class),
             "ipv6" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/ipv6.json"), TestType::class),
             "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname.json"), TestType::class),
             "minimum-ttl" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/minimum-ttl.json"), TestType::class)

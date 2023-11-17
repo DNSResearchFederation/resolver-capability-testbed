@@ -1,6 +1,6 @@
 <?php
 
-namespace ResolverTest\Services\Server;
+namespace Services\Server;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
@@ -11,7 +11,11 @@ use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\Services\Server\LinuxServer;
+use ResolverTest\Services\Server\Server;
 use ResolverTest\ValueObjects\TestType\Config\DNSRecord;
+use ResolverTest\ValueObjects\TestType\Config\DNSSECAlgorithmEnum;
+use ResolverTest\ValueObjects\TestType\Config\DNSSECConfig;
 use ResolverTest\ValueObjects\TestType\Config\DNSZone;
 use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
 
@@ -63,25 +67,77 @@ class LinuxServerTest extends TestCase {
 
     }
 
+
+    public function testCanInstallSignedDNSZoneCorrectly() {
+
+        $this->configService->setIPv4Address("1.2.3.4");
+        $this->configService->setIPv6Address("2001::1234");
+
+        $dnsRecords = [
+            new DNSRecord("this", 300, "A", "1.2.3.4"),
+            new DNSRecord("that", 200, "AAAA", "2001::1234"),
+            new DNSRecord("", 250, "MX", "mail.testdomain.com"),
+            new DNSRecord("www", 200, "CNAME", "testdomain.com")
+        ];
+
+        $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords, "", null,
+            new DNSSECConfig(DNSSECAlgorithmEnum::Alg8));
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
+
+        $this->server->performOperations([$operation]);
+
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+
+        $this->assertTrue(file_exists($path));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($path));
+
+        $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.signed";
+        $this->assertTrue(file_exists($signedPath));
+
+        $this->assertEquals("-N INCREMENT -o testdomain.com $path", file_get_contents($signedPath));
+
+        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux-dnssec"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+
+    }
+
+
     public function testCanUninstallDNSZoneCorrectly() {
 
-        $path = Configuration::readParameter("server.bind.config.dir") . "/1.com.conf";
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         file_put_contents($path, "contents");
 
-        file_put_contents(Configuration::readParameter("server.bind.zones.path"), "zone \"1.com\" IN {\n
-        type master;\n
-        file \"testdomain.com.conf\";\n
-        };");
+        file_put_contents(Configuration::readParameter("server.bind.zones.path"), file_get_contents(__DIR__ . "/test-bind-zones-linux") . " EXTRA CONTENT");
 
-        $dnsZone = new DNSZone("1.com");
+        $dnsZone = new DNSZone("testdomain.com");
         $operation = new ServerOperation(ServerOperation::OPERATION_REMOVE, $dnsZone);
 
         $this->assertTrue(file_exists($path));
         $this->server->performOperations([$operation]);
         $this->assertFalse(file_exists($path));
         $this->assertStringNotContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        $this->assertStringContainsString("EXTRA CONTENT", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
     }
+
+
+    public function testCanUninstallSignedDNSZoneCorrectly() {
+
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.signed";
+        file_put_contents($path, "contents");
+
+        file_put_contents(Configuration::readParameter("server.bind.zones.path"), file_get_contents(__DIR__ . "/test-bind-zones-linux-dnssec") . " EXTRA DATA");
+
+        $dnsZone = new DNSZone("testdomain.com", [], [], "", null, new DNSSECConfig(DNSSECAlgorithmEnum::Alg6));
+        $operation = new ServerOperation(ServerOperation::OPERATION_REMOVE, $dnsZone);
+
+        $this->assertTrue(file_exists($path));
+        $this->server->performOperations([$operation]);
+        $this->assertFalse(file_exists($path));
+        $this->assertStringNotContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux-dnssec"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        $this->assertStringContainsString("EXTRA DATA", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+    }
+
 
     public function testCanInstallWebServerVirtualHostCorrectly() {
 

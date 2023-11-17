@@ -1,6 +1,6 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
@@ -8,11 +8,12 @@ use Kinikit\Core\Serialisation\JSON\ObjectToJSONConverter;
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\TestUpdateCommand;
 use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
-use ResolverTest\TestBase;
+use TestBase;
 use ResolverTest\ValueObjects\TestType\TestType;
 
 include_once "autoloader.php";
@@ -48,8 +49,7 @@ class TestUpdateCommandTest extends TestBase {
         $this->testManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
 
         // Sample test type
-        $testType = Container::instance()->get(TestType::class);
-        $testType->setType("testType");
+        $testType = new TestType("testType", null, null, null);
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/testType.json", $this->objectToJSONConverter->convert($testType));
     }
 

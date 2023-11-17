@@ -1,11 +1,12 @@
 <?php
 
-namespace ResolverTest\Objects\Test;
+namespace Objects\Test;
 
 use ResolverTest\Exception\InvalidDateFormatException;
 use ResolverTest\Exception\InvalidTestTypeException;
 use ResolverTest\Exception\StartAfterExpiryException;
-use ResolverTest\TestBase;
+use TestBase;
+use ResolverTest\Objects\Test\Test;
 
 include_once "autoloader.php";
 

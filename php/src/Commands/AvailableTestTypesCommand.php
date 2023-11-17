@@ -12,7 +12,8 @@ class AvailableTestTypesCommand {
 
     const TEST_TYPES = [
         "ipv6" => "tbc",
-        "qname-minimisation" => "pending"
+        "qname-minimisation" => "pending",
+        "dnssec" => "pending"
     ];
 
     /**

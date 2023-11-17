@@ -1,6 +1,6 @@
 <?php
 
-namespace ResolverTest\Services\Logging;
+namespace Services\Logging;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Testing\MockObject;
@@ -10,10 +10,11 @@ use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
-use ResolverTest\TestBase;
+use TestBase;
 use ResolverTest\ValueObjects\TestType\TestType;
 use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
 use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;

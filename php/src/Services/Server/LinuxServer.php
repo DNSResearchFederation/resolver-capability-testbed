@@ -4,6 +4,7 @@ namespace ResolverTest\Services\Server;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
+use Kinikit\Core\Stream\File\ReadOnlyFileStream;
 use Kinikit\Core\Template\MustacheTemplateParser;
 use ResolverTest\Objects\Log\BaseLog;
 use ResolverTest\Objects\Log\NameserverLog;
@@ -122,7 +123,7 @@ class LinuxServer implements Server {
                 $date = date_create(trim(array_shift($components) . " " . array_shift($components), "[]"));
                 $userAgent = array_pop($components);
 
-                while (strpos($userAgent, "\"") > 0)  {
+                while (strpos($userAgent, "\"") > 0) {
                     $userAgent = array_pop($components) . " " . $userAgent;
                 }
 
@@ -141,17 +142,85 @@ class LinuxServer implements Server {
      */
     private function installBind($operation) {
 
-        $targetUser = Configuration::readParameter("server.bind.service.user");
-        $this->installTemplateFile($operation, "bind-zonefile.txt", Configuration::readParameter("server.bind.config.dir"), $targetUser);
+        /**
+         * @var DNSZone $config
+         */
+        $config = $operation->getConfig();
 
-        $model = ["domainName" => $operation->getConfig()->getIdentifier()];
+        $dnssecConfig = $config->getDnsSecConfig();
+
+        $model = [];
+
+        $domainName = $config->getDomainName();
+
+        // If doing DNS Sec, make the keys
+        $dnsSECDir = null;
+        if ($dnssecConfig) {
+            $dnsSECDir = (Configuration::readParameter("server.temp.dir") ?? sys_get_temp_dir()) . "/dnssec-$domainName-" . date("U");
+            mkdir($dnsSECDir, 0777, true);
+
+            $keyGenArgs = " -L 3600 -a " . $dnssecConfig->getAlgorithmKey();
+
+            // Add strength if supplied
+            $keyStrength = $dnssecConfig->getKeyStrength();
+            if ($keyStrength) {
+                $keyGenArgs .= " -b $keyStrength";
+            }
+
+            // Add zone info
+            $keyGenArgs .= " -n ZONE " . $domainName;
+
+            // Build the key gen command
+            $keyGenCommand = Configuration::readParameter("server.dnssec.keygen.command") . " -K " . $dnsSECDir;
+
+            // Create the zone signing key (ZSK)
+            passthru($this->sudoPrefix . " " . $keyGenCommand . $keyGenArgs);
+
+            // Create the key signing key (KSK)
+            passthru($this->sudoPrefix . " " . $keyGenCommand . " -f KSK" . $keyGenArgs);
+
+            // Grab the key data and map to DNSKEY records
+            $iterator = new \DirectoryIterator($dnsSECDir);
+            $dnsSECRecords = [];
+            foreach ($iterator as $file) {
+                if (str_ends_with($file->getFileName(), ".key")) {
+                    $dnsSECRecords[] = file_get_contents($file->getPathName());
+                }
+            }
+
+            $model["dnsSECRecords"] = $dnsSECRecords;
+
+
+        }
+
+
+        $targetUser = Configuration::readParameter("server.bind.service.user");
+        $this->installTemplateFile($operation, "bind-zonefile.txt", Configuration::readParameter("server.bind.config.dir"), $targetUser, $model);
+
+        $model = ["domainName" => $operation->getConfig()->getIdentifier(), "dnsSEC" => $dnssecConfig ? true : false];
         $templateFile = $this->fileResolver->resolveFile("Config/templates/linux/bind-zones-entry.txt");
         $text = $this->templateParser->parseTemplateText(file_get_contents($templateFile), $model);
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $text, FILE_APPEND);
 
-        // Reload bind
+
+        // If dnssec config, sign the zone file
+        if ($dnssecConfig) {
+
+            // Build the sign zone command
+            $signZoneCommand = Configuration::readParameter("server.dnssec.signzone.command") . " -K " . $dnsSECDir . " -d " . $dnsSECDir;
+            $signZoneCommand .= " -N INCREMENT -o " . $domainName . " " . Configuration::readParameter("server.bind.config.dir") . "/$domainName.conf";
+
+            passthru($this->sudoPrefix . " " . $signZoneCommand);
+
+            // Remove temp directory
+            //passthru("rm -rf $dnsSECDir");
+
+        }
+
+
+        // Restart bind
         $serviceCommand = Configuration::readParameter("server.bind.service.command");
-        passthru("{$this->sudoPrefix} $serviceCommand reload");
+        passthru("{$this->sudoPrefix} $serviceCommand restart");
     }
 
     /**
@@ -160,9 +229,19 @@ class LinuxServer implements Server {
      */
     private function uninstallBind($operation) {
 
-        $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
+        /**
+         * @var DNSZone $config
+         */
+        $config = $operation->getConfig();
 
-        $remainingZones = preg_replace("/zone \"" . $operation->getConfig()->getDomainName() . "\"[a-zA-Z0-9\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+        if ($config->getDnsSecConfig()) {
+            $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"), ".signed");
+        } else {
+            $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
+        }
+
+        $remainingZones = preg_replace(" /zone \"" . $operation->getConfig()->getDomainName() . "\"[a-zA-Z0-9\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $remainingZones);
 
         // Reload bind
@@ -196,7 +275,7 @@ class LinuxServer implements Server {
             "serverWebRoot" => Configuration::readParameter("server.httpd.webroot.dir"),
             "serverAliases" => array_map(function ($elt) use ($config) {
                 return $elt . "." . $config->getIdentifier();
-            },  $config->getSslCertPrefixes())
+            }, $config->getSslCertPrefixes())
         ];
 
         $this->installTemplateFile($operation, "httpd-virtualhost.txt", Configuration::readParameter("server.httpd.config.dir"), $targetUser, $model);
@@ -260,11 +339,11 @@ class LinuxServer implements Server {
      * @param string $targetDirectory
      * @return void
      */
-    private function removeTemplateFile($operation, $targetDirectory) {
+    private function removeTemplateFile($operation, $targetDirectory, $suffix = "") {
 
         $config = $operation->getConfig();
 
-        $path = $targetDirectory . "/{$config->getIdentifier()}.conf";
+        $path = $targetDirectory . "/{$config->getIdentifier()}.conf" . $suffix;
 
         if (file_exists($path)) {
             $this->sudoRemoveFile($path);

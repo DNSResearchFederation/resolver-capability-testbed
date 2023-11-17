@@ -1,10 +1,11 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\ConfigShowCommand;
 use ResolverTest\Services\Config\GlobalConfigService;
 
 include_once "autoloader.php";

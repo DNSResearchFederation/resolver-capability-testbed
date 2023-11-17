@@ -1,6 +1,6 @@
 <?php
 
-namespace ResolverTest\Services\Logging;
+namespace Services\Logging;
 
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\HTTP\Dispatcher\HttpRequestDispatcher;
@@ -10,6 +10,7 @@ use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\Services\Logging\DAPLogger;
 
 include_once "autoloader.php";
 

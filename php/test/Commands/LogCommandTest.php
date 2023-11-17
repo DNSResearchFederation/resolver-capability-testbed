@@ -1,10 +1,11 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\LogCommand;
 use ResolverTest\Services\Logging\LoggingService;
 
 class LogCommandTest extends TestCase {

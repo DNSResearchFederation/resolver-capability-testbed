@@ -1,11 +1,12 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
 use MathieuViossat\Util\ArrayToTextTable;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\TestListCommand;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\TestService;
 

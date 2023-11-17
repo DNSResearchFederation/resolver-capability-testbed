@@ -13,3 +13,6 @@ $ORIGIN {{operationConfig.domainName}}.
 {{#operationConfig.records}}
 {{prefix}}   {{ttl}}   IN   {{type}}   {{data}}
 {{/operationConfig.records}}
+{{#dnsSECRecords}}
+{{.}}
+{{/dnsSECRecords}}

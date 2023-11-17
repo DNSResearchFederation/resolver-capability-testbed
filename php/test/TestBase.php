@@ -1,6 +1,5 @@
 <?php
 
-namespace ResolverTest;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;

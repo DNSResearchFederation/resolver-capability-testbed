@@ -1,0 +1,4 @@
+zone "testdomain.com" IN {
+        type master;
+        file "resolvertest/testdomain.com.conf.signed";
+};

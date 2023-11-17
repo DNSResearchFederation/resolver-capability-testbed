@@ -1,9 +1,10 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\NameserversShowCommand;
 use ResolverTest\Services\Config\NameserverConfigService;
 
 include_once "autoloader.php";

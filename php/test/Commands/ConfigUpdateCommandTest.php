@@ -1,9 +1,10 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use Kinikit\Core\Testing\MockObjectProvider;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\ConfigUpdateCommand;
 use ResolverTest\Exception\InvalidIPAddressException;
 use ResolverTest\Services\Config\GlobalConfigService;
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace ResolverTest\Services\Util;
+namespace Services\Util;
 
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Services\Util\IPAddressUtils;
 
 include_once "autoloader.php";
 

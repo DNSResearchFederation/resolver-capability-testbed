@@ -32,18 +32,28 @@ class DNSZone implements OperationConfig {
      */
     private $nameserverSet;
 
+
+    /**
+     * @var DNSSECConfig
+     */
+    private $dnsSecConfig;
+
+
     /**
      * @param string $domainName
      * @param array $nameservers
      * @param DNSRecord[] $records
      * @param string $prefix
+     * @param string $nameserverSet
+     * @param DNSSECConfig $dnsSecConfig
      */
-    public function __construct($domainName, $nameservers = [], $records = [], $prefix = "", $nameserverSet = null) {
+    public function __construct($domainName, $nameservers = [], $records = [], $prefix = "", $nameserverSet = null, $dnsSecConfig = null) {
         $this->domainName = $domainName;
         $this->nameservers = $nameservers;
         $this->records = $records;
         $this->prefix = $prefix;
         $this->nameserverSet = $nameserverSet;
+        $this->dnsSecConfig = $dnsSecConfig;
     }
 
     /**
@@ -115,6 +125,21 @@ class DNSZone implements OperationConfig {
     public function setNameserverSet($nameserverSet) {
         $this->nameserverSet = $nameserverSet;
     }
+
+    /**
+     * @return DNSSECConfig|null
+     */
+    public function getDnsSecConfig(): ?DNSSECConfig {
+        return $this->dnsSecConfig;
+    }
+
+    /**
+     * @param DNSSECConfig|null $dnsSecConfig
+     */
+    public function setDnsSecConfig(?DNSSECConfig $dnsSecConfig): void {
+        $this->dnsSecConfig = $dnsSecConfig;
+    }
+
 
     /**
      * @param GlobalConfigService $globalConfig

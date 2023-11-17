@@ -19,3 +19,7 @@ server.httpd.config.dir = Storage/httpd/conf.d
 server.httpd.webroot.dir = Storage/httpd/www
 server.httpd.service.command = echo 'httpd'
 server.httpd.service.user = `whoami`
+
+server.temp.dir = /tmp
+server.dnssec.keygen.command = Scripts/dnssec-keygen.php
+server.dnssec.signzone.command = Scripts/dnssec-signzone.php

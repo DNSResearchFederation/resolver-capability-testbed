@@ -2,6 +2,9 @@
 
 namespace ResolverTest\ValueObjects\TestType;
 
+/**
+ * @noProxy
+ */
 class TestType {
 
     /**

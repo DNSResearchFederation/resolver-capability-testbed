@@ -1,9 +1,10 @@
 <?php
 
-namespace ResolverTest\Services\Whois;
+namespace Services\Whois;
 
 use Kinikit\Core\DependencyInjection\Container;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Services\Whois\WhoisService;
 
 include_once "autoloader.php";
 

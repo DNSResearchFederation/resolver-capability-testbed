@@ -1,9 +1,10 @@
 <?php
 
-namespace ResolverTest\Commands;
+namespace Commands;
 
 use MathieuViossat\Util\ArrayToTextTable;
 use PHPUnit\Framework\TestCase;
+use ResolverTest\Commands\AvailableTestTypesCommand;
 
 include_once "autoloader.php";
 
@@ -19,6 +20,10 @@ class AvailableTestTypesCommandTest extends TestCase {
         ob_end_clean();
 
         $expected = new ArrayToTextTable([
+            [
+                "name" => "dnssec",
+                "description" => "Test DNSSEC Algorithm"
+            ],
             [
                 "name" => "ipv6",
                 "description" => "IPv6 Records Defined Only for domain name"
