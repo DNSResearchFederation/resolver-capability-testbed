@@ -1,4 +1,3 @@
-#!/opt/homebrew/opt/php@8.1/bin/php
 <?php
 
 
