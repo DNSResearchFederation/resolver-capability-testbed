@@ -1,5 +1,5 @@
 import DNSSECHostQueryTestRunner from "../../src/test-type-runner/dnssec-host-query-test-runner";
-describe("Test ipv6 host query test runner", function ()  {
+describe("Test dnssec host query test runner", function ()  {
 
     it("Should be able to make 2 request to the correct domains", () => {
 
