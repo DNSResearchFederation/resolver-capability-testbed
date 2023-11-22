@@ -119,13 +119,18 @@ class WebServerVirtualHost implements OperationConfig {
         return $this->getDomainName();
     }
 
-    public function updateDynamicValues($test) {
+    public function updateDynamicValues($test, $testParameterValues = []) {
 
         if ($this->prefix) {
             $this->domainName = $this->getPrefix() . $test->getDomainName();
         } else {
             $this->domainName = $test->getDomainName();
         }
+
+        if (in_array($this->content, array_keys($testParameterValues))) {
+            $this->setContent($testParameterValues[$this->content]);
+        }
+
 
     }
 

@@ -146,7 +146,7 @@ class DNSZone implements OperationConfig {
      * @param Test $test
      * @return void
      */
-    public function updateDynamicValues($globalConfig, $test) {
+    public function updateDynamicValues($globalConfig, $test, $testParameterValues = []) {
 
         if ($this->prefix) {
             $this->domainName = $this->getPrefix() . $test->getDomainName();
@@ -167,6 +167,7 @@ class DNSZone implements OperationConfig {
 
         $this->nameservers = $globalConfig->getNameserversByKey($nameserversKey);
 
+
         // Replace Literal IP addresses with values from global config
         foreach ($this->getRecords() as $record) {
             switch ($record->getData()) {
@@ -176,8 +177,14 @@ class DNSZone implements OperationConfig {
                 case "IPV6_ADDRESS":
                     $record->setData($globalConfig->getIPv6Address());
                     break;
+                default:
+                    if (in_array($record->getData(), array_keys($testParameterValues))) {
+                        $record->setData($testParameterValues[$record->getData()]);
+                    }
             }
         }
+
+
     }
 
 

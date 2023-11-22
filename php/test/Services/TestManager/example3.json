@@ -1,0 +1,51 @@
+{
+  "type": "example3",
+  "description": "An example test type",
+  "parameters": [
+    {
+      "identifier": "CUSTOM_V4_ADDRESS"
+    },
+    {
+      "identifier": "CUSTOM_V6_ADDRESS"
+    },
+    {
+      "identifier": "CUSTOM_CONTENT"
+    }
+  ],
+  "config": {
+    "dnsZone": {
+      "records": [
+        {
+          "prefix": "*",
+          "ttl": 200,
+          "type": "A",
+          "data": "CUSTOM_V4_ADDRESS"
+        },
+        {
+          "prefix": "*",
+          "ttl": 250,
+          "type": "AAAA",
+          "data": "CUSTOM_V6_ADDRESS"
+        }
+      ]
+    },
+    "webVirtualHost": {
+      "wildcard": true,
+      "content": "CUSTOM_CONTENT"
+    }
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": [
+        {
+          "type": "AAAA"
+        }
+      ]
+    },
+    "webserver": {
+      "expectedQueries": 3
+    },
+    "relationalKey": "HOSTNAME",
+    "timeoutSeconds": 3
+  }
+}

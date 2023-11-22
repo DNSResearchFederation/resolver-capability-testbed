@@ -61,11 +61,19 @@ class TestTypeManager {
         $serverOperations = [];
         $config = $testType->getConfig();
 
+        $testData = $test->getTestData();
+
+        // Map parameter values
+        $testParameterValues = [];
+        foreach ($testType->getParameters() ?? [] as $index => $parameter) {
+            $testParameterValues[$parameter->getIdentifier()] = $testData[$index] ?? null;
+        }
+
         $dnsZones = $config->getDnsZones() ?? [$config->getDnsZone()];
 
         if ($dnsZones) {
             foreach ($dnsZones as $dnsZone) {
-                $dnsZone->updateDynamicValues($this->globalConfig, $test);
+                $dnsZone->updateDynamicValues($this->globalConfig, $test, $testParameterValues);
                 $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
             }
         }
@@ -74,7 +82,7 @@ class TestTypeManager {
 
         if ($webVirtualHosts) {
             foreach ($webVirtualHosts as $webVirtualHost) {
-                $webVirtualHost->updateDynamicValues($test);
+                $webVirtualHost->updateDynamicValues($test, $testParameterValues);
                 $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $webVirtualHost);
             }
         }

@@ -16,6 +16,7 @@ class ServerOperation {
      */
     private $config;
 
+
     const OPERATION_ADD = "add";
     const OPERATION_REMOVE = "remove";
 

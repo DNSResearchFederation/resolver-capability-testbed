@@ -31,6 +31,12 @@ class TestType {
      */
     private $rules;
 
+
+    /**
+     * @var TestTypeParameter[]
+     */
+    private $parameters;
+
     /**
      * @param string $type
      * @param string $description
@@ -70,6 +76,20 @@ class TestType {
      */
     public function setDescription($description) {
         $this->description = $description;
+    }
+
+    /**
+     * @return TestTypeParameter[]
+     */
+    public function getParameters() {
+        return $this->parameters;
+    }
+
+    /**
+     * @param TestTypeParameter[] $parameters
+     */
+    public function setParameters($parameters): void {
+        $this->parameters = $parameters;
     }
 
     /**

@@ -237,9 +237,8 @@ class LinuxServer implements Server {
 
         if ($config->getDnsSecConfig()) {
             $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"), ".signed");
-        } else {
-            $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
         }
+        $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
 
         $remainingZones = preg_replace(" /zone \"" . $operation->getConfig()->getDomainName() . "\"[a-zA-Z0-9\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $remainingZones);

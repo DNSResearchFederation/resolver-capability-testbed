@@ -90,6 +90,7 @@ class TestTypeManagerTest extends TestCase {
 
     }
 
+
     public function testCanCreateMultipleNameserverServerOperationsForMultipleZonesOrWebserverHosts() {
 
         $testTypeManager = new TestTypeManager();
@@ -111,6 +112,32 @@ class TestTypeManagerTest extends TestCase {
         $this->assertEquals($expectedOperations, $operations);
 
     }
+
+
+    public function testTestParametersAreCorrectlySpunInDynamicallyIfUsedInZoneFileConfig() {
+
+        $testTypeManager = new TestTypeManager();
+        $test = new Test("aKey", "example3", "test.co.uk", null, null, null, null, null, ["88.77.66.55", "2001::1234", "SUCCESS"]);
+
+        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example3.json", file_get_contents(__DIR__ . "/example3.json"));
+
+        $operations = $testTypeManager->getInstallServerOperations($test);
+
+        $dnsRecord1 = new DNSRecord("*", 200, "A", "88.77.66.55");
+        $dnsRecord2 = new DNSRecord("*", 250, "AAAA", "2001::1234");
+
+        $expectedOperations = [
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2])),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "SUCCESS"))
+        ];
+
+        unlink(Configuration::readParameter("config.root") . "/resolvertest/example3.json");
+
+        $this->assertEquals($expectedOperations, $operations);
+
+
+    }
+
 
     public function testCanCreateCorrectServerOperationsUponUninstall() {
 
