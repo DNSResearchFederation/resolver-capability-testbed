@@ -37,6 +37,24 @@ describe("Test entry point", function () {
 
     });
 
+    it("Should be able to run the correct test type for NSEC", () => {
+
+        let resolverCapTest = new ResolverCapabilityTest("nsec", "test.com", [], null);
+        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests().length).toEqual(3);
+        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests()[0].hostname).toContain("https://apples.test.com");
+        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests()[1].hostname).toContain("https://pears.test.com")
+        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests()[2].hostname).toContain("https://oranges.test.com")
+
+    });
+
+    it("Should be able to run the correct test type for TCP Fallback", () => {
+
+        let resolverCapTest = new ResolverCapabilityTest("tcp-fallback", "test.com", [], null);
+        expect(resolverCapTest.installedTestTypeRunners["tcp-fallback"].getPreviousRequests().length).toEqual(1);
+        expect(resolverCapTest.installedTestTypeRunners["tcp-fallback"].getPreviousRequests()[0].hostname).toContain("test.com");
+
+    });
+
     it('Should be able to register a callback on test completion', () => {
         let resolverCapTest = new ResolverCapabilityTest("qname-minimisation", "test3.com", [], (requests) => {
             expect(requests.length).toEqual(1);
