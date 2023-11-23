@@ -33,8 +33,16 @@ class AvailableTestTypesCommandTest extends TestCase {
                 "description" => "Minimum TTL Allowed"
             ],
             [
+                "name" => "nsec",
+                "description" => "Test NSEC is acknowledged"
+            ],
+            [
                 "name" => "qname-minimisation",
                 "description" => "Test QName Minimisation"
+            ],
+            [
+                "name" => "tcp-fallback",
+                "description" => "UDP falls back to TCP for large responses"
             ]
         ]);
 

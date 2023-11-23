@@ -4,7 +4,7 @@
   "config": {
     "dnsZones": [
       {
-        "prefix": "-ipv4",
+        "prefix": "ipv4-",
         "records": [
           {
             "prefix": "*",
@@ -41,7 +41,7 @@
           "type": "A"
         },
         {
-          "prefix": "-ipv4",
+          "prefix": "ipv4-",
           "type": "A"
         }
       ]

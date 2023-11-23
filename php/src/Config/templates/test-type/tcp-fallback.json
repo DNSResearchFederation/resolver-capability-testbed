@@ -1,0 +1,43 @@
+{
+  "type": "tcp-fallback",
+  "description": "UDP falls back to TCP for large responses",
+  "config": {
+    "dnsZone": {
+      "records": [
+        {
+          "prefix": "*",
+          "ttl": 10,
+          "type": "A",
+          "data": "IPV4_ADDRESS"
+        }
+      ]
+    },
+    "webVirtualHost": {
+      "wildcard": true,
+      "content": "OK",
+      "sslCertPrefixes": [
+        "*"
+      ]
+    }
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": [
+        {
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]+\\.ttl10\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]+\\.ttl15\\.[a-z]+\\.[a-z]+"
+        }
+      ]
+    },
+    "webserver": {
+      "expectedQueries": 4
+    },
+    "webserverOptional": false,
+    "relationalKey": "HOSTNAME_OR_IP",
+    "timeoutSeconds": 15
+  }
+}

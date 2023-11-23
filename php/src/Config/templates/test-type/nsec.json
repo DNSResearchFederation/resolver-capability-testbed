@@ -1,47 +1,26 @@
 {
-  "type": "dnssec",
-  "description": "Test DNSSEC Algorithm",
+  "type": "nsec",
+  "description": "Test NSEC is acknowledged",
   "config": {
-    "dnsZones": [
-      {
-        "dnsSecConfig": {
-          "algorithm": "Alg13"
-        },
-        "records": [
-          {
-            "prefix": "*",
-            "ttl": 200,
-            "type": "A",
-            "data": "IPV4_ADDRESS"
-          }
-        ]
+    "dnsZone": {
+      "dnsSecConfig": {
+        "algorithm": "Alg8"
       },
-      {
-        "prefix": "unvalidated-",
-        "dnsSecConfig": {
-          "algorithm": "Alg13"
+      "records": [
+        {
+          "prefix": "apples",
+          "ttl": 60,
+          "type": "A",
+          "data": "IPV4_ADDRESS"
         },
-        "records": [
-          {
-            "prefix": "*",
-            "ttl": 200,
-            "type": "A",
-            "data": "IPV4_ADDRESS"
-          }
-        ]
-      },
-      {
-        "prefix": "unsigned-",
-        "records": [
-          {
-            "prefix": "*",
-            "ttl": 200,
-            "type": "A",
-            "data": "IPV4_ADDRESS"
-          }
-        ]
-      }
-    ],
+        {
+          "prefix": "pears",
+          "ttl": 60,
+          "type": "A",
+          "data": "IPV4_ADDRESS"
+        }
+      ]
+    },
     "webVirtualHost": {
       "wildcard": true,
       "content": "OK",
