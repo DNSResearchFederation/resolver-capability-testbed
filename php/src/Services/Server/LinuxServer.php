@@ -240,7 +240,7 @@ class LinuxServer implements Server {
         }
         $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
 
-        $remainingZones = preg_replace(" /zone \"" . $operation->getConfig()->getDomainName() . "\"[a-zA-Z0-9\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        $remainingZones = preg_replace(" /zone \"" . $operation->getConfig()->getDomainName() . "\"[a-zA-Z0-9\-\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $remainingZones);
 
         // Reload bind
@@ -344,10 +344,7 @@ class LinuxServer implements Server {
 
         $path = $targetDirectory . "/{$config->getIdentifier()}.conf" . $suffix;
 
-        if (file_exists($path)) {
-            $this->sudoRemoveFile($path);
-        }
-
+        $this->sudoRemoveFile($path);
     }
 
     /**
