@@ -11,6 +11,8 @@ use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\ValueObjects\TestType\Config\DNSRecord;
+use ResolverTest\ValueObjects\TestType\Config\DNSSECAlgorithmEnum;
+use ResolverTest\ValueObjects\TestType\Config\DNSSECConfig;
 use ResolverTest\ValueObjects\TestType\Config\DNSZone;
 use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
 use ResolverTest\ValueObjects\TestType\TestType;
@@ -82,7 +84,7 @@ class TestTypeManagerTest extends TestCase {
         $dnsRecord2 = new DNSRecord("*", 250, "A", "1.2.3.4");
 
         $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2])),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, null, true)),
             new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "OK"))
         ];
 
@@ -103,8 +105,8 @@ class TestTypeManagerTest extends TestCase {
         $operations = $testTypeManager->getInstallServerOperations($test);
 
         $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4"), new DNSRecord("*", 200, "AAAA", "2001::1234")], "", "DEFAULT")),
-            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("alt-test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4")], "alt-", "NAMESERVER_SET")),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4"), new DNSRecord("*", 200, "AAAA", "2001::1234")], "", "DEFAULT", null, true)),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("alt-test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4")], "alt-", "NAMESERVER_SET", null, true)),
             new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.com", true, "OK")),
             new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("alt-test.com", true, "OK", ["*"], "alt-"))
         ];
@@ -129,7 +131,7 @@ class TestTypeManagerTest extends TestCase {
         $dnsRecord2 = new DNSRecord("*", 250, "AAAA", "2001::1234");
 
         $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2])),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, null, true)),
             new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "SUCCESS"))
         ];
 
@@ -138,6 +140,33 @@ class TestTypeManagerTest extends TestCase {
         $this->assertEquals($expectedOperations, $operations);
 
 
+    }
+
+
+    public function testDNSSECSignedZoneFlagIsCorrectlySetOnWebserverHostsIfInUse() {
+
+        $testTypeManager = new TestTypeManager();
+        $test = new Test("aKey", "example4", "test.co.uk", null, null, null, null, null, ["6"]);
+
+        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example4.json", file_get_contents(__DIR__ . "/example4.json"));
+
+        $operations = $testTypeManager->getInstallServerOperations($test);
+
+        $dnsRecord1 = new DNSRecord("*", 200, "A", "88.77.66.55");
+        $dnsRecord2 = new DNSRecord("*", 250, "AAAA", "2001::1234");
+
+        $expectedOperations = [
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, new DNSSECConfig(6), true)),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "OK", ["*"], "", true))
+        ];
+
+        unlink(Configuration::readParameter("config.root") . "/resolvertest/example4.json");
+
+        $this->assertEquals($expectedOperations, $operations);
+
+        // Check enum correctly mapped
+        $zone = new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, new DNSSECConfig(6));
+        $this->assertEquals(DNSSECConfig::ALGORITHMS[6], $zone->getDnsSecConfig()->getAlgorithm());
     }
 
 
@@ -155,7 +184,7 @@ class TestTypeManagerTest extends TestCase {
         $dnsRecord2 = new DNSRecord("*", 250, "A", "1.2.3.4");
 
         $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2])),
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, null, true)),
             new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("test.co.uk", true, "OK"))
         ];
 
@@ -175,8 +204,8 @@ class TestTypeManagerTest extends TestCase {
         $operations = $testTypeManager->getUninstallServerOperations($test);
 
         $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4"), new DNSRecord("*", 200, "AAAA", "2001::1234")], "", "DEFAULT")),
-            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("alt-test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4")], "alt-", "NAMESERVER_SET")),
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4"), new DNSRecord("*", 200, "AAAA", "2001::1234")], "", "DEFAULT", null, true)),
+            new ServerOperation(ServerOperation::OPERATION_REMOVE, new DNSZone("alt-test.com", [""], [new DNSRecord("*", 250, "A", "1.2.3.4")], "alt-", "NAMESERVER_SET", null, true)),
             new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("test.com", true, "OK")),
             new ServerOperation(ServerOperation::OPERATION_REMOVE, new WebServerVirtualHost("alt-test.com", true, "OK", ["*"], "alt-"))
         ];
@@ -186,9 +215,6 @@ class TestTypeManagerTest extends TestCase {
         $this->assertEquals($expectedOperations, $operations);
 
     }
-
-
-
 
 
     public function testCanReturnTheTestTypeObjectForAGivenTest() {

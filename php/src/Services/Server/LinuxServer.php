@@ -156,8 +156,8 @@ class LinuxServer implements Server {
         // If doing DNS Sec, make the keys
         $dnsSECDir = null;
         if ($dnssecConfig) {
-            $dnsSECDir = (Configuration::readParameter("server.temp.dir") ?? sys_get_temp_dir()) . "/dnssec-$domainName-" . date("U");
-            mkdir($dnsSECDir, 0777, true);
+            $dnsSECDir = Configuration::readParameter("server.bind.config.dir") . "/dnssec/" . $domainName;
+            passthru($this->sudoPrefix . " mkdir -m 777 -p " . $dnsSECDir);
 
             $keyGenArgs = " -L 3600 -a " . $dnssecConfig->getAlgorithmKey();
 
@@ -180,11 +180,18 @@ class LinuxServer implements Server {
             passthru($this->sudoPrefix . " " . $keyGenCommand . " -f KSK" . $keyGenArgs);
 
             // Grab the key data and map to DNSKEY records
-            $iterator = new \DirectoryIterator($dnsSECDir);
+            ob_start();
+            passthru($this->sudoPrefix . " ls $dnsSECDir");
+            $files = explode("\n", ob_get_contents());
+            ob_end_clean();
+
             $dnsSECRecords = [];
-            foreach ($iterator as $file) {
-                if (str_ends_with($file->getFileName(), ".key")) {
-                    $dnsSECRecords[] = file_get_contents($file->getPathName());
+            foreach ($files as $file) {
+                if (str_ends_with($file, ".key")) {
+                    ob_start();
+                    passthru($this->sudoPrefix . " cat $dnsSECDir/$file");
+                    $dnsSECRecords[] = ob_get_contents();
+                    ob_end_clean();
                 }
             }
 
@@ -197,30 +204,22 @@ class LinuxServer implements Server {
         $targetUser = Configuration::readParameter("server.bind.service.user");
         $this->installTemplateFile($operation, "bind-zonefile.txt", Configuration::readParameter("server.bind.config.dir"), $targetUser, $model);
 
-        $model = ["domainName" => $operation->getConfig()->getIdentifier(), "dnsSEC" => $dnssecConfig ? true : false];
+        $model = ["domainName" => $operation->getConfig()->getIdentifier()];
         $templateFile = $this->fileResolver->resolveFile("Config/templates/linux/bind-zones-entry.txt");
         $text = $this->templateParser->parseTemplateText(file_get_contents($templateFile), $model);
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $text, FILE_APPEND);
 
 
-        // If dnssec config, sign the zone file
-        if ($dnssecConfig) {
-
-            // Build the sign zone command
-            $signZoneCommand = Configuration::readParameter("server.dnssec.signzone.command") . " -K " . $dnsSECDir . " -d " . $dnsSECDir;
-            $signZoneCommand .= " -N INCREMENT -o " . $domainName . " " . Configuration::readParameter("server.bind.config.dir") . "/$domainName.conf";
-
-            passthru($this->sudoPrefix . " " . $signZoneCommand);
-
-            // Remove temp directory
-            //passthru("rm -rf $dnsSECDir");
-
+        // If dnssec config and no web virtual hosts, sign the zone file now
+        if ($dnssecConfig && !$config->getHasWebVirtualHost()) {
+            $this->signZoneForDNSSEC($domainName);
+        } else {
+            // Restart bind
+            $serviceCommand = Configuration::readParameter("server.bind.service.command");
+            passthru("{$this->sudoPrefix} $serviceCommand restart");
         }
 
 
-        // Restart bind
-        $serviceCommand = Configuration::readParameter("server.bind.service.command");
-        passthru("{$this->sudoPrefix} $serviceCommand restart");
     }
 
     /**
@@ -236,7 +235,7 @@ class LinuxServer implements Server {
 
 
         if ($config->getDnsSecConfig()) {
-            $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"), ".signed");
+            $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"), ".unsigned");
         }
         $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
 
@@ -284,7 +283,6 @@ class LinuxServer implements Server {
             foreach ($config->getSslCertPrefixes() as $prefix) {
                 $sslDomains[] = $prefix . "." . $config->getIdentifier();
             }
-
             $sslDomainsString = implode(",", $sslDomains);
             $authHook = Configuration::readParameter("config.root") . "/../src/resolvertest/scripts/certbot-certificate-install.sh";
             passthru("{$this->sudoPrefix} certbot certonly --webroot-path $contentDir --manual --preferred-challenges=dns --server https://acme-v02.api.letsencrypt.org/directory --agree-tos --register-unsafely-without-email --manual-auth-hook $authHook -d $sslDomainsString");
@@ -292,6 +290,11 @@ class LinuxServer implements Server {
         // Reload httpd
         $serviceCommand = Configuration::readParameter("server.httpd.service.command");
         passthru("{$this->sudoPrefix} $serviceCommand reload");
+
+        // If DNSSEC signed, sign now
+        if ($config->isDnssecSignedZone()) {
+            $this->signZoneForDNSSEC($config->getDomainName());
+        }
     }
 
     /**
@@ -317,7 +320,7 @@ class LinuxServer implements Server {
      * @param ServerOperation $operation
      * @return void
      */
-    private function installTemplateFile($operation, $template, $targetDirectory, $targetUser, $model = []) {
+    private function installTemplateFile($operation, $template, $targetDirectory, $targetUser, $model = [], $suffix = "") {
 
         $config = $operation->getConfig();
 
@@ -329,7 +332,7 @@ class LinuxServer implements Server {
 
         $text = $this->templateParser->parseTemplateText(file_get_contents($templateFile), $model);
 
-        $this->sudoWriteFile($targetDirectory . "/{$config->getIdentifier()}.conf", $text, $targetUser);
+        $this->sudoWriteFile($targetDirectory . "/{$config->getIdentifier()}.conf" . $suffix, $text, $targetUser);
 
     }
 
@@ -370,5 +373,33 @@ class LinuxServer implements Server {
      */
     private function sudoRemoveFile($filePath) {
         passthru("{$this->sudoPrefix} rm -rf $filePath");
+    }
+
+    /**
+     * Sign a zone for DNSSec using keys in supplied directory and domain name
+     *
+     * @param string $domainName
+     * @return void
+     */
+    private function signZoneForDNSSEC($domainName): void {
+
+        // Get zone config dir
+        $configDir = Configuration::readParameter("server.bind.config.dir");
+        $dnsSECDir = $configDir . "/dnssec/" . $domainName;
+
+        // Build the sign zone command
+        $signZoneCommand = Configuration::readParameter("server.dnssec.signzone.command") . " -K " . $dnsSECDir . " -d " . $dnsSECDir;
+        $signZoneCommand .= " -N INCREMENT -o " . $domainName . " " . $configDir . "/$domainName.conf";
+
+        passthru($this->sudoPrefix . " " . $signZoneCommand);
+
+        // Move signed file back to the main zone
+        passthru($this->sudoPrefix . " mv " . $configDir . "/$domainName.conf " . $configDir . "/$domainName.conf.unsigned");
+        passthru($this->sudoPrefix . " mv " . $configDir . "/$domainName.conf.signed " . $configDir . "/$domainName.conf");
+
+        // Restart bind
+        $serviceCommand = Configuration::readParameter("server.bind.service.command");
+        passthru("{$this->sudoPrefix} $serviceCommand restart");
+
     }
 }

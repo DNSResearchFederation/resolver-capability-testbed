@@ -73,7 +73,7 @@ class TestTypeManager {
 
         if ($dnsZones) {
             foreach ($dnsZones as $dnsZone) {
-                $dnsZone->updateDynamicValues($this->globalConfig, $test, $testParameterValues);
+                $dnsZone->updateDynamicValues($this->globalConfig, $test, $testType, $testParameterValues);
                 $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
             }
         }
@@ -82,7 +82,7 @@ class TestTypeManager {
 
         if ($webVirtualHosts) {
             foreach ($webVirtualHosts as $webVirtualHost) {
-                $webVirtualHost->updateDynamicValues($test, $testParameterValues);
+                $webVirtualHost->updateDynamicValues($test, $testType, $testParameterValues);
                 $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_ADD, $webVirtualHost);
             }
         }
@@ -106,13 +106,13 @@ class TestTypeManager {
         $dnsZones = $config->getDnsZones() ?? [$config->getDnsZone()];
 
         foreach ($dnsZones as $dnsZone) {
-            $dnsZone->updateDynamicValues($this->globalConfig, $test);
+            $dnsZone->updateDynamicValues($this->globalConfig, $test, $testType);
             $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_REMOVE, $dnsZone);
         }
 
         $webVirtualHosts = $config->getWebVirtualHosts() ?? [$config->getWebVirtualHost()];
         foreach ($webVirtualHosts as $webVirtualHost) {
-            $webVirtualHost->updateDynamicValues($test);
+            $webVirtualHost->updateDynamicValues($test, $testType);
             $serverOperations[] = new ServerOperation(ServerOperation::OPERATION_REMOVE, $webVirtualHost);
         }
 

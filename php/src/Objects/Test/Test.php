@@ -6,6 +6,7 @@ use Kinikit\Persistence\ORM\ActiveRecord;
 use ResolverTest\Exception\InvalidDateFormatException;
 use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Exception\InvalidTestTypeException;
+use ResolverTest\Exception\NotEnoughTestParametersException;
 use ResolverTest\Exception\StartAfterExpiryException;
 use ResolverTest\Services\TestType\TestTypeManager;
 
@@ -241,11 +242,21 @@ class Test extends ActiveRecord {
         try {
             $testTypeManager = new TestTypeManager();
             $types = $testTypeManager->listTestTypes();
-            $x = $types[$this->getType()];
+            $type = $types[$this->getType()];
         } catch (\Exception $e) {
-            print_r($e->getMessage());
             throw new InvalidTestTypeException($this->getType());
         }
+
+        // Check we have the right number of parameters
+        $parameterValues = $this->getTestData() ?? [];
+        $missingParams = [];
+        foreach ($type->getParameters() ?? [] as $index => $parameter) {
+            if (!$parameter->getOptional() && !isset($parameterValues[$index]))
+                $missingParams[] = $parameter->getIdentifier();
+        }
+        if (sizeof($missingParams))
+            throw new NotEnoughTestParametersException($this->getType(), $missingParams);
+
     }
 
 }

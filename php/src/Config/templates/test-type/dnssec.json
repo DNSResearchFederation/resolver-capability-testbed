@@ -1,11 +1,21 @@
 {
   "type": "dnssec",
   "description": "Test DNSSEC Algorithm",
+  "parameters": [
+    {
+      "identifier": "ALGORITHM"
+    },
+    {
+      "identifier": "KEYSTRENGTH",
+      "optional": true
+    }
+  ],
   "config": {
     "dnsZones": [
       {
         "dnsSecConfig": {
-          "algorithm": "Alg13"
+          "algorithm": "ALGORITHM",
+          "keyStrength": "KEYSTRENGTH"
         },
         "records": [
           {
@@ -19,7 +29,8 @@
       {
         "prefix": "unvalidated-",
         "dnsSecConfig": {
-          "algorithm": "Alg13"
+          "algorithm": "ALGORITHM",
+          "keyStrength": "KEYSTRENGTH"
         },
         "records": [
           {
@@ -42,13 +53,23 @@
         ]
       }
     ],
-    "webVirtualHost": {
-      "wildcard": true,
-      "content": "OK",
-      "sslCertPrefixes": [
-        "*"
-      ]
-    }
+    "webVirtualHosts": [
+      {
+        "wildcard": true,
+        "content": "OK",
+        "sslCertPrefixes": [
+          "*"
+        ]
+      },
+      {
+        "prefix": "unvalidated-",
+        "wildcard": true,
+        "content": "OK",
+        "sslCertPrefixes": [
+          "*"
+        ]
+      }
+    ]
   },
   "rules": {
     "dns": {

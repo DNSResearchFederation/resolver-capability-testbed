@@ -1,0 +1,52 @@
+{
+  "type": "example4",
+  "description": "An example test type with DNSSEC binding",
+  "parameters": [
+    {
+      "identifier": "ALGORITHM"
+    },
+    {
+      "identifier": "KEYSTRENGTH"
+    }
+  ],
+  "config": {
+    "dnsZone": {
+      "dnsSecConfig": {
+        "algorithm": "ALGORITHM",
+        "keyStrength": "KEYSTRENGTH"
+      },
+      "records": [
+        {
+          "prefix": "*",
+          "ttl": 200,
+          "type": "A",
+          "data": "88.77.66.55"
+        },
+        {
+          "prefix": "*",
+          "ttl": 250,
+          "type": "AAAA",
+          "data": "2001::1234"
+        }
+      ]
+    },
+    "webVirtualHost": {
+      "wildcard": true,
+      "content": "OK"
+    }
+  },
+  "rules": {
+    "dns": {
+      "expectedQueries": [
+        {
+          "type": "AAAA"
+        }
+      ]
+    },
+    "webserver": {
+      "expectedQueries": 3
+    },
+    "relationalKey": "HOSTNAME",
+    "timeoutSeconds": 3
+  }
+}

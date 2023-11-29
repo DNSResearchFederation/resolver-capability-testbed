@@ -4,6 +4,7 @@ namespace ResolverTest\ValueObjects\TestType\Config;
 
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\ValueObjects\TestType\TestType;
 
 class DNSZone implements OperationConfig {
 
@@ -40,6 +41,12 @@ class DNSZone implements OperationConfig {
 
 
     /**
+     * @var boolean
+     */
+    private $hasWebVirtualHost;
+
+
+    /**
      * @param string $domainName
      * @param array $nameservers
      * @param DNSRecord[] $records
@@ -47,13 +54,14 @@ class DNSZone implements OperationConfig {
      * @param string $nameserverSet
      * @param DNSSECConfig $dnsSecConfig
      */
-    public function __construct($domainName, $nameservers = [], $records = [], $prefix = "", $nameserverSet = null, $dnsSecConfig = null) {
+    public function __construct($domainName, $nameservers = [], $records = [], $prefix = "", $nameserverSet = null, $dnsSecConfig = null, $hasWebVirtualHost = false) {
         $this->domainName = $domainName;
         $this->nameservers = $nameservers;
         $this->records = $records;
         $this->prefix = $prefix;
         $this->nameserverSet = $nameserverSet;
         $this->dnsSecConfig = $dnsSecConfig;
+        $this->hasWebVirtualHost = $hasWebVirtualHost;
     }
 
     /**
@@ -140,18 +148,38 @@ class DNSZone implements OperationConfig {
         $this->dnsSecConfig = $dnsSecConfig;
     }
 
+    /**
+     * @return bool|mixed
+     */
+    public function getHasWebVirtualHost(): mixed {
+        return $this->hasWebVirtualHost;
+    }
+
 
     /**
      * @param GlobalConfigService $globalConfig
      * @param Test $test
+     * @param TestType $testType
      * @return void
      */
-    public function updateDynamicValues($globalConfig, $test, $testParameterValues = []) {
+    public function updateDynamicValues($globalConfig, $test, $testType, $testParameterValues = []) {
 
         if ($this->prefix) {
             $this->domainName = $this->getPrefix() . $test->getDomainName();
         } else {
             $this->domainName = $test->getDomainName();
+        }
+
+        // If dnssec config, attempt substitution from params
+        if ($this->dnsSecConfig) {
+            $algorithm = $this->dnsSecConfig->getAlgorithm();
+            $keyStrength = $this->dnsSecConfig->getKeyStrength();
+            if (in_array($algorithm, array_keys($testParameterValues))) {
+                $this->dnsSecConfig->setAlgorithm($testParameterValues[$algorithm]);
+            }
+            if (in_array($keyStrength, array_keys($testParameterValues))) {
+                $this->dnsSecConfig->setKeyStrength($testParameterValues[$keyStrength]);
+            }
         }
 
         switch ($this->getNameserverSet()) {
@@ -181,6 +209,16 @@ class DNSZone implements OperationConfig {
                     if (in_array($record->getData(), array_keys($testParameterValues))) {
                         $record->setData($testParameterValues[$record->getData()]);
                     }
+            }
+        }
+
+
+        // Determine whether we need to set the has webserver virtual host flag
+        foreach ($testType->getConfig()->getWebVirtualHosts() ?? [$testType->getConfig()->getWebVirtualHost()] as $webVirtualHost) {
+            // If we have a matching prefix or it's a no prefix case continue
+            if (($webVirtualHost->getPrefix() == $this->prefix) || (!$this->prefix && !$webVirtualHost->getPrefix())) {
+                $this->hasWebVirtualHost = true;
+                break;
             }
         }
 

@@ -4,6 +4,7 @@ namespace Objects\Test;
 
 use ResolverTest\Exception\InvalidDateFormatException;
 use ResolverTest\Exception\InvalidTestTypeException;
+use ResolverTest\Exception\NotEnoughTestParametersException;
 use ResolverTest\Exception\StartAfterExpiryException;
 use TestBase;
 use ResolverTest\Objects\Test\Test;
@@ -83,5 +84,27 @@ class TestTest extends TestBase {
         }
 
     }
+
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testCanValidateParametersAccordingToOptionalFlag() {
+
+        $test = new Test("new", "dnssec", "test.com");
+
+        try {
+            $test->validate();
+            $this->fail("Should have thrown here");
+        } catch (NotEnoughTestParametersException $e) {
+        }
+
+        // Should be fine with one value
+        $test->setTestData(["7"]);
+        $test->validate();
+
+
+    }
+
 
 }

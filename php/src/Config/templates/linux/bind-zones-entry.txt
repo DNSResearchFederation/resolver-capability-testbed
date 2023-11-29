@@ -1,4 +1,4 @@
 zone "{{domainName}}" IN {
         type master;
-        file "resolvertest/{{domainName}}.conf{{#dnsSEC}}.signed{{/dnsSEC}}";
+        file "resolvertest/{{domainName}}.conf";
 };

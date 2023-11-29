@@ -2,6 +2,9 @@
 
 namespace ResolverTest\ValueObjects\TestType\Config;
 
+use ResolverTest\Objects\Test\Test;
+use ResolverTest\ValueObjects\TestType\TestType;
+
 class WebServerVirtualHost implements OperationConfig {
 
     /**
@@ -31,18 +34,25 @@ class WebServerVirtualHost implements OperationConfig {
     private $prefix;
 
     /**
+     * @var boolean
+     */
+    private $dnssecSignedZone;
+
+
+    /**
      * @param string $domainName
      * @param bool $wildcard
      * @param string $content
      * @param array $sslCertPrefixes
      * @param string $prefix
      */
-    public function __construct($domainName = null, $wildcard = false, $content = null, $sslCertPrefixes = ["*"], $prefix = "") {
+    public function __construct($domainName = null, $wildcard = false, $content = null, $sslCertPrefixes = ["*"], $prefix = "", $dnssecSignedZone = false) {
         $this->domainName = $domainName;
         $this->wildcard = $wildcard;
         $this->content = $content;
         $this->sslCertPrefixes = $sslCertPrefixes;
         $this->prefix = $prefix;
+        $this->dnssecSignedZone = $dnssecSignedZone;
     }
 
     /**
@@ -115,11 +125,26 @@ class WebServerVirtualHost implements OperationConfig {
         $this->prefix = $prefix;
     }
 
+    /**
+     * @return bool
+     */
+    public function isDnssecSignedZone() {
+        return $this->dnssecSignedZone;
+    }
+
+
     public function getIdentifier() {
         return $this->getDomainName();
     }
 
-    public function updateDynamicValues($test, $testParameterValues = []) {
+
+    /**
+     * @param Test $test
+     * @param TestType $testType
+     * @param mixed[] $testParameterValues
+     * @return void
+     */
+    public function updateDynamicValues($test, $testType, $testParameterValues = []) {
 
         if ($this->prefix) {
             $this->domainName = $this->getPrefix() . $test->getDomainName();
@@ -129,6 +154,17 @@ class WebServerVirtualHost implements OperationConfig {
 
         if (in_array($this->content, array_keys($testParameterValues))) {
             $this->setContent($testParameterValues[$this->content]);
+        }
+
+        // Determine whether we need to set the dnssec signed zone flag
+        foreach ($testType->getConfig()->getDnsZones() ?? [$testType->getConfig()->getDnsZone()] as $dnsZone) {
+            // If we have a matching prefix or it's a no prefix case continue
+            if (($dnsZone->getPrefix() == $this->prefix) || (!$this->prefix && !$dnsZone->getPrefix())) {
+                if ($dnsZone->getDnsSecConfig()) {
+                    $this->dnssecSignedZone = true;
+                    break;
+                }
+            }
         }
 
 

@@ -39,6 +39,9 @@ class LinuxServerTest extends TestCase {
             Container::instance()->get(FileResolver::class), "");
 
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), "");
+
+        passthru("rm -rf " . Configuration::readParameter("server.bind.config.dir") . "/*conf*");
+
     }
 
     public function testCanInstallDNSZoneCorrectly() {
@@ -68,7 +71,7 @@ class LinuxServerTest extends TestCase {
     }
 
 
-    public function testCanInstallSignedDNSZoneCorrectly() {
+    public function testCanInstallSignedDNSZoneCorrectlyIfNoMatchingWebserverVirtualHost() {
 
         $this->configService->setIPv4Address("1.2.3.4");
         $this->configService->setIPv6Address("2001::1234");
@@ -81,7 +84,41 @@ class LinuxServerTest extends TestCase {
         ];
 
         $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords, "", null,
-            new DNSSECConfig(DNSSECAlgorithmEnum::Alg8));
+            new DNSSECConfig(8));
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
+
+        $this->server->performOperations([$operation]);
+
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
+        $this->assertTrue(file_exists($path));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($path));
+
+        $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertTrue(file_exists($signedPath));
+
+        $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertEquals("-N INCREMENT -o testdomain.com $originalPath", file_get_contents($signedPath));
+
+        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+
+    }
+
+
+    public function testKeysCreatedButSignedZoneNotCreatedForDNSSECIfMatchingWebserverVirtualHost() {
+
+        $this->configService->setIPv4Address("1.2.3.4");
+        $this->configService->setIPv6Address("2001::1234");
+
+        $dnsRecords = [
+            new DNSRecord("this", 300, "A", "1.2.3.4"),
+            new DNSRecord("that", 200, "AAAA", "2001::1234"),
+            new DNSRecord("", 250, "MX", "mail.testdomain.com"),
+            new DNSRecord("www", 200, "CNAME", "testdomain.com")
+        ];
+
+        $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords, "", null,
+            new DNSSECConfig(8), true);
         $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
 
         $this->server->performOperations([$operation]);
@@ -91,12 +128,10 @@ class LinuxServerTest extends TestCase {
         $this->assertTrue(file_exists($path));
         $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($path));
 
-        $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.signed";
-        $this->assertTrue(file_exists($signedPath));
+        $unsignedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.unsigned";
+        $this->assertFalse(file_exists($unsignedPath));
 
-        $this->assertEquals("-N INCREMENT -o testdomain.com $path", file_get_contents($signedPath));
-
-        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux-dnssec"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
 
     }
@@ -123,18 +158,24 @@ class LinuxServerTest extends TestCase {
 
     public function testCanUninstallSignedDNSZoneCorrectly() {
 
-        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.signed";
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         file_put_contents($path, "contents");
+        file_put_contents($path . ".unsigned", "contents");
 
-        file_put_contents(Configuration::readParameter("server.bind.zones.path"), file_get_contents(__DIR__ . "/test-bind-zones-linux-dnssec") . " EXTRA DATA");
+        file_put_contents(Configuration::readParameter("server.bind.zones.path"), file_get_contents(__DIR__ . "/test-bind-zones-linux") . " EXTRA DATA");
 
-        $dnsZone = new DNSZone("testdomain.com", [], [], "", null, new DNSSECConfig(DNSSECAlgorithmEnum::Alg6));
+        $dnsZone = new DNSZone("testdomain.com", [], [], "", null, new DNSSECConfig(6));
         $operation = new ServerOperation(ServerOperation::OPERATION_REMOVE, $dnsZone);
 
         $this->assertTrue(file_exists($path));
+        $this->assertTrue(file_exists($path . ".unsigned"));
+
         $this->server->performOperations([$operation]);
+
         $this->assertFalse(file_exists($path));
-        $this->assertStringNotContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux-dnssec"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+        $this->assertFalse(file_exists($path . ".unsigned"));
+
+        $this->assertStringNotContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         $this->assertStringContainsString("EXTRA DATA", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
     }
 
@@ -158,6 +199,35 @@ class LinuxServerTest extends TestCase {
         $this->assertEquals($content, file_get_contents($contentPath));
 
     }
+
+
+    public function testWhereWebServerVirtualHostIsForDNSSECDomainZoneFileIsSignedAfterDNSValidationRecordInserted() {
+
+        $content = "Hello World!";
+
+        $webServerVirtualHost = new WebServerVirtualHost("testdomain.com", false, $content, ["*"], "", true);
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $webServerVirtualHost);
+
+        $this->server->performOperations([$operation]);
+
+        $path = Configuration::readParameter("server.httpd.config.dir") . "/testdomain.com.conf";
+
+        $this->assertTrue(file_exists($path));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-httpd-linux.com"), file_get_contents($path));
+
+        $contentPath = Configuration::readParameter("server.httpd.webroot.dir") . "/testdomain.com/index.html";
+        $this->assertTrue(file_exists($contentPath));
+        $this->assertEquals($content, file_get_contents($contentPath));
+
+        // Check DNSSEC activated.
+        $bindPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertTrue(file_exists($bindPath));
+        $this->assertEquals("-N INCREMENT -o testdomain.com $bindPath", file_get_contents($bindPath));
+
+
+
+    }
+
 
     public function testCanInstallWebserverVirtualHostWithoutSSLCorrectly() {
 
