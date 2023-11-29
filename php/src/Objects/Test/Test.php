@@ -65,6 +65,14 @@ class Test extends ActiveRecord {
      */
     private $testData;
 
+
+    /**
+     * @var string[]
+     * @json
+     */
+    private $additionalInformation;
+
+
     // Status constants
     const STATUS_PENDING = "PENDING";
     const STATUS_ACTIVE = "ACTIVE";
@@ -220,6 +228,21 @@ class Test extends ActiveRecord {
     public function setTestData($testData) {
         $this->testData = $testData;
     }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalInformation() {
+        return $this->additionalInformation;
+    }
+
+    /**
+     * @param string[] $additionalInformation
+     */
+    public function setAdditionalInformation($additionalInformation): void {
+        $this->additionalInformation = $additionalInformation;
+    }
+
 
     public function validate() {
         if (is_string($this->getStarts()) || is_string($this->getExpires())) {

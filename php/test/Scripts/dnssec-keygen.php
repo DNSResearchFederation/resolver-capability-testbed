@@ -19,3 +19,5 @@ if ($args["K"] ?? null) {
     $line = $args[0] . ". 3600 IN DNSKEY " . join(" ", array_slice($argv, 1));
     file_put_contents($outputDir . "/" . $args[0] . "-" . ($args["f"] ?? "ZSK") . ".key", $line);
 }
+
+file_put_contents($outputDir . "/dsset-" . $args[0] . ".", "EXAMPLE-DS-RECORDS-" . $args[0]);

@@ -61,7 +61,15 @@ class LinuxServer implements Server {
     }
 
 
+    /**
+     * Perform the supplied operations and return optionally an array of additional information strings
+     *
+     * @param $operations
+     * @return string[]
+     */
     public function performOperations($operations) {
+
+        $additionalInfo = [];
 
         foreach ($operations as $operation) {
 
@@ -69,7 +77,7 @@ class LinuxServer implements Server {
                 case ServerOperation::OPERATION_ADD:
                     switch (get_class($operation->getConfig())) {
                         case DNSZone::class:
-                            $this->installBind($operation);
+                            $additionalInfo = array_merge($additionalInfo, $this->installBind($operation));
                             break;
 
                         case WebServerVirtualHost::class:
@@ -92,6 +100,8 @@ class LinuxServer implements Server {
             }
 
         }
+
+        return $additionalInfo;
 
     }
 
@@ -138,9 +148,11 @@ class LinuxServer implements Server {
 
     /**
      * @param ServerOperation $operation
-     * @return void
+     * @return string[]
      */
     private function installBind($operation) {
+
+        $additionalInfo = [];
 
         /**
          * @var DNSZone $config
@@ -186,6 +198,7 @@ class LinuxServer implements Server {
             ob_end_clean();
 
             $dnsSECRecords = [];
+            $dsRecords = [];
             foreach ($files as $file) {
                 if (str_ends_with($file, ".key")) {
                     ob_start();
@@ -193,10 +206,19 @@ class LinuxServer implements Server {
                     $dnsSECRecords[] = ob_get_contents();
                     ob_end_clean();
                 }
+                if (str_starts_with($file, "dsset")) {
+                    ob_start();
+                    passthru($this->sudoPrefix . " cat $dnsSECDir/$file");
+                    $dsRecords = ob_get_contents();
+                    ob_end_clean();
+                }
+            }
+
+            if ($dsRecords) {
+                $additionalInfo[] = "Please add the following DS records for " . $domainName . " via your Registrar\n\n" . $dsRecords;
             }
 
             $model["dnsSECRecords"] = $dnsSECRecords;
-
 
         }
 
@@ -220,6 +242,8 @@ class LinuxServer implements Server {
         }
 
 
+        return $additionalInfo;
+
     }
 
     /**
@@ -234,10 +258,12 @@ class LinuxServer implements Server {
         $config = $operation->getConfig();
 
 
+        $bindConfigDir = Configuration::readParameter("server.bind.config.dir");
         if ($config->getDnsSecConfig()) {
-            $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"), ".unsigned");
+            $this->removeTemplateFile($operation, $bindConfigDir, ".unsigned");
+            passthru("{$this->sudoPrefix} rm -rf $bindConfigDir/dnssec/" . $config->getIdentifier());
         }
-        $this->removeTemplateFile($operation, Configuration::readParameter("server.bind.config.dir"));
+        $this->removeTemplateFile($operation, $bindConfigDir);
 
         $remainingZones = preg_replace(" /zone \"" . $operation->getConfig()->getDomainName() . "\"[a-zA-Z0-9\-\s;\/\.\"{]+};/", "", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         file_put_contents(Configuration::readParameter("server.bind.zones.path"), $remainingZones);

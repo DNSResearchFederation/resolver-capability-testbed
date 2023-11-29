@@ -67,7 +67,7 @@ class TestServiceTest extends TestBase {
 
         // Hook up a test manager
         $this->testTypeManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
-        $testType = new TestType("test", null, new TestTypeConfig(),new TestTypeRules(new TestTypeDNSRules([]),new TestTypeWebServerRules(1),false,"",30));
+        $testType = new TestType("test", null, new TestTypeConfig(), new TestTypeRules(new TestTypeDNSRules([]), new TestTypeWebServerRules(1), false, "", 30));
 
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/test.json", $this->objectToJSONConverter->convert($testType));
         $testType->setType("testType");
@@ -227,7 +227,6 @@ class TestServiceTest extends TestBase {
     }
 
 
-
     /**
      * @doesNotPerformAssertions
      */
@@ -314,11 +313,14 @@ class TestServiceTest extends TestBase {
         $installOperations = [new ServerOperation(ServerOperation::OPERATION_ADD, "BINGO"), new ServerOperation(ServerOperation::OPERATION_ADD, "BONGO")];
         $this->testTypeManager->returnValue("getInstallServerOperations", $installOperations);
 
+        $this->server->returnValue("performOperations", ["I AM AN ADDITIONAL INFO ITEM", "I AM A SECOND ADDITIONAL INFO ITEM"], [$installOperations]);
+
         $test = new Test("test-this", "test", "hello.org", "A wonderful test");
         $this->testService->createTest($test);
 
         $reTest = $this->testService->getTest("test-this");
         $this->assertEquals(Test::STATUS_ACTIVE, $reTest->getStatus());
+        $this->assertEquals(["I AM AN ADDITIONAL INFO ITEM", "I AM A SECOND ADDITIONAL INFO ITEM"], $reTest->getAdditionalInformation());
 
         // Check the server was updated
         $this->assertTrue($this->server->methodWasCalled("performOperations", [$installOperations]));
@@ -356,6 +358,7 @@ class TestServiceTest extends TestBase {
         $future = (new \DateTime())->add(new \DateInterval("P2M"));
         $test = new Test("key", "testType", "test.co.uk", null, $future, null, Test::STATUS_PENDING);
         $test->save();
+
 
         $this->testService->startTest("key");
         $alteredTest = $this->testService->getTest("key");

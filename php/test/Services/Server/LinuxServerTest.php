@@ -87,7 +87,7 @@ class LinuxServerTest extends TestCase {
             new DNSSECConfig(8));
         $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
 
-        $this->server->performOperations([$operation]);
+        $additionalInfo = $this->server->performOperations([$operation]);
 
         $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
         $this->assertTrue(file_exists($path));
@@ -100,6 +100,10 @@ class LinuxServerTest extends TestCase {
         $this->assertEquals("-N INCREMENT -o testdomain.com $originalPath", file_get_contents($signedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+        // Check additional info as expected
+        $this->assertEquals(1, sizeof($additionalInfo));
+        $this->assertEquals("Please add the following DS records for testdomain.com via your Registrar\n\nEXAMPLE-DS-RECORDS-testdomain.com", $additionalInfo[0]);
 
 
     }
@@ -169,11 +173,13 @@ class LinuxServerTest extends TestCase {
 
         $this->assertTrue(file_exists($path));
         $this->assertTrue(file_exists($path . ".unsigned"));
+        $this->assertTrue(file_exists(Configuration::readParameter("server.bind.config.dir") . "/dnssec/testdomain.com"));
 
         $this->server->performOperations([$operation]);
 
         $this->assertFalse(file_exists($path));
         $this->assertFalse(file_exists($path . ".unsigned"));
+        $this->assertFalse(file_exists(Configuration::readParameter("server.bind.config.dir") . "/dnssec/testdomain.com"));
 
         $this->assertStringNotContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
         $this->assertStringContainsString("EXTRA DATA", file_get_contents(Configuration::readParameter("server.bind.zones.path")));
@@ -223,7 +229,6 @@ class LinuxServerTest extends TestCase {
         $bindPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($bindPath));
         $this->assertEquals("-N INCREMENT -o testdomain.com $bindPath", file_get_contents($bindPath));
-
 
 
     }

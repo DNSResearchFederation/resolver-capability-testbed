@@ -15,8 +15,10 @@ interface Server {
     const SERVICE_NAMESERVER = "nameserver";
 
     /**
+     * Perform operations and return an array of additional information
+     *
      * @param ServerOperation[] $operations
-     * @return void
+     * @return string[]
      */
     public function performOperations($operations);
 

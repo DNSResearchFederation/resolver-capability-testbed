@@ -235,8 +235,9 @@ class TestService {
             $test->setStatus(Test::STATUS_INSTALLING);
             $this->updateTest($test);
 
-            $this->server->performOperations($this->testTypeManager->getInstallServerOperations($test));
+            $additionalInfo = $this->server->performOperations($this->testTypeManager->getInstallServerOperations($test));
 
+            $test->setAdditionalInformation(array_merge($test->getAdditionalInformation() ?? [], $additionalInfo ?? []));
             $test->setStatus(Test::STATUS_ACTIVE);
             $this->updateTest($test);
         }
