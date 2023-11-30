@@ -185,6 +185,11 @@ class LinuxServer implements Server {
             // Build the key gen command
             $keyGenCommand = Configuration::readParameter("server.dnssec.keygen.command") . " -K " . $dnsSECDir;
 
+            // If NSEC3 in use, add a -3 to the command
+            if ($dnssecConfig->isNsec3()) {
+                $keyGenCommand .= " -3";
+            }
+
             // Create the zone signing key (ZSK)
             passthru($this->sudoPrefix . " " . $keyGenCommand . $keyGenArgs);
 
@@ -214,11 +219,13 @@ class LinuxServer implements Server {
                 }
             }
 
-            if ($dsRecords) {
+            if ($dsRecords && $dnssecConfig->isGenerateDSRecords()) {
                 $additionalInfo[] = "Please add the following DS records for " . $domainName . " via your Registrar\n\n" . $dsRecords;
             }
 
-            $model["dnsSECRecords"] = $dnsSECRecords;
+            // If we are signing the zone, add the dnssec records
+            if ($dnssecConfig->isSignZone())
+                $model["dnsSECRecords"] = $dnsSECRecords;
 
         }
 
@@ -233,8 +240,8 @@ class LinuxServer implements Server {
 
 
         // If dnssec config and no web virtual hosts, sign the zone file now
-        if ($dnssecConfig && !$config->getHasWebVirtualHost()) {
-            $this->signZoneForDNSSEC($domainName);
+        if ($dnssecConfig && $dnssecConfig->isSignZone() && !$config->getHasWebVirtualHost()) {
+            $this->signZoneForDNSSEC($domainName, $dnssecConfig->isNsec3());
         } else {
             // Restart bind
             $serviceCommand = Configuration::readParameter("server.bind.service.command");
@@ -318,8 +325,8 @@ class LinuxServer implements Server {
         passthru("{$this->sudoPrefix} $serviceCommand reload");
 
         // If DNSSEC signed, sign now
-        if ($config->isDnssecSignedZone()) {
-            $this->signZoneForDNSSEC($config->getDomainName());
+        if ($config->getDNSSecConfig()) {
+            $this->signZoneForDNSSEC($config->getDomainName(),$config->getDNSSecConfig());
         }
     }
 
@@ -407,7 +414,7 @@ class LinuxServer implements Server {
      * @param string $domainName
      * @return void
      */
-    private function signZoneForDNSSEC($domainName): void {
+    private function signZoneForDNSSEC($domainName, $nsec3): void {
 
         // Get zone config dir
         $configDir = Configuration::readParameter("server.bind.config.dir");
@@ -415,7 +422,7 @@ class LinuxServer implements Server {
 
         // Build the sign zone command
         $signZoneCommand = Configuration::readParameter("server.dnssec.signzone.command") . " -K " . $dnsSECDir . " -d " . $dnsSECDir;
-        $signZoneCommand .= " -N INCREMENT -o " . $domainName . " " . $configDir . "/$domainName.conf";
+        $signZoneCommand .= " -N INCREMENT -o " . $domainName . ($nsec3 ? " -3" : "") . " " . $configDir . "/$domainName.conf";
 
         passthru($this->sudoPrefix . " " . $signZoneCommand);
 

@@ -27,9 +27,9 @@ class TestListCommandTest extends TestCase {
 
         $command = new TestListCommand($this->testService);
         $this->testService->returnValue("listTests", [
-            new Test("test1", "type", "1.co.uk", "My first test.", date_create("2022-05-01 10:30:20"), date_create("2023-07-01 11:00:00"), "ACTIVE"),
-            new Test("test2", "type", "2.co.uk", null, date_create("2023-05-01 10:30:20"), null, "ACTIVE"),
-            new Test("test3", "type", "3.co.uk", "New Test", date_create("2022-07-01 10:30:20"), null, "ACTIVE"),
+            new Test("test1", "type", "1.co.uk", "My first test.", date_create("2022-05-01 10:30:20"), date_create("2023-07-01 11:00:00"), "ACTIVE",null,null, ["Item 1", "Item 2"]),
+            new Test("test2", "type", "2.co.uk", null, date_create("2023-05-01 10:30:20"), null, "ACTIVE",null,null, ["Item 3", "Item 4"]),
+            new Test("test3", "type", "3.co.uk", "New Test", date_create("2022-07-01 10:30:20"), null, "ACTIVE",null,null, ["Item 5", "Item 6"]),
         ]);
 
         ob_start();
@@ -46,14 +46,16 @@ class TestListCommandTest extends TestCase {
                 "Domain Name" => "1.co.uk",
                 "Status" => "ACTIVE",
                 "Start Time" => "2022-05-01 10:30:20",
-                "End Time" => "2023-07-01 11:00:00"
+                "End Time" => "2023-07-01 11:00:00",
+                "Additional Info" => "Item 1\n\nItem 2"
             ], [
                 "Key" => "test2",
                 "Type" => "type",
                 "Domain Name" => "2.co.uk",
                 "Status" => "ACTIVE",
                 "Start Time" => "2023-05-01 10:30:20",
-                "End Time" => "Never"
+                "End Time" => "Never",
+                "Additional Info" => "Item 3\n\nItem 4"
             ], [
                 "Key" => "test3",
                 "Description" => "New Test",
@@ -61,7 +63,8 @@ class TestListCommandTest extends TestCase {
                 "Domain Name" => "3.co.uk",
                 "Status" => "ACTIVE",
                 "Start Time" => "2022-07-01 10:30:20",
-                "End Time" => "Never"
+                "End Time" => "Never",
+                "Additional Info" => "Item 5\n\nItem 6"
             ]
         ]))->getTable(), $output);
 

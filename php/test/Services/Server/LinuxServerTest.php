@@ -71,6 +71,7 @@ class LinuxServerTest extends TestCase {
     }
 
 
+
     public function testCanInstallSignedDNSZoneCorrectlyIfNoMatchingWebserverVirtualHost() {
 
         $this->configService->setIPv4Address("1.2.3.4");
@@ -97,7 +98,7 @@ class LinuxServerTest extends TestCase {
         $this->assertTrue(file_exists($signedPath));
 
         $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
-        $this->assertEquals("-N INCREMENT -o testdomain.com $originalPath", file_get_contents($signedPath));
+        $this->assertEquals("-N INCREMENT -o testdomain.com -3 $originalPath", file_get_contents($signedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -136,6 +137,112 @@ class LinuxServerTest extends TestCase {
         $this->assertFalse(file_exists($unsignedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+
+    }
+
+    public function testSignedZoneNotCreatedIfSignZoneSetToFalse() {
+
+        $this->configService->setIPv4Address("1.2.3.4");
+        $this->configService->setIPv6Address("2001::1234");
+
+        $dnsRecords = [
+            new DNSRecord("this", 300, "A", "1.2.3.4"),
+            new DNSRecord("that", 200, "AAAA", "2001::1234"),
+            new DNSRecord("", 250, "MX", "mail.testdomain.com"),
+            new DNSRecord("www", 200, "CNAME", "testdomain.com")
+        ];
+
+        $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords, "", null,
+            new DNSSECConfig(8, null, false));
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
+
+        $additionalInfo = $this->server->performOperations([$operation]);
+
+        $unsignedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
+        $this->assertFalse(file_exists($unsignedPath));
+
+        $zonePath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertTrue(file_exists($zonePath));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux.com"), file_get_contents($zonePath));
+
+        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+        // Check additional info as expected as we still want DS records
+        $this->assertEquals(1, sizeof($additionalInfo));
+        $this->assertEquals("Please add the following DS records for testdomain.com via your Registrar\n\nEXAMPLE-DS-RECORDS-testdomain.com", $additionalInfo[0]);
+
+
+    }
+
+    public function testNSECUsedRatherThanNSEC3IfNSEC3SetToFalseForDNSSECZone() {
+
+        $this->configService->setIPv4Address("1.2.3.4");
+        $this->configService->setIPv6Address("2001::1234");
+
+        $dnsRecords = [
+            new DNSRecord("this", 300, "A", "1.2.3.4"),
+            new DNSRecord("that", 200, "AAAA", "2001::1234"),
+            new DNSRecord("", 250, "MX", "mail.testdomain.com"),
+            new DNSRecord("www", 200, "CNAME", "testdomain.com")
+        ];
+
+        $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords, "", null,
+            new DNSSECConfig(8, null, true, true,false));
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
+
+        $this->server->performOperations([$operation]);
+
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
+        $this->assertTrue(file_exists($path));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec-nsec.com"), file_get_contents($path));
+
+        $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertTrue(file_exists($signedPath));
+
+        $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertEquals("-N INCREMENT -o testdomain.com $originalPath", file_get_contents($signedPath));
+
+        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+
+
+    }
+
+
+
+    public function testAdditionalInfoNotReturnedIfGenerateDSRecordsSetToFalseForDNSSECZone() {
+
+        $this->configService->setIPv4Address("1.2.3.4");
+        $this->configService->setIPv6Address("2001::1234");
+
+        $dnsRecords = [
+            new DNSRecord("this", 300, "A", "1.2.3.4"),
+            new DNSRecord("that", 200, "AAAA", "2001::1234"),
+            new DNSRecord("", 250, "MX", "mail.testdomain.com"),
+            new DNSRecord("www", 200, "CNAME", "testdomain.com")
+        ];
+
+        $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords, "", null,
+            new DNSSECConfig(8, null, true, false));
+        $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
+
+        $additionalInfo = $this->server->performOperations([$operation]);
+
+        $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
+        $this->assertTrue(file_exists($path));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($path));
+
+        $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertTrue(file_exists($signedPath));
+
+        $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
+        $this->assertEquals("-N INCREMENT -o testdomain.com -3 $originalPath", file_get_contents($signedPath));
+
+        $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
+
+        // Check additional info as expected
+        $this->assertEquals(0, sizeof($additionalInfo));
 
 
     }
@@ -228,7 +335,7 @@ class LinuxServerTest extends TestCase {
         // Check DNSSEC activated.
         $bindPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($bindPath));
-        $this->assertEquals("-N INCREMENT -o testdomain.com $bindPath", file_get_contents($bindPath));
+        $this->assertEquals("-N INCREMENT -o testdomain.com -3 $bindPath", file_get_contents($bindPath));
 
 
     }
