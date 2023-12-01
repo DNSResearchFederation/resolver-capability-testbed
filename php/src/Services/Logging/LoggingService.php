@@ -2,10 +2,10 @@
 
 namespace ResolverTest\Services\Logging;
 
+use DateInterval;
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
-use Kinikit\Core\Logging\Logger;
 use Kinikit\Core\Reflection\ClassInspectorProvider;
 use Kinikit\Persistence\Database\Generator\TableDDLGenerator;
 use Kinikit\Persistence\Database\ResultSet\ResultSet;
@@ -22,10 +22,8 @@ use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\Services\Util\IPAddressUtils;
-use ResolverTest\ValueObjects\TestType\TestType;
 use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
 use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;
-use ResolverTest\ValueObjects\TestType\TestTypeRules;
 use ResolverTest\ValueObjects\TestType\TestTypeWebServerRules;
 
 class LoggingService {
@@ -130,24 +128,37 @@ class LoggingService {
 
         $testType = $this->testTypeManager->getTestTypeForTest($test);
 
-        $expectedRecordTypes = [];
         foreach ($testType->getRules()->getDns()->getExpectedQueries() as $expectedQuery) {
-            $expectedRecordTypes[] = $expectedQuery->getType();
-        }
+            if ($log->getRecordType() == $expectedQuery->getType()) {
 
-        // Validate log entry is one we care about
-        if (!in_array($log->getRecordType(), $expectedRecordTypes) || sizeof(explode(".", $log->getHostname())) < 3) {
-            return;
-        }
+                if ($expectedQuery->getValue() && preg_match("/{$expectedQuery->getValue()}/", $log->getHostname()) == 1) {
+                    $this->saveLog($log, $test->getKey());
+                    return;
+                }
 
-        // Save into database
+                if ($expectedQuery->getPrefix() && preg_match("/{$expectedQuery->getPrefix()}{$test->getDomainName()}$/", $log->getHostname()) == 1) {
+                    $this->saveLog($log, $test->getKey());
+                    return;
+                }
+
+            }
+        }
+    }
+
+    /**
+     * Save nameserver log into the database
+     *
+     * @param BaseLog $log
+     * @param string $key
+     * @return void
+     */
+    public function saveLog($log, $key) {
         $connection = new SQLite3DatabaseConnection([
-            "filename" => Configuration::readParameter("storage.root") . "/logs/{$test->getKey()}.db"
+            "filename" => Configuration::readParameter("storage.root") . "/logs/$key.db"
         ]);
 
         $orm = ORM::get($connection);
         $orm->save($log);
-
     }
 
     /**
@@ -166,75 +177,68 @@ class LoggingService {
             return;
         }
 
-        $testType = $this->testTypeManager->getTestTypeForTest($test);
-
         // Validate log entry is one we care about
         if (sizeof(explode(".", $log->getHostname())) < 3) {
             return;
         }
 
-
         // Save into database
-        $connection = new SQLite3DatabaseConnection([
-            "filename" => Configuration::readParameter("storage.root") . "/logs/{$test->getKey()}.db"
-        ]);
+        $this->saveLog($log, $test->getKey());
 
-        $orm = ORM::get($connection);
-        $orm->save($log);
-
-        // Get corresponding nameserver logs and check against rules
-        if ($testType->getRules()->getWebserver()->getExpectedQueries() == 1) {
-            $this->compareLogs($connection, $testType, $log, $test->getKey());
-        }
     }
 
     /**
      * Analyse webserver/nameserver logs and write a combined entry if test criteria is met
      *
-     * @param SQLite3DatabaseConnection $connection
-     * @param TestType $testType
-     * @param BaseLog $triggerLog
-     * @param string $sessionKey
      * @return void
      */
-    public function compareLogs($connection, $testType, $triggerLog, $sessionKey) {
+    public function compareLogs() {
+        foreach ($this->testService->listTests() as $test) {
+            $this->compareLogsForTest($test);
+        }
+    }
 
-        if ($testType->getRules()->getRelationalKey() == TestTypeRules::RELATIONAL_KEY_HOSTNAME) {
+    public function compareLogsForTest($test) {
 
-            $relationalKey = $triggerLog->getRelationalKeyValue($testType->getRules()->getRelationalKey());
+        $connection = new SQLite3DatabaseConnection([
+            "filename" => Configuration::readParameter("storage.root") . "/logs/{$test->getKey()}.db"
+        ]);
 
-            $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE hostname LIKE '%$relationalKey' ORDER BY `date`;")->fetchAll();
-            if (!$webserverLogs)
-                return;
+        $testType = $this->testTypeManager->getTestTypeForTest($test);
+        $timeoutSeconds = $testType->getRules()->getTimeoutSeconds();
+        $pointOfQuery = date_create();
 
-            $nameserverLogs = $connection->query("SELECT * FROM nameserver_queue WHERE hostname LIKE '%$relationalKey' ORDER BY `date`;")->fetchAll();
-            if (!$nameserverLogs)
-                return;
+        // TODO: limit to 2mins
+        $uniqueUUIDS = $connection->query("SELECT DISTINCT SUBSTR(hostname, 0, 37) `uuid` FROM nameserver_queue;")->fetchAll();
 
-        } else {
+        foreach ($uniqueUUIDS as $UUID) {
 
-            $hostname = $triggerLog->getRelationalKeyValue(TestTypeRules::RELATIONAL_KEY_HOSTNAME);
-            $firstLog = $connection->query("SELECT * FROM nameserver_queue WHERE hostname LIKE '%$hostname' ORDER BY `date`;")->fetchAll();
+            $UUID = $UUID["uuid"];
 
-            if (!$firstLog) {
-                return;
+            // Has it been dealt with?
+            if ($connection->query("SELECT * FROM combined_log WHERE `dnsResolvedHostname1` LIKE '$UUID%'")->fetchAll()) {
+                continue;
             }
 
-            $clientIp = $firstLog[0]["ip_address"];
-            $timeout = $testType->getRules()->getTimeoutSeconds();
-            $recently = date_create("now", new \DateTimeZone("UTC"))->sub(new \DateInterval("PT{$timeout}S"))->format("Y-m-d H:i:s");
+            // Get all matching nameserver logs2
+            $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE `hostname` LIKE '$UUID%' ORDER BY `date`")->fetchAll();
 
-            $nameserverLogs = $connection->query("SELECT * FROM nameserver_queue WHERE `date` > '$recently' AND ip_address = '$clientIp' ORDER BY `date` DESC;")->fetchAll();
-            $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE hostname LIKE '%$hostname' ORDER BY `date`;")->fetchAll();
+            // Check if not timed out
+            if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
+                continue;
+            }
 
-            $nameserverLogs = array_merge($firstLog, $nameserverLogs);
-        }
+            // Run the validation
+            $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
 
-        $matchedWebserverLogs = $this->validateWebserverLogs($webserverLogs, $testType->getRules()->getWebserver());
-        $matchedNameserverLogs = $this->validateNameserverLogs($nameserverLogs, $testType->getRules()->getDns());
+            $status = $validation[1] ? "Success" : "Failed";
 
-        if ($matchedWebserverLogs && sizeof($matchedNameserverLogs) == sizeof($testType->getRules()->getDns()->getExpectedQueries())) {
-            $this->writeCombinedLog($connection, $sessionKey, $testType->getType(), $matchedWebserverLogs, $matchedNameserverLogs);
+            // ToDo: Call validateWebserverLogs() on matching logs, and add to write combined
+
+            $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [
+                ["hostname" => "", "date" => date("Y-m-d H:i:s"), "ip_address" => "192.0.2.2", "user_agent" => "", "status_code" => 200]
+            ], $validation[0], $status);
+
         }
 
     }
@@ -263,18 +267,40 @@ class LoggingService {
     public function validateNameserverLogs($logs, $rules) {
 
         $matchedLogs = [];
+        $ipAddress = $logs[0]["ip_address"];
+        $passed = true;
 
         foreach ($rules->getExpectedQueries() as $expectedQuery) {
-            foreach ($logs as $log) {
+            $matched = false;
+            foreach ($logs as $key => $log) {
+                if ($log["ip_address"] != $ipAddress) {
+                    unset($logs[$key]);
+                    continue;
+                }
+
                 if ($this->matchRecord($log, $expectedQuery)) {
+
+                    unset($logs[$key]);
                     $matchedLogs[] = $log;
+
+                    if ($expectedQuery->isAbsent()) {
+                        $passed = false;
+                    }
+
+                    $matched = true;
                     break;
                 }
             }
 
+            if (!$matched && !$expectedQuery->isAbsent()) {
+                $matchedLogs[] = ["ip_address" => null, "port" => null, "request" => null, "record_type" => null, "flags" => null, "id" => null, "hostname" => null, "date" => null];
+                $passed = false;
+            }
+
         }
 
-        return $matchedLogs;
+        return [$matchedLogs, $passed];
+
     }
 
     /**
@@ -286,14 +312,17 @@ class LoggingService {
 
         $type = $expectedQuery->getType();
         $value = $expectedQuery->getValue();
+        $prefix = $expectedQuery->getPrefix();
 
-        if ($type && $type != $log["record_type"]) {
+        if ($type && $type != $log["record_type"])
             return false;
-        } elseif ($value && !preg_match("/$value/", $log["hostname"])) {
+        if ($value && !preg_match("/$value/", $log["hostname"]))
             return false;
-        } else {
-            return true;
-        }
+        if ($prefix && !preg_match("/$prefix/", $log["hostname"]))
+            return false;
+
+        return true;
+
     }
 
     /**

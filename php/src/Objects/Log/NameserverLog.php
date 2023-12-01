@@ -39,6 +39,7 @@ class NameserverLog extends BaseLog {
      * @param string $ipAddress
      * @param integer $port
      * @param string $request
+     * @param string $recordType
      * @param string $flags
      */
     public function __construct($hostname, $date, $ipAddress, $port, $request, $recordType, $flags) {

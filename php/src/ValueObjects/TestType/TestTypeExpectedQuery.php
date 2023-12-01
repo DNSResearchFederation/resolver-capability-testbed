@@ -6,6 +6,7 @@ class TestTypeExpectedQuery {
 
     /**
      * @var string
+     * @required
      */
     private $type;
 
@@ -20,14 +21,20 @@ class TestTypeExpectedQuery {
     private $prefix;
 
     /**
+     * @var bool
+     */
+    private $absent;
+
+    /**
      * @param string $type
      * @param string $value
-     * @param string $prefix
+     * @param bool $absent
      */
-    public function __construct($type = null, $value = null, $prefix = null) {
+    public function __construct($type = null, $value = null, $prefix = null, $absent = false) {
         $this->type = $type;
         $this->value = $value;
         $this->prefix = $prefix;
+        $this->absent = $absent;
     }
 
     /**
@@ -58,18 +65,26 @@ class TestTypeExpectedQuery {
         $this->value = $value;
     }
 
-    /**
-     * @return string
-     */
     public function getPrefix() {
         return $this->prefix;
     }
 
-    /**
-     * @param string $prefix
-     */
     public function setPrefix($prefix) {
         $this->prefix = $prefix;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAbsent() {
+        return $this->absent;
+    }
+
+    /**
+     * @param bool $absent
+     */
+    public function setAbsent($absent) {
+        $this->absent = $absent;
     }
 
 }

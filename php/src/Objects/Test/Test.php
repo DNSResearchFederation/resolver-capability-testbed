@@ -85,8 +85,8 @@ class Test extends ActiveRecord {
      * @param string $type
      * @param string $domainName
      * @param string $description
-     * @param \DateTime $starts
-     * @param \DateTime $expires
+     * @param mixed $starts
+     * @param mixed $expires
      * @param string $status
      * @param string $nameserversKey
      * @param mixed $testData
@@ -239,7 +239,7 @@ class Test extends ActiveRecord {
     /**
      * @param string[] $additionalInformation
      */
-    public function setAdditionalInformation($additionalInformation): void {
+    public function setAdditionalInformation($additionalInformation) {
         $this->additionalInformation = $additionalInformation;
     }
 
