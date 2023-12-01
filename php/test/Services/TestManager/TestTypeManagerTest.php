@@ -52,9 +52,9 @@ class TestTypeManagerTest extends TestCase {
         $expected = [
             "dnssec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/dnssec.json"), TestType::class),
             "ipv6" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/ipv6.json"), TestType::class),
-            "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname.json"), TestType::class),
+            "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname-minimisation.json"), TestType::class),
             "minimum-ttl" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/minimum-ttl.json"), TestType::class),
-            "nsec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/nsec.json"), TestType::class),
+            "aggressive-nsec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/aggressive-nsec.json"), TestType::class),
             "tcp-fallback" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/tcp-fallback.json"), TestType::class)
         ];
 
@@ -173,7 +173,7 @@ class TestTypeManagerTest extends TestCase {
     public function testDNSSECSignedZoneFlagIsCorrectlyNotSetOnWebserverHostsIfDNSSecConfigIsNotSigningZone() {
 
         $testTypeManager = new TestTypeManager();
-        $test = new Test("aKey", "example4", "test.co.uk", null, null, null, null, null, ["6"]);
+        $test = new Test("aKey", "example5", "test.co.uk", null, null, null, null, null, ["6"]);
 
         file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example5.json", file_get_contents(__DIR__ . "/example5.json"));
 

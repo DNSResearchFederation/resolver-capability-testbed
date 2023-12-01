@@ -4,9 +4,7 @@ $args = [];
 $numericalArgs = 0;
 for ($i = 1; $i < sizeof($argv); $i++) {
     if (str_starts_with($argv[$i], "-")) {
-        if ($argv[$i] == "-3") $args["3"] = 1;
-        else
-            $args[substr($argv[$i], 1)] = $argv[++$i];
+        $args[substr($argv[$i], 1)] = $argv[++$i];
     } else {
         $args[$numericalArgs++] = $argv[$i];
     }
