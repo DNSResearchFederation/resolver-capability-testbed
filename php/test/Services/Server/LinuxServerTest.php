@@ -98,7 +98,7 @@ class LinuxServerTest extends TestCase {
         $this->assertTrue(file_exists($signedPath));
 
         $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
-        $this->assertEquals("-N INCREMENT -o testdomain.com -3 testdomain.com $originalPath", file_get_contents($signedPath));
+        $this->assertEquals("-N INCREMENT -o testdomain.com -3 - $originalPath", file_get_contents($signedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -237,7 +237,7 @@ class LinuxServerTest extends TestCase {
         $this->assertTrue(file_exists($signedPath));
 
         $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
-        $this->assertEquals("-N INCREMENT -o testdomain.com -3 testdomain.com $originalPath", file_get_contents($signedPath));
+        $this->assertEquals("-N INCREMENT -o testdomain.com -3 - $originalPath", file_get_contents($signedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -335,7 +335,7 @@ class LinuxServerTest extends TestCase {
         // Check DNSSEC activated.
         $bindPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($bindPath));
-        $this->assertEquals("-N INCREMENT -o testdomain.com -3 testdomain.com $bindPath", file_get_contents($bindPath));
+        $this->assertEquals("-N INCREMENT -o testdomain.com -3 - $bindPath", file_get_contents($bindPath));
 
 
     }

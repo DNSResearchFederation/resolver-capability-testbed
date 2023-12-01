@@ -422,7 +422,7 @@ class LinuxServer implements Server {
 
         // Build the sign zone command
         $signZoneCommand = Configuration::readParameter("server.dnssec.signzone.command") . " -K " . $dnsSECDir . " -d " . $dnsSECDir;
-        $signZoneCommand .= " -N INCREMENT -o " . $domainName . ($nsec3 ? " -3 $domainName" : "") . " " . $configDir . "/$domainName.conf";
+        $signZoneCommand .= " -N INCREMENT -o " . $domainName . ($nsec3 ? " -3 -" : "") . " " . $configDir . "/$domainName.conf";
 
         passthru($this->sudoPrefix . " " . $signZoneCommand);
 
