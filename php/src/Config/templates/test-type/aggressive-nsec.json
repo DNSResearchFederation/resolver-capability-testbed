@@ -1,5 +1,5 @@
 {
-  "type": "nsec",
+  "type": "aggressive-nsec",
   "description": "Test NSEC is acknowledged",
   "config": {
     "dnsZone": {

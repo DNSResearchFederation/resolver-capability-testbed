@@ -34,9 +34,9 @@ class WebServerVirtualHost implements OperationConfig {
     private $prefix;
 
     /**
-     * @var boolean
+     * @var DNSSECConfig
      */
-    private $dnssecSignedZone;
+    private $dnssecConfig;
 
 
     /**
@@ -45,14 +45,15 @@ class WebServerVirtualHost implements OperationConfig {
      * @param string $content
      * @param array $sslCertPrefixes
      * @param string $prefix
+     * @param DNSSECConfig $dnssecConfig
      */
-    public function __construct($domainName = null, $wildcard = false, $content = null, $sslCertPrefixes = ["*"], $prefix = "", $dnssecSignedZone = false) {
+    public function __construct($domainName = null, $wildcard = false, $content = null, $sslCertPrefixes = ["*"], $prefix = "", $dnssecConfig = null) {
         $this->domainName = $domainName;
         $this->wildcard = $wildcard;
         $this->content = $content;
         $this->sslCertPrefixes = $sslCertPrefixes;
         $this->prefix = $prefix;
-        $this->dnssecSignedZone = $dnssecSignedZone;
+        $this->dnssecConfig = $dnssecConfig;
     }
 
     /**
@@ -128,8 +129,8 @@ class WebServerVirtualHost implements OperationConfig {
     /**
      * @return bool
      */
-    public function isDnssecSignedZone() {
-        return $this->dnssecSignedZone;
+    public function getDNSSecConfig() {
+        return $this->dnssecConfig;
     }
 
 
@@ -160,8 +161,8 @@ class WebServerVirtualHost implements OperationConfig {
         foreach ($testType->getConfig()->getDnsZones() ?? [$testType->getConfig()->getDnsZone()] as $dnsZone) {
             // If we have a matching prefix or it's a no prefix case continue
             if (($dnsZone->getPrefix() == $this->prefix) || (!$this->prefix && !$dnsZone->getPrefix())) {
-                if ($dnsZone->getDnsSecConfig()) {
-                    $this->dnssecSignedZone = true;
+                if ($dnsZone->getDnsSecConfig() && $dnsZone->getDnsSecConfig()->isSignZone()) {
+                    $this->dnssecConfig = $dnsZone->getDnsSecConfig();
                     break;
                 }
             }

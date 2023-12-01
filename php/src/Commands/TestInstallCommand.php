@@ -35,7 +35,11 @@ class TestInstallCommand extends BaseTestCommand {
         }
 
         $testObject = new Test($testKey, $test, $domain, $description, $starts, $expires, null, $nameserverSet, $testArgs);
-        $this->testService->createTest($testObject);
+        $test = $this->testService->createTest($testObject);
+
+        if ($test && $test->getAdditionalInformation()) {
+            print_r("\n\nAdditional Test Info\n\n" . join("\n\n", $test->getAdditionalInformation()));
+        }
 
     }
 

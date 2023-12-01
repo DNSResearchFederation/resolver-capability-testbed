@@ -1,0 +1,1 @@
+-N INCREMENT -o testdomain.com -3 testdomain.com Storage/bind/zonefiles/testdomain.com.conf

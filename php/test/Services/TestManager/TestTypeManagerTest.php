@@ -52,9 +52,9 @@ class TestTypeManagerTest extends TestCase {
         $expected = [
             "dnssec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/dnssec.json"), TestType::class),
             "ipv6" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/ipv6.json"), TestType::class),
-            "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname.json"), TestType::class),
+            "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname-minimisation.json"), TestType::class),
             "minimum-ttl" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/minimum-ttl.json"), TestType::class),
-            "nsec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/nsec.json"), TestType::class),
+            "aggressive-nsec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/aggressive-nsec.json"), TestType::class),
             "tcp-fallback" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/tcp-fallback.json"), TestType::class)
         ];
 
@@ -157,10 +157,37 @@ class TestTypeManagerTest extends TestCase {
 
         $expectedOperations = [
             new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, new DNSSECConfig(6), true)),
-            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "OK", ["*"], "", true))
+            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "OK", ["*"], "", new DNSSECConfig(6)))
         ];
 
         unlink(Configuration::readParameter("config.root") . "/resolvertest/example4.json");
+
+        $this->assertEquals($expectedOperations, $operations);
+
+        // Check enum correctly mapped
+        $zone = new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, new DNSSECConfig(6));
+        $this->assertEquals(DNSSECConfig::ALGORITHMS[6], $zone->getDnsSecConfig()->getAlgorithm());
+    }
+
+
+    public function testDNSSECSignedZoneFlagIsCorrectlyNotSetOnWebserverHostsIfDNSSecConfigIsNotSigningZone() {
+
+        $testTypeManager = new TestTypeManager();
+        $test = new Test("aKey", "example5", "test.co.uk", null, null, null, null, null, ["6"]);
+
+        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example5.json", file_get_contents(__DIR__ . "/example5.json"));
+
+        $operations = $testTypeManager->getInstallServerOperations($test);
+
+        $dnsRecord1 = new DNSRecord("*", 200, "A", "88.77.66.55");
+        $dnsRecord2 = new DNSRecord("*", 250, "AAAA", "2001::1234");
+
+        $expectedOperations = [
+            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, new DNSSECConfig(6, null, false), true)),
+            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "OK", ["*"], "", false))
+        ];
+
+        unlink(Configuration::readParameter("config.root") . "/resolvertest/example5.json");
 
         $this->assertEquals($expectedOperations, $operations);
 

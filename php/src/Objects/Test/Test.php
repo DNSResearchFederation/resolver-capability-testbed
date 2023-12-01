@@ -90,8 +90,9 @@ class Test extends ActiveRecord {
      * @param string $status
      * @param string $nameserversKey
      * @param mixed $testData
+     * @param string[] $additionalInformation
      */
-    public function __construct($key, $type, $domainName, $description = null, $starts = null, $expires = null, $status = null, $nameserversKey = "default", $testData = []) {
+    public function __construct($key, $type, $domainName, $description = null, $starts = null, $expires = null, $status = null, $nameserversKey = "default", $testData = [], $additionalInformation = []) {
         $this->key = $key;
         $this->type = $type;
         $this->domainName = $domainName;
@@ -101,6 +102,7 @@ class Test extends ActiveRecord {
         $this->status = $status;
         $this->description = $description;
         $this->nameserversKey = $nameserversKey;
+        $this->additionalInformation = $additionalInformation;
     }
 
     /**

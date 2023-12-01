@@ -31,12 +31,35 @@ class DNSSECConfig {
     private $keyStrength;
 
     /**
-     * @param string $algorithm
-     * @param mixed $keyStrength
+     * @var bool
      */
-    public function __construct($algorithm, $keyStrength = null) {
+    private $signZone = true;
+
+
+    /**
+     * @var bool
+     */
+    private $generateDSRecords = true;
+
+    /**
+     * @var bool
+     */
+    private $nsec3 = true;
+
+
+    /**
+     * @param string $algorithm
+     * @param string $keyStrength
+     * @param bool $signZone
+     * @param bool $generateDSRecords
+     * @param bool $nsec3
+     */
+    public function __construct($algorithm, $keyStrength = null, $signZone = true, $generateDSRecords = true, $nsec3 = true) {
         $this->algorithm = $algorithm;
         $this->keyStrength = $keyStrength;
+        $this->signZone = $signZone;
+        $this->generateDSRecords = $generateDSRecords;
+        $this->nsec3 = $nsec3;
     }
 
     /**
@@ -73,6 +96,48 @@ class DNSSECConfig {
      */
     public function setKeyStrength($keyStrength): void {
         $this->keyStrength = $keyStrength;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSignZone(): bool {
+        return $this->signZone;
+    }
+
+    /**
+     * @param bool $signZone
+     */
+    public function setSignZone(bool $signZone): void {
+        $this->signZone = $signZone;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGenerateDSRecords(): bool {
+        return $this->generateDSRecords;
+    }
+
+    /**
+     * @param bool $generateDSRecords
+     */
+    public function setGenerateDSRecords(bool $generateDSRecords): void {
+        $this->generateDSRecords = $generateDSRecords;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNsec3(): bool {
+        return $this->nsec3;
+    }
+
+    /**
+     * @param bool $nsec3
+     */
+    public function setNsec3(bool $nsec3): void {
+        $this->nsec3 = $nsec3;
     }
 
 

@@ -5,10 +5,22 @@
     "dnsZone": {
       "records": [
         {
-          "prefix": "*",
+          "prefix": "*.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab",
           "ttl": 10,
           "type": "A",
           "data": "IPV4_ADDRESS"
+        },
+        {
+          "prefix": "*.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab",
+          "ttl": 10,
+          "type": "A",
+          "data": "10.0.0.1"
+        },
+        {
+          "prefix": "*.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab",
+          "ttl": 10,
+          "type": "A",
+          "data": "10.0.0.2"
         }
       ]
     },
@@ -16,7 +28,7 @@
       "wildcard": true,
       "content": "OK",
       "sslCertPrefixes": [
-        "*"
+        "*.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab"
       ]
     }
   },

@@ -1,11 +1,12 @@
 <?php
 
 $args = [];
+$numericalArgs = 0;
 for ($i = 1; $i < sizeof($argv); $i++) {
     if (str_starts_with($argv[$i], "-")) {
         $args[substr($argv[$i], 1)] = $argv[++$i];
     } else {
-        $args[] = $argv[$i];
+        $args[$numericalArgs++] = $argv[$i];
     }
 }
 

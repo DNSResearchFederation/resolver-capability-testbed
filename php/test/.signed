@@ -1,0 +1,1 @@
+Storage/bind/zonefiles/dnssec/testdomain.com -N INCREMENT -o testdomain.com Storage/bind/zonefiles/testdomain.com.conf

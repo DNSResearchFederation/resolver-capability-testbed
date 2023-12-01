@@ -30,7 +30,8 @@
         "prefix": "unvalidated-",
         "dnsSecConfig": {
           "algorithm": "ALGORITHM",
-          "keyStrength": "KEYSTRENGTH"
+          "keyStrength": "KEYSTRENGTH",
+          "generateDSRecords": false
         },
         "records": [
           {
@@ -43,6 +44,11 @@
       },
       {
         "prefix": "unsigned-",
+        "dnsSecConfig": {
+          "algorithm": "ALGORITHM",
+          "keyStrength": "KEYSTRENGTH",
+          "signZone": false
+        },
         "records": [
           {
             "prefix": "*",
