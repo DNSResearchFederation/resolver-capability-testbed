@@ -149,9 +149,9 @@ class DNSZone implements OperationConfig {
     }
 
     /**
-     * @return bool|mixed
+     * @return bool
      */
-    public function getHasWebVirtualHost(): mixed {
+    public function getHasWebVirtualHost() {
         return $this->hasWebVirtualHost;
     }
 
