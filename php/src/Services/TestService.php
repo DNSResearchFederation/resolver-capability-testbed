@@ -166,7 +166,9 @@ class TestService {
         $loggingService->createLogDatabaseForTest($test);
 
         // Synchronise tests to start this test if required
-        $this->synchroniseTests();
+        $this->synchroniseTest($test);
+
+        return $test;
     }
 
     /**
@@ -230,6 +232,8 @@ class TestService {
 
     public function synchroniseTest($test) {
 
+        $testProcessed = false;
+
         if ($test->getStatus() == Test::STATUS_PENDING && $test->getStarts()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
 
             $test->setStatus(Test::STATUS_INSTALLING);
@@ -240,6 +244,9 @@ class TestService {
             $test->setAdditionalInformation(array_merge($test->getAdditionalInformation() ?? [], $additionalInfo ?? []));
             $test->setStatus(Test::STATUS_ACTIVE);
             $this->updateTest($test);
+
+            $testProcessed = true;
+
         }
 
         if ($test->getStatus() == Test::STATUS_ACTIVE && $test->getExpires() && $test->getExpires()->format("Y-m-d H:i:s") <= date("Y-m-d H:i:s")) {
@@ -251,7 +258,12 @@ class TestService {
 
             $test->setStatus(Test::STATUS_COMPLETED);
             $this->updateTest($test);
+
+            $testProcessed = true;
         }
+
+        return $testProcessed;
+
 
     }
 
