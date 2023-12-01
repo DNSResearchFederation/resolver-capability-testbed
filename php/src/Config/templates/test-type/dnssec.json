@@ -77,18 +77,6 @@
         {
           "type": "A",
           "value": "(?i)^capability\\.[a-z]+\\.[a-z]+"
-        },
-        {
-          "type": "A",
-          "value": "(?i)^resolver\\.capability\\.[a-z]+\\.[a-z]+"
-        },
-        {
-          "type": "A",
-          "value": "(?i)^qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
-        },
-        {
-          "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
         }
       ]
     },

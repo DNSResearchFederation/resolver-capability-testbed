@@ -16,7 +16,6 @@
       "wildcard": true,
       "content": "OK",
       "sslCertPrefixes": [
-        "*",
         "capability",
         "resolver.capability",
         "qname.resolver.capability"
