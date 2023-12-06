@@ -68,6 +68,14 @@
         ]
       },
       {
+        "prefix": "unsigned-",
+        "wildcard": true,
+        "content": "OK",
+        "sslCertPrefixes": [
+          "*"
+        ]
+      },
+      {
         "prefix": "unvalidated-",
         "wildcard": true,
         "content": "OK",

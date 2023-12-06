@@ -71,7 +71,6 @@ class LinuxServerTest extends TestCase {
     }
 
 
-
     public function testCanInstallSignedDNSZoneCorrectlyIfNoMatchingWebserverVirtualHost() {
 
         $this->configService->setIPv4Address("1.2.3.4");
@@ -104,7 +103,7 @@ class LinuxServerTest extends TestCase {
 
         // Check additional info as expected
         $this->assertEquals(1, sizeof($additionalInfo));
-        $this->assertEquals("Please add the following DS records for testdomain.com via your Registrar\n\nEXAMPLE-DS-RECORDS-testdomain.com", $additionalInfo[0]);
+        $this->assertEquals("Please add the following DS records for testdomain.com via your Registrar\n\nKey Tag: 9875\nDigest: 4E8B6264E81D803A693BE18E50291097707E2056\nAlgorithm: 13\nDigest Type:1", $additionalInfo[0]);
 
 
     }
@@ -164,13 +163,13 @@ class LinuxServerTest extends TestCase {
 
         $zonePath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($zonePath));
-        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux.com"), file_get_contents($zonePath));
+        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($zonePath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
         // Check additional info as expected as we still want DS records
         $this->assertEquals(1, sizeof($additionalInfo));
-        $this->assertEquals("Please add the following DS records for testdomain.com via your Registrar\n\nEXAMPLE-DS-RECORDS-testdomain.com", $additionalInfo[0]);
+        $this->assertEquals("Please add the following DS records for testdomain.com via your Registrar\n\nKey Tag: 9875\nDigest: 4E8B6264E81D803A693BE18E50291097707E2056\nAlgorithm: 13\nDigest Type:1", $additionalInfo[0]);
 
 
     }
@@ -188,7 +187,7 @@ class LinuxServerTest extends TestCase {
         ];
 
         $dnsZone = new DNSZone("testdomain.com", ["ns1.testdomain.com", "ns2.testdomain.com"], $dnsRecords, "", null,
-            new DNSSECConfig(8, null, true, true,false));
+            new DNSSECConfig(8, null, true, true, false));
         $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $dnsZone);
 
         $this->server->performOperations([$operation]);
@@ -206,9 +205,7 @@ class LinuxServerTest extends TestCase {
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
 
-
     }
-
 
 
     public function testAdditionalInfoNotReturnedIfGenerateDSRecordsSetToFalseForDNSSECZone() {
@@ -318,10 +315,10 @@ class LinuxServerTest extends TestCase {
 
         $content = "Hello World!";
 
-        $webServerVirtualHost = new WebServerVirtualHost("testdomain.com", false, $content, ["*"], "", true);
+        $webServerVirtualHost = new WebServerVirtualHost("testdomain.com", false, $content, ["*"], "", new DNSSECConfig(8, 2048, true, true, true));
         $operation = new ServerOperation(ServerOperation::OPERATION_ADD, $webServerVirtualHost);
 
-        $this->server->performOperations([$operation]);
+        $additionalInfo = $this->server->performOperations([$operation]);
 
         $path = Configuration::readParameter("server.httpd.config.dir") . "/testdomain.com.conf";
 
@@ -336,6 +333,10 @@ class LinuxServerTest extends TestCase {
         $bindPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($bindPath));
         $this->assertEquals("-N INCREMENT -o testdomain.com -3 - $bindPath", file_get_contents($bindPath));
+
+        // Check additional info as expected as we still want DS records
+        $this->assertEquals(1, sizeof($additionalInfo));
+        $this->assertEquals("Please add the following DS records for testdomain.com via your Registrar\n\nKey Tag: 9875\nDigest: 4E8B6264E81D803A693BE18E50291097707E2056\nAlgorithm: 13\nDigest Type:1", $additionalInfo[0]);
 
 
     }

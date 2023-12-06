@@ -11,6 +11,7 @@ use ResolverTest\Objects\Log\NameserverLog;
 use ResolverTest\Objects\Log\WebserverLog;
 use ResolverTest\Objects\Server\ServerOperation;
 use ResolverTest\Services\Config\GlobalConfigService;
+use ResolverTest\ValueObjects\TestType\Config\DNSSECConfig;
 use ResolverTest\ValueObjects\TestType\Config\DNSZone;
 use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
 
@@ -81,7 +82,7 @@ class LinuxServer implements Server {
                             break;
 
                         case WebServerVirtualHost::class:
-                            $this->installHttpd($operation);
+                            $additionalInfo = array_merge($additionalInfo, $this->installHttpd($operation));
                             break;
                     }
                     break;
@@ -203,7 +204,7 @@ class LinuxServer implements Server {
             ob_end_clean();
 
             $dnsSECRecords = [];
-            $dsRecords = [];
+
             foreach ($files as $file) {
                 if (str_ends_with($file, ".key")) {
                     ob_start();
@@ -211,21 +212,12 @@ class LinuxServer implements Server {
                     $dnsSECRecords[] = ob_get_contents();
                     ob_end_clean();
                 }
-                if (str_starts_with($file, "dsset")) {
-                    ob_start();
-                    passthru($this->sudoPrefix . " cat $dnsSECDir/$file");
-                    $dsRecords = ob_get_contents();
-                    ob_end_clean();
-                }
+
             }
 
-            if ($dsRecords && $dnssecConfig->isGenerateDSRecords()) {
-                $additionalInfo[] = "Please add the following DS records for " . $domainName . " via your Registrar\n\n" . $dsRecords;
-            }
 
             // If we are signing the zone, add the dnssec records
-            if ($dnssecConfig->isSignZone())
-                $model["dnsSECRecords"] = $dnsSECRecords;
+            $model["dnsSECRecords"] = $dnsSECRecords;
 
         }
 
@@ -240,8 +232,8 @@ class LinuxServer implements Server {
 
 
         // If dnssec config and no web virtual hosts, sign the zone file now
-        if ($dnssecConfig && $dnssecConfig->isSignZone() && !$config->getHasWebVirtualHost()) {
-            $this->signZoneForDNSSEC($domainName, $dnssecConfig->isNsec3());
+        if ($dnssecConfig && !$config->getHasWebVirtualHost()) {
+            $additionalInfo = array_merge($additionalInfo, $this->signZoneForDNSSEC($domainName, $dnssecConfig));
         } else {
             // Restart bind
             $serviceCommand = Configuration::readParameter("server.bind.service.command");
@@ -282,9 +274,11 @@ class LinuxServer implements Server {
 
     /**
      * @param ServerOperation $operation
-     * @return void
+     * @return string[]
      */
     private function installHttpd($operation) {
+
+        $additionalInfo = [];
 
         /**
          * @var WebServerVirtualHost $config
@@ -313,6 +307,7 @@ class LinuxServer implements Server {
 
         // SSL Certificate
         if ($secure) {
+            $sslDomains = [$config->getIdentifier()];
             foreach ($config->getSslCertPrefixes() as $prefix) {
                 $sslDomains[] = $prefix . "." . $config->getIdentifier();
             }
@@ -326,8 +321,10 @@ class LinuxServer implements Server {
 
         // If DNSSEC signed, sign now
         if ($config->getDNSSecConfig()) {
-            $this->signZoneForDNSSEC($config->getDomainName(),$config->getDNSSecConfig());
+            $additionalInfo = array_merge($additionalInfo, $this->signZoneForDNSSEC($config->getDomainName(), $config->getDNSSecConfig()));
         }
+
+        return $additionalInfo;
     }
 
     /**
@@ -412,9 +409,13 @@ class LinuxServer implements Server {
      * Sign a zone for DNSSec using keys in supplied directory and domain name
      *
      * @param string $domainName
-     * @return void
+     * @param DNSSECConfig $dnsSecConfig
+     *
+     * @return string[]
      */
-    private function signZoneForDNSSEC($domainName, $nsec3): void {
+    private function signZoneForDNSSEC($domainName, $dnsSecConfig): array {
+
+        $additionalInfo = [];
 
         // Get zone config dir
         $configDir = Configuration::readParameter("server.bind.config.dir");
@@ -422,17 +423,55 @@ class LinuxServer implements Server {
 
         // Build the sign zone command
         $signZoneCommand = Configuration::readParameter("server.dnssec.signzone.command") . " -K " . $dnsSECDir . " -d " . $dnsSECDir;
-        $signZoneCommand .= " -N INCREMENT -o " . $domainName . ($nsec3 ? " -3 -" : "") . " " . $configDir . "/$domainName.conf";
+        $signZoneCommand .= " -N INCREMENT -o " . $domainName . ($dnsSecConfig->isNsec3() ? " -3 -" : "") . " " . $configDir . "/$domainName.conf";
 
         passthru($this->sudoPrefix . " " . $signZoneCommand);
 
-        // Move signed file back to the main zone
-        passthru($this->sudoPrefix . " mv " . $configDir . "/$domainName.conf " . $configDir . "/$domainName.conf.unsigned");
-        passthru($this->sudoPrefix . " mv " . $configDir . "/$domainName.conf.signed " . $configDir . "/$domainName.conf");
 
-        // Restart bind
-        $serviceCommand = Configuration::readParameter("server.bind.service.command");
-        passthru("{$this->sudoPrefix} $serviceCommand restart");
+        if ($dnsSecConfig->isSignZone()) {
+
+            // Move signed file back to the main zone
+            passthru($this->sudoPrefix . " mv " . $configDir . "/$domainName.conf " . $configDir . "/$domainName.conf.unsigned");
+            passthru($this->sudoPrefix . " mv " . $configDir . "/$domainName.conf.signed " . $configDir . "/$domainName.conf");
+
+            // Restart bind
+            $serviceCommand = Configuration::readParameter("server.bind.service.command");
+            passthru("{$this->sudoPrefix} $serviceCommand restart");
+
+        }
+
+
+        // Grab the key data and map to DNSKEY records
+        ob_start();
+        passthru($this->sudoPrefix . " ls $dnsSECDir");
+        $files = explode("\n", ob_get_contents());
+        ob_end_clean();
+
+
+        $dsRecords = [];
+        foreach ($files as $file) {
+            if (str_starts_with($file, "dsset")) {
+                ob_start();
+                passthru($this->sudoPrefix . " cat $dnsSECDir/$file");
+                $dsRecords = ob_get_contents();
+                ob_end_clean();
+            }
+        }
+
+        if ($dsRecords && $dnsSecConfig->isGenerateDSRecords()) {
+
+            $recordStrings = [];
+            foreach (explode("\n", $dsRecords) as $dsRecord) {
+                $record = preg_split("/[\\t ]+/", $dsRecord);
+                if (sizeof($record) >= 7)
+                    $recordStrings[] = "Key Tag: $record[3]\nDigest: $record[6]\nAlgorithm: $record[4]\nDigest Type:$record[5]";
+            }
+
+            $additionalInfo[] = "Please add the following DS records for " . $domainName . " via your Registrar\n\n" . join("\n\n", $recordStrings);
+        }
+
+        return $additionalInfo;
+
 
     }
 }

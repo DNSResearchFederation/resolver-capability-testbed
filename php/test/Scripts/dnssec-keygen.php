@@ -23,4 +23,4 @@ if ($args["K"] ?? null) {
     file_put_contents($outputDir . "/" . $args[0] . "-" . ($args["f"] ?? "ZSK") . ".key", $line);
 }
 
-file_put_contents($outputDir . "/dsset-" . $args[0] . ".", "EXAMPLE-DS-RECORDS-" . $args[0]);
+

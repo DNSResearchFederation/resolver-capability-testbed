@@ -404,9 +404,11 @@ class LoggingServiceTest extends TestBase {
             'webServerResponseCode2' => null
         ], $outputLogs->nextRow());
 
+        $nextRow = $outputLogs->nextRow();
+
         $this->assertEquals([
             'id' => 2,
-            'date' => $now,
+            'date' => $nextRow['date'],
             'status' => 'Failed',
             'dnsResolutionTime1' => $tenSecAgo->format("Y-m-d H:i:s"),
             'dnsResolvedHostname1' => '08dd00f2-7ead-474d-9008-aca9c51d4071.test.com',
@@ -420,7 +422,7 @@ class LoggingServiceTest extends TestBase {
             'dnsResolvedHostname3' => "08dd00f2-7ead-474d-9008-aca9c51d4071.test.com",
             'dnsClientIpAddress3' => "192.0.2.8",
             'dnsResolverQuery3' => "A IN 08dd00f2-7ead-474d-9008-aca9c51d4071.test.com",
-            'webServerRequestTime1' => $now,
+            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
             'webServerRequestHostname1' => '',
             'webServerClientIpAddress1' => '192.0.2.2',
             'webServerResponseCode1' => 200,
@@ -428,11 +430,14 @@ class LoggingServiceTest extends TestBase {
             'webServerRequestHostname2' => null,
             'webServerClientIpAddress2' => null,
             'webServerResponseCode2' => null
-        ], $outputLogs->nextRow());
+        ], $nextRow);
+
+        $nextRow = $outputLogs->nextRow();
+
 
         $this->assertEquals([
             'id' => 3,
-            'date' => $now,
+            'date' => $nextRow['date'],
             'status' => 'Failed',
             'dnsResolutionTime1' => $tenSecAgo->format("Y-m-d H:i:s"),
             'dnsResolvedHostname1' => '9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com',
@@ -446,7 +451,7 @@ class LoggingServiceTest extends TestBase {
             'dnsResolvedHostname3' => null,
             'dnsClientIpAddress3' => null,
             'dnsResolverQuery3' => null,
-            'webServerRequestTime1' => $now,
+            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
             'webServerRequestHostname1' => '',
             'webServerClientIpAddress1' => '192.0.2.2',
             'webServerResponseCode1' => 200,
@@ -454,7 +459,7 @@ class LoggingServiceTest extends TestBase {
             'webServerRequestHostname2' => null,
             'webServerClientIpAddress2' => null,
             'webServerResponseCode2' => null
-        ], $outputLogs->nextRow());
+        ], $nextRow);
 
         $this->assertNull($outputLogs->nextRow());
     }

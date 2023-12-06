@@ -47,7 +47,7 @@
       ]
     },
     "webserver": {
-      "expectedQueries": 1
+      "expectedQueries": 2
     },
     "webserverOptional": true,
     "relationalKey": "HOSTNAME_OR_IP",

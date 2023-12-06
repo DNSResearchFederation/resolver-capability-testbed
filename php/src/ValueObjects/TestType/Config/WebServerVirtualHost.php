@@ -161,7 +161,7 @@ class WebServerVirtualHost implements OperationConfig {
         foreach ($testType->getConfig()->getDnsZones() ?? [$testType->getConfig()->getDnsZone()] as $dnsZone) {
             // If we have a matching prefix or it's a no prefix case continue
             if (($dnsZone->getPrefix() == $this->prefix) || (!$this->prefix && !$dnsZone->getPrefix())) {
-                if ($dnsZone->getDnsSecConfig() && $dnsZone->getDnsSecConfig()->isSignZone()) {
+                if ($dnsZone->getDnsSecConfig()) {
                     $this->dnssecConfig = $dnsZone->getDnsSecConfig();
                     break;
                 }

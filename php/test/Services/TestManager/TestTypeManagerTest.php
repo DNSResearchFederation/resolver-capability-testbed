@@ -170,31 +170,7 @@ class TestTypeManagerTest extends TestCase {
     }
 
 
-    public function testDNSSECSignedZoneFlagIsCorrectlyNotSetOnWebserverHostsIfDNSSecConfigIsNotSigningZone() {
 
-        $testTypeManager = new TestTypeManager();
-        $test = new Test("aKey", "example5", "test.co.uk", null, null, null, null, null, ["6"]);
-
-        file_put_contents(Configuration::readParameter("config.root") . "/resolvertest/example5.json", file_get_contents(__DIR__ . "/example5.json"));
-
-        $operations = $testTypeManager->getInstallServerOperations($test);
-
-        $dnsRecord1 = new DNSRecord("*", 200, "A", "88.77.66.55");
-        $dnsRecord2 = new DNSRecord("*", 250, "AAAA", "2001::1234");
-
-        $expectedOperations = [
-            new ServerOperation(ServerOperation::OPERATION_ADD, new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, new DNSSECConfig(6, null, false), true)),
-            new ServerOperation(ServerOperation::OPERATION_ADD, new WebServerVirtualHost("test.co.uk", true, "OK", ["*"], "", false))
-        ];
-
-        unlink(Configuration::readParameter("config.root") . "/resolvertest/example5.json");
-
-        $this->assertEquals($expectedOperations, $operations);
-
-        // Check enum correctly mapped
-        $zone = new DNSZone("test.co.uk", [""], [$dnsRecord1, $dnsRecord2], "", null, new DNSSECConfig(6));
-        $this->assertEquals(DNSSECConfig::ALGORITHMS[6], $zone->getDnsSecConfig()->getAlgorithm());
-    }
 
 
     public function testCanCreateCorrectServerOperationsUponUninstall() {

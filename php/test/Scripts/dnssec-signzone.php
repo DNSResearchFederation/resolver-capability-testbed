@@ -19,4 +19,9 @@ if ($args["K"] ?? null && $args["d"] ?? null) {
     unset($argv[4]);
     $keyDir = $args["K"];
     file_put_contents($args[0] . ".signed", join(" ", $argv));
+
+    if (!file_exists($keyDir))
+        mkdir($keyDir, 0777, true);
+    file_put_contents($keyDir . "/dsset-" . $args["o"], $args["o"] . ".\tIN\tDS\t9875\t13\t1\t4E8B6264E81D803A693BE18E50291097707E2056");
 }
+

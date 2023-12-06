@@ -15,7 +15,7 @@ export default class ResolverCapabilityTest {
         "minimum-ttl": new TtlTestRunner(),
         "dnssec": new DNSSECHostQueryTestRunner(),
         "tcp-fallback": new SingleHostQueryTestRunner(),
-        "nsec": new NSECHostQueryTestRunner()
+        "aggressive-nsec": new NSECHostQueryTestRunner()
     };
 
     // Export test type runner

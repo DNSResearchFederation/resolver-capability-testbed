@@ -18,7 +18,8 @@
       "sslCertPrefixes": [
         "capability",
         "resolver.capability",
-        "qname.resolver.capability"
+        "qname.resolver.capability",
+        "*.qname.resolver.capability"
       ]
     }
   },
