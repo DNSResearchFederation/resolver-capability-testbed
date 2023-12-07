@@ -39,11 +39,11 @@ describe("Test entry point", function () {
 
     it("Should be able to run the correct test type for NSEC", () => {
 
-        let resolverCapTest = new ResolverCapabilityTest("nsec", "test.com", [], null);
-        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests().length).toEqual(3);
-        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests()[0].hostname).toContain("https://apples.test.com");
-        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests()[1].hostname).toContain("https://pears.test.com")
-        expect(resolverCapTest.installedTestTypeRunners["nsec"].getPreviousRequests()[2].hostname).toContain("https://oranges.test.com")
+        let resolverCapTest = new ResolverCapabilityTest("aggressive-nsec", "test.com", [], null);
+        expect(resolverCapTest.installedTestTypeRunners["aggressive-nsec"].getPreviousRequests().length).toEqual(3);
+        expect(resolverCapTest.installedTestTypeRunners["aggressive-nsec"].getPreviousRequests()[0].hostname).toContain("https://apples.test.com");
+        expect(resolverCapTest.installedTestTypeRunners["aggressive-nsec"].getPreviousRequests()[1].hostname).toContain("https://pears.test.com")
+        expect(resolverCapTest.installedTestTypeRunners["aggressive-nsec"].getPreviousRequests()[2].hostname).toContain("https://oranges.test.com")
 
     });
 
