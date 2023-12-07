@@ -89,8 +89,10 @@ class LoggingService {
                 $columnsClause .= ", dnsResolutionTime$i INT, dnsResolvedHostname$i VARCHAR(255), dnsClientIpAddress$i VARCHAR(255), dnsResolverQuery$i VARCHAR(255)";
             }
 
-            for ($i = 1; $i <= $rules->getWebserver()->getExpectedQueries(); $i++) {
-                $columnsClause .= ", webServerRequestTime$i INT, webServerRequestHostname$i VARCHAR(255), webServerClientIpAddress$i VARCHAR(255), webServerResponseCode$i INT";
+            if ($rules->getWebserver()) {
+                for ($i = 1; $i <= $rules->getWebserver()->getExpectedQueries(); $i++) {
+                    $columnsClause .= ", webServerRequestTime$i INT, webServerRequestHostname$i VARCHAR(255), webServerClientIpAddress$i VARCHAR(255), webServerResponseCode$i INT";
+                }
             }
 
             $connection->query("CREATE TABLE combined_log ({$columnsClause});");
@@ -240,14 +242,23 @@ class LoggingService {
 
                     // Run the validation
                     $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
+                    $dnsPassed = $validation[1];
 
-                    $status = $validation[1] ? "Success" : "Failed";
+                    // Do webserver log validation if required
+                    if ($testType->getRules()->getWebserver()) {
 
-                    // ToDo: Call validateWebserverLogs() on matching logs, and add to write combined
+                        // Get relevant logs
+                        $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE hostname LIKE '{$UUID}%';")->fetchAll();
+                        $webserverPassed = $testType->getRules()->isWebserverOptional() || $this->validateWebserverLogs($webserverLogs, $testType->getRules()->getWebserver());
 
-                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [
-                        ["hostname" => "", "date" => date("Y-m-d H:i:s"), "ip_address" => "192.0.2.2", "user_agent" => "", "status_code" => 200]
-                    ], $validation[0], $status);
+                    } else {
+                        $webserverLogs = [];
+                        $webserverPassed = true;
+                    }
+
+                    $status = $dnsPassed && $webserverPassed ? "Success" : "Failed";
+
+                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), $webserverLogs, $validation[0], $status);
                 }
                 break;
 
@@ -280,7 +291,7 @@ class LoggingService {
 
                     $status = $validation[1] ? "Success" : "Failed";
 
-                    // ToDo: Call validateWebserverLogs() on matching logs, and add to write combined
+                    // ToDo: Do we ever care in the IP Address case? If so, how to reconcile? No UUID to use.
 
                     $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [
                         ["hostname" => "", "date" => date("Y-m-d H:i:s"), "ip_address" => "192.0.2.2", "user_agent" => "", "status_code" => 200]
@@ -295,16 +306,12 @@ class LoggingService {
     /**
      * @param array $logs
      * @param TestTypeWebServerRules $rules
-     * @return array
+     * @return bool
      */
     public function validateWebserverLogs($logs, $rules) {
 
         $expectedCount = $rules->getExpectedQueries();
-        if (sizeof($logs) == $expectedCount) {
-            return $logs;
-        } else {
-            return [];
-        }
+        return sizeof($logs) == $expectedCount;
 
     }
 

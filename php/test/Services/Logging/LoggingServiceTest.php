@@ -344,9 +344,11 @@ class LoggingServiceTest extends TestBase {
             new NameserverLog("8e1e4931-173c-4e3e-987e-4f893fb4b982.test.com", $oneSecAgo, "192.0.2.12", 22817, "A IN 8e1e4931-173c-4e3e-987e-4f893fb4b982.test.com", "A", ""),        // E - not yet timed out
         ];
 
-        // ToDo: Make some corresponding webserver logs and add to assertions
         $webServerLogs = [
-
+            new WebserverLog("16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com", $tenSecAgo, "192.0.2.200", "", 200),
+            new WebserverLog("08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", $tenSecAgo, "192.0.2.208", "", 200),
+            new WebserverLog("9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com", $tenSecAgo, "192.0.2.210", "", 200),
+            new WebserverLog("8e1e4931-173c-4e3e-987e-4f893fb4b982.test.com", $oneSecAgo, "192.0.2.212", "", 200)
         ];
 
         // Mockery
@@ -359,7 +361,7 @@ class LoggingServiceTest extends TestBase {
             new TestTypeExpectedQuery("A", "[a-z0-9\-]\.test.com"),
             new TestTypeExpectedQuery("AAAA", "[a-z0-9\-]\.test.com"),
             new TestTypeExpectedQuery("A", "[a-z0-9\-]\.test.com", null, true)
-        ]), new TestTypeWebServerRules(2), true, TestTypeRules::RELATIONAL_KEY_HOSTNAME, 3);
+        ]), new TestTypeWebServerRules(1), true, TestTypeRules::RELATIONAL_KEY_HOSTNAME, 3);
 
         $this->testTypeManager->returnValue("getTestTypeForTest", $testType, [$test]);
         $test->returnValue("getKey", "compareTest", []);
@@ -394,14 +396,10 @@ class LoggingServiceTest extends TestBase {
             'dnsResolvedHostname3' => null,
             'dnsClientIpAddress3' => null,
             'dnsResolverQuery3' => null,
-            'webServerRequestTime1' => $now,
-            'webServerRequestHostname1' => '',
-            'webServerClientIpAddress1' => '192.0.2.2',
-            'webServerResponseCode1' => 200,
-            'webServerRequestTime2' => null,
-            'webServerRequestHostname2' => null,
-            'webServerClientIpAddress2' => null,
-            'webServerResponseCode2' => null
+            'webServerRequestTime1' => $tenSecAgo->format("Y-m-d H:i:s"),
+            'webServerRequestHostname1' => '16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com',
+            'webServerClientIpAddress1' => '192.0.2.200',
+            'webServerResponseCode1' => 200
         ], $outputLogs->nextRow());
 
         $nextRow = $outputLogs->nextRow();
@@ -423,13 +421,9 @@ class LoggingServiceTest extends TestBase {
             'dnsClientIpAddress3' => "192.0.2.8",
             'dnsResolverQuery3' => "A IN 08dd00f2-7ead-474d-9008-aca9c51d4071.test.com",
             'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
-            'webServerRequestHostname1' => '',
-            'webServerClientIpAddress1' => '192.0.2.2',
-            'webServerResponseCode1' => 200,
-            'webServerRequestTime2' => null,
-            'webServerRequestHostname2' => null,
-            'webServerClientIpAddress2' => null,
-            'webServerResponseCode2' => null
+            'webServerRequestHostname1' => '08dd00f2-7ead-474d-9008-aca9c51d4071.test.com',
+            'webServerClientIpAddress1' => '192.0.2.208',
+            'webServerResponseCode1' => 200
         ], $nextRow);
 
         $nextRow = $outputLogs->nextRow();
@@ -452,13 +446,9 @@ class LoggingServiceTest extends TestBase {
             'dnsClientIpAddress3' => null,
             'dnsResolverQuery3' => null,
             'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
-            'webServerRequestHostname1' => '',
-            'webServerClientIpAddress1' => '192.0.2.2',
-            'webServerResponseCode1' => 200,
-            'webServerRequestTime2' => null,
-            'webServerRequestHostname2' => null,
-            'webServerClientIpAddress2' => null,
-            'webServerResponseCode2' => null
+            'webServerRequestHostname1' => '9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com',
+            'webServerClientIpAddress1' => '192.0.2.210',
+            'webServerResponseCode1' => 200
         ], $nextRow);
 
         $this->assertNull($outputLogs->nextRow());
@@ -487,20 +477,24 @@ class LoggingServiceTest extends TestBase {
             new NameserverLog("that.test.com", $fiveSecAgo, "192.0.2.0", 22813, "AAAA IN that.test.com", "AAAA", ""),  // A - other expected query
             new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.1", 22814, "A IN this.test.com", "A", ""),         // B - same as A, but different IP
             new NameserverLog("that.test.com", $fiveSecAgo, "192.0.2.1", 22814, "AAAA IN that.test.com", "AAAA", ""),  // B - same as A, but different IP
-            new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.8", 22815, "A IN this.test.com", "A", ""),        // C - timed out, expected query
-            new NameserverLog("other.test.com", $twoSecAgo, "192.0.2.8", 22815, "A IN other.test.com", "A", ""),         // C - should be absent
+            new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.8", 22815, "A IN this.test.com", "A", ""),         // C - timed out, expected query
+            new NameserverLog("other.test.com", $twoSecAgo, "192.0.2.8", 22815, "A IN other.test.com", "A", ""),       // C - should be absent
             new NameserverLog("that.test.com", $oneSecAgo, "192.0.2.8", 22815, "AAAA IN that.test.com", "AAAA", ""),   // C - expected query
             new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.10", 22816, "A IN this.test.com", "A", ""),        // D - timed out, expected query
             new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.12", 22817, "A IN this.test.com", "A", ""),        // E - not yet timed out
-            new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.0", 22817, "A IN this.test.com", "A", ""),        // F - same as A
-            new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.0", 22817, "A IN this.test.com", "A", ""),        // F - same as A
-
+            new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.0", 22817, "A IN this.test.com", "A", ""),         // F - same as A
+            new NameserverLog("that.test.com", $oneSecAgo, "192.0.2.0", 22817, "AAAA IN this.test.com", "AAAA", "")    // F - same as A
         ];
 
-        // ToDo: Make some corresponding webserver logs and add to assertions
         $webServerLogs = [
-
+            new WebserverLog("this.test.com", $tenSecAgo, "192.0.2.200", "", 200),
+            new WebserverLog("this.test.com", $tenSecAgo, "192.0.2.201", "", 200),
+            new WebserverLog("this.test.com", $tenSecAgo, "192.0.2.208", "", 200),
+            new WebserverLog("this.test.com", $tenSecAgo, "192.0.2.210", "", 200),
+            new WebserverLog("this.test.com", $tenSecAgo, "192.0.2.212", "", 200),
+            new WebserverLog("this.test.com", $tenSecAgo, "192.0.2.200", "", 200)
         ];
+
 
         // Mockery
         $test = MockObjectProvider::instance()->getMockInstance(Test::class);
