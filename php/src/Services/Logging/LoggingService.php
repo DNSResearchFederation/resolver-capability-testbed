@@ -24,6 +24,7 @@ use ResolverTest\Services\TestType\TestTypeManager;
 use ResolverTest\Services\Util\IPAddressUtils;
 use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
 use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;
+use ResolverTest\ValueObjects\TestType\TestTypeRules;
 use ResolverTest\ValueObjects\TestType\TestTypeWebServerRules;
 
 class LoggingService {
@@ -198,6 +199,10 @@ class LoggingService {
         }
     }
 
+    /**
+     * @param Test $test
+     * @return void
+     */
     public function compareLogsForTest($test) {
 
         $connection = new SQLite3DatabaseConnection([
@@ -205,39 +210,82 @@ class LoggingService {
         ]);
 
         $testType = $this->testTypeManager->getTestTypeForTest($test);
+        $expectedNSQueries = sizeof($testType->getRules()->getDns()->getExpectedQueries());
         $timeoutSeconds = $testType->getRules()->getTimeoutSeconds();
         $pointOfQuery = date_create();
 
-        // TODO: limit to 2mins
-        $uniqueUUIDS = $connection->query("SELECT DISTINCT SUBSTR(hostname, 0, 37) `uuid` FROM nameserver_queue;")->fetchAll();
+        switch ($testType->getRules()->getRelationalKey()) {
+            case TestTypeRules::RELATIONAL_KEY_HOSTNAME:
 
-        foreach ($uniqueUUIDS as $UUID) {
+                $twoMinsAgo = date_create()->sub(new DateInterval("PT2M"))->format("Y-m-d H:i:s");
+                $uniqueUUIDS = $connection->query("SELECT DISTINCT SUBSTR(hostname, 0, 37) `uuid` FROM nameserver_queue WHERE `date` > '{$twoMinsAgo}';")->fetchAll();
 
-            $UUID = $UUID["uuid"];
+                foreach ($uniqueUUIDS as $UUID) {
+                    $UUID = $UUID["uuid"];
 
-            // Has it been dealt with?
-            if ($connection->query("SELECT * FROM combined_log WHERE `dnsResolvedHostname1` LIKE '$UUID%'")->fetchAll()) {
-                continue;
-            }
+                    // Has it been dealt with?
+                    for ($i = 1; $i < $expectedNSQueries + 1; $i++) {
+                        if ($connection->query("SELECT * FROM combined_log WHERE `dnsResolvedHostname$i` LIKE '$UUID%'")->fetchAll()) {
+                            continue 2;
+                        }
+                    }
 
-            // Get all matching nameserver logs2
-            $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE `hostname` LIKE '$UUID%' ORDER BY `date`")->fetchAll();
+                    // Get the matching logs
+                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE `hostname` LIKE '$UUID%' ORDER BY `date`")->fetchAll();
 
-            // Check if not timed out
-            if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
-                continue;
-            }
+                    // Check if not timed out
+                    if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
+                        continue;
+                    }
 
-            // Run the validation
-            $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
+                    // Run the validation
+                    $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
 
-            $status = $validation[1] ? "Success" : "Failed";
+                    $status = $validation[1] ? "Success" : "Failed";
 
-            // ToDo: Call validateWebserverLogs() on matching logs, and add to write combined
+                    // ToDo: Call validateWebserverLogs() on matching logs, and add to write combined
 
-            $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [
-                ["hostname" => "", "date" => date("Y-m-d H:i:s"), "ip_address" => "192.0.2.2", "user_agent" => "", "status_code" => 200]
-            ], $validation[0], $status);
+                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [
+                        ["hostname" => "", "date" => date("Y-m-d H:i:s"), "ip_address" => "192.0.2.2", "user_agent" => "", "status_code" => 200]
+                    ], $validation[0], $status);
+                }
+                break;
+
+            case TestTypeRules::RELATIONAL_KEY_IP_ADDRESS:
+
+                $twoMinsAgo = date_create()->sub(new DateInterval("PT2M"))->format("Y-m-d H:i:s");
+                $uniqueIPs = $connection->query("SELECT DISTINCT ip_address FROM nameserver_queue WHERE `date` > '{$twoMinsAgo}';")->fetchAll();
+
+                foreach ($uniqueIPs as $ipAddress) {
+
+                    // Has it been dealt with?
+                    for ($i = 1; $i < $expectedNSQueries + 1; $i++) {
+                        // Limit time?
+                        if ($connection->query("SELECT * FROM combined_log WHERE `dnsResolvedIPAddress$i` = '$ipAddress'")->fetchAll()) {
+                            continue 2;
+                        }
+                    }
+
+                    // Get the matching logs
+                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE 'ip_address' = '$ipAddress' ORDER BY `date`")->fetchAll();
+
+                    // Check if not timed out
+                    if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
+                        continue;
+                    }
+
+                    // Run the validation
+                    $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
+
+                    $status = $validation[1] ? "Success" : "Failed";
+
+                    // ToDo: Call validateWebserverLogs() on matching logs, and add to write combined
+
+                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [
+                        ["hostname" => "", "date" => date("Y-m-d H:i:s"), "ip_address" => "192.0.2.2", "user_agent" => "", "status_code" => 200]
+                    ], $validation[0], $status);
+                }
+                break;
 
         }
 
