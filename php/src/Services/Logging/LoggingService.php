@@ -268,7 +268,7 @@ class LoggingService {
                     }
 
                     // Get the matching logs
-                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE ip_address = '$ipAddress' ORDER BY `date`")->fetchAll();
+                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE ip_address = '$ipAddress' AND 'date' > '$oneMinAgo' ORDER BY `date`")->fetchAll();
 
                     // Check if not timed out
                     if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
