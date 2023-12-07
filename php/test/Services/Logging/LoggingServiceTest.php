@@ -315,7 +315,7 @@ class LoggingServiceTest extends TestBase {
 
     }
 
-    public function testCanCompareLogsCorrectly() {
+    public function testCanCompareLogsCorrectlyWhenRelationalKeyIsHostname() {
 
         if (file_exists(Configuration::readParameter("storage.root") . "/logs/compareTest.db")) {
             unlink(Configuration::readParameter("storage.root") . "/logs/compareTest.db");
@@ -443,6 +443,186 @@ class LoggingServiceTest extends TestBase {
             'dnsResolvedHostname1' => '9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com',
             'dnsClientIpAddress1' => '192.0.2.10',
             'dnsResolverQuery1' => 'A IN 9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com',
+            'dnsResolutionTime2' => null,
+            'dnsResolvedHostname2' => null,
+            'dnsClientIpAddress2' => null,
+            'dnsResolverQuery2' => null,
+            'dnsResolutionTime3' => null,
+            'dnsResolvedHostname3' => null,
+            'dnsClientIpAddress3' => null,
+            'dnsResolverQuery3' => null,
+            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
+            'webServerRequestHostname1' => '',
+            'webServerClientIpAddress1' => '192.0.2.2',
+            'webServerResponseCode1' => 200,
+            'webServerRequestTime2' => null,
+            'webServerRequestHostname2' => null,
+            'webServerClientIpAddress2' => null,
+            'webServerResponseCode2' => null
+        ], $nextRow);
+
+        $this->assertNull($outputLogs->nextRow());
+    }
+
+
+    public function testCanCompareLogsCorrectlyWhenRelationalKeyIsIpAddress() {
+
+        if (file_exists(Configuration::readParameter("storage.root") . "/logs/compareTest.db")) {
+            unlink(Configuration::readParameter("storage.root") . "/logs/compareTest.db");
+        }
+
+        $connection = new SQLite3DatabaseConnection([
+            "filename" => Configuration::readParameter("storage.root") . "/logs/compareTest.db"
+        ]);
+
+        $now = date("Y-m-d H:i:s");
+        $oneSecAgo = date_create()->sub(new \DateInterval("PT1S"));
+        $twoSecAgo = date_create()->sub(new \DateInterval("PT2S"));
+        $fiveSecAgo = date_create()->sub(new \DateInterval("PT5S"));
+        $tenSecAgo = date_create()->sub(new \DateInterval("PT10S"));
+
+        // Create test data
+        $nameServerLogs = [
+            new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.0", 22813, "A IN this.test.com", "A", ""),         // A - timed out, expected query
+            new NameserverLog("that.test.com", $fiveSecAgo, "192.0.2.0", 22813, "AAAA IN that.test.com", "AAAA", ""),  // A - other expected query
+            new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.1", 22814, "A IN this.test.com", "A", ""),         // B - same as A, but different IP
+            new NameserverLog("that.test.com", $fiveSecAgo, "192.0.2.1", 22814, "AAAA IN that.test.com", "AAAA", ""),  // B - same as A, but different IP
+            new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.8", 22815, "A IN this.test.com", "A", ""),        // C - timed out, expected query
+            new NameserverLog("other.test.com", $twoSecAgo, "192.0.2.8", 22815, "A IN other.test.com", "A", ""),         // C - should be absent
+            new NameserverLog("that.test.com", $oneSecAgo, "192.0.2.8", 22815, "AAAA IN that.test.com", "AAAA", ""),   // C - expected query
+            new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.10", 22816, "A IN this.test.com", "A", ""),        // D - timed out, expected query
+            new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.12", 22817, "A IN this.test.com", "A", ""),        // E - not yet timed out
+            new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.0", 22817, "A IN this.test.com", "A", ""),        // F - same as A
+            new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.0", 22817, "A IN this.test.com", "A", ""),        // F - same as A
+
+        ];
+
+        // ToDo: Make some corresponding webserver logs and add to assertions
+        $webServerLogs = [
+
+        ];
+
+        // Mockery
+        $test = MockObjectProvider::instance()->getMockInstance(Test::class);
+        $testType = MockObjectProvider::instance()->getMockInstance(TestType::class);
+        $this->configService->returnValue("isClientIpAddressLogging", true, []);
+
+        // Rules for the logging
+        $testTypeRules = new TestTypeRules(new TestTypeDNSRules([
+            new TestTypeExpectedQuery("A", "this.test.com"),
+            new TestTypeExpectedQuery("AAAA", "that.test.com"),
+            new TestTypeExpectedQuery("A", "other.test.com", null, true)
+        ]), new TestTypeWebServerRules(2), true, TestTypeRules::RELATIONAL_KEY_IP_ADDRESS, 3);
+
+        $this->testTypeManager->returnValue("getTestTypeForTest", $testType, [$test]);
+        $test->returnValue("getKey", "compareTest", []);
+        $testType->returnValue("getRules", $testTypeRules, []);
+
+        // Create DB and insert test data
+        $this->loggingService->createLogDatabaseForTest($test);
+
+        foreach ($nameServerLogs as $nameServerLog) {
+            $this->loggingService->saveLog($nameServerLog, "compareTest");
+        }
+        foreach ($webServerLogs as $webServerLog) {
+            $this->loggingService->saveLog($webServerLog, "compareTest");
+        }
+        $this->loggingService->compareLogsForTest($test);
+
+        $outputLogs = $connection->query("SELECT * FROM combined_log;");
+
+        $this->assertEquals([
+            'id' => 1,
+            'date' => $now,
+            'status' => 'Success',
+            'dnsResolutionTime1' => $tenSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname1' => 'this.test.com',
+            'dnsClientIpAddress1' => '192.0.2.0',
+            'dnsResolverQuery1' => 'A IN this.test.com',
+            'dnsResolutionTime2' => $fiveSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname2' => 'that.test.com',
+            'dnsClientIpAddress2' => '192.0.2.0',
+            'dnsResolverQuery2' => 'AAAA IN that.test.com',
+            'dnsResolutionTime3' => null,
+            'dnsResolvedHostname3' => null,
+            'dnsClientIpAddress3' => null,
+            'dnsResolverQuery3' => null,
+            'webServerRequestTime1' => $now,
+            'webServerRequestHostname1' => '',
+            'webServerClientIpAddress1' => '192.0.2.2',
+            'webServerResponseCode1' => 200,
+            'webServerRequestTime2' => null,
+            'webServerRequestHostname2' => null,
+            'webServerClientIpAddress2' => null,
+            'webServerResponseCode2' => null
+        ], $outputLogs->nextRow());
+
+        $nextRow = $outputLogs->nextRow();
+        $this->assertEquals([
+            'id' => 2,
+            'date' => $nextRow["date"],
+            'status' => 'Success',
+            'dnsResolutionTime1' => $tenSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname1' => 'this.test.com',
+            'dnsClientIpAddress1' => '192.0.2.1',
+            'dnsResolverQuery1' => 'A IN this.test.com',
+            'dnsResolutionTime2' => $fiveSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname2' => 'that.test.com',
+            'dnsClientIpAddress2' => '192.0.2.1',
+            'dnsResolverQuery2' => 'AAAA IN that.test.com',
+            'dnsResolutionTime3' => null,
+            'dnsResolvedHostname3' => null,
+            'dnsClientIpAddress3' => null,
+            'dnsResolverQuery3' => null,
+            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
+            'webServerRequestHostname1' => '',
+            'webServerClientIpAddress1' => '192.0.2.2',
+            'webServerResponseCode1' => 200,
+            'webServerRequestTime2' => null,
+            'webServerRequestHostname2' => null,
+            'webServerClientIpAddress2' => null,
+            'webServerResponseCode2' => null
+        ], $nextRow);
+
+        $nextRow = $outputLogs->nextRow();
+
+        $this->assertEquals([
+            'id' => 3,
+            'date' => $nextRow['date'],
+            'status' => 'Failed',
+            'dnsResolutionTime1' => $tenSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname1' => 'this.test.com',
+            'dnsClientIpAddress1' => '192.0.2.8',
+            'dnsResolverQuery1' => 'A IN this.test.com',
+            'dnsResolutionTime2' => $oneSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname2' => 'that.test.com',
+            'dnsClientIpAddress2' => '192.0.2.8',
+            'dnsResolverQuery2' => 'AAAA IN that.test.com',
+            'dnsResolutionTime3' => $twoSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname3' => "other.test.com",
+            'dnsClientIpAddress3' => "192.0.2.8",
+            'dnsResolverQuery3' => "A IN other.test.com",
+            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
+            'webServerRequestHostname1' => '',
+            'webServerClientIpAddress1' => '192.0.2.2',
+            'webServerResponseCode1' => 200,
+            'webServerRequestTime2' => null,
+            'webServerRequestHostname2' => null,
+            'webServerClientIpAddress2' => null,
+            'webServerResponseCode2' => null
+        ], $nextRow);
+
+        $nextRow = $outputLogs->nextRow();
+
+
+        $this->assertEquals([
+            'id' => 4,
+            'date' => $nextRow['date'],
+            'status' => 'Failed',
+            'dnsResolutionTime1' => $tenSecAgo->format("Y-m-d H:i:s"),
+            'dnsResolvedHostname1' => 'this.test.com',
+            'dnsClientIpAddress1' => '192.0.2.10',
+            'dnsResolverQuery1' => 'A IN this.test.com',
             'dnsResolutionTime2' => null,
             'dnsResolvedHostname2' => null,
             'dnsClientIpAddress2' => null,

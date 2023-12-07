@@ -253,21 +253,22 @@ class LoggingService {
 
             case TestTypeRules::RELATIONAL_KEY_IP_ADDRESS:
 
+                $oneMinAgo = date_create()->sub(new DateInterval("PT1M"))->format("Y-m-d H:i:s");
                 $twoMinsAgo = date_create()->sub(new DateInterval("PT2M"))->format("Y-m-d H:i:s");
                 $uniqueIPs = $connection->query("SELECT DISTINCT ip_address FROM nameserver_queue WHERE `date` > '{$twoMinsAgo}';")->fetchAll();
 
                 foreach ($uniqueIPs as $ipAddress) {
+                    $ipAddress = $ipAddress["ip_address"];
 
                     // Has it been dealt with?
                     for ($i = 1; $i < $expectedNSQueries + 1; $i++) {
-                        // Limit time?
-                        if ($connection->query("SELECT * FROM combined_log WHERE `dnsResolvedIPAddress$i` = '$ipAddress'")->fetchAll()) {
+                        if ($connection->query("SELECT * FROM combined_log WHERE `dnsClientIpAddress$i` = '$ipAddress' AND 'date' > '$oneMinAgo'")->fetchAll()) {
                             continue 2;
                         }
                     }
 
                     // Get the matching logs
-                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE 'ip_address' = '$ipAddress' ORDER BY `date`")->fetchAll();
+                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE ip_address = '$ipAddress' ORDER BY `date`")->fetchAll();
 
                     // Check if not timed out
                     if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
