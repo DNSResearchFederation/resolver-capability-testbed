@@ -9,10 +9,9 @@ export default class TtlTestRunner extends TestTypeRunner {
 
     async runTest(domainName, additionalConfig?: any, testRunCallback?: any) {
 
-        let uuid10 = this.getUUID();
-        let uuid15 = this.getUUID();
-        let hostname10 = uuid10 + ".ttl10." + domainName;
-        let hostname15 = uuid15 + ".ttl15." + domainName;
+        let uuid = this.getUUID();
+        let hostname10 = uuid + ".ttl10." + domainName;
+        let hostname15 = uuid + ".ttl15." + domainName;
 
 
         this.doubleRequest(hostname10, additionalConfig, testRunCallback, 5000)

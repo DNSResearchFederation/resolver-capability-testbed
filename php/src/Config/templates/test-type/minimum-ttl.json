@@ -37,14 +37,24 @@
         },
         {
           "type": "A",
+          "value": "(?i)^[a-z0-9-]+\\.ttl10\\.[a-z]+\\.[a-z]+",
+          "absent": true
+        },
+        {
+          "type": "A",
           "value": "(?i)^[a-z0-9-]+\\.ttl15\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]+\\.ttl15\\.[a-z]+\\.[a-z]+",
+          "absent": true
         }
       ]
     },
     "webserver": {
-      "expectedQueries": 4
+      "expectedQueries": 2
     },
-    "webserverOptional": false,
+    "webserverOptional": true,
     "relationalKey": "HOSTNAME",
     "timeoutSeconds": 15
   }
