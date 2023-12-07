@@ -45,7 +45,7 @@
         }
       ]
     },
-    "relationalKey": "HOSTNAME_OR_IP",
+    "relationalKey": "HOSTNAME",
     "timeoutSeconds": 15
   }
 }

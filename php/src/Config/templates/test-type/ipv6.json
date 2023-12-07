@@ -50,7 +50,7 @@
       "expectedQueries": 2
     },
     "webserverOptional": true,
-    "relationalKey": "HOSTNAME_OR_IP",
+    "relationalKey": "HOSTNAME",
     "timeoutSeconds": 3
   }
 }

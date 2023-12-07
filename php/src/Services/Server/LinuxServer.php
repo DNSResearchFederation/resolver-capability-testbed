@@ -162,7 +162,7 @@ class LinuxServer implements Server {
 
         $dnssecConfig = $config->getDnsSecConfig();
 
-        $model = [];
+        $model = ["now" => date("YmdH")];
 
         $domainName = $config->getDomainName();
 

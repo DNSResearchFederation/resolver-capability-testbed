@@ -85,7 +85,7 @@ abstract class BaseLog {
             case TestTypeRules::RELATIONAL_KEY_HOSTNAME:
                 return $this->getHostname();
 
-            case TestTypeRules::RELATIONAL_KEY_HOSTNAME_LEAF:
+            case TestTypeRules::RELATIONAL_KEY_IP_ADDRESS:
                 $hostname = $this->getHostname();
                 $components = explode(".", $hostname);
                 $hostnameLeaf = implode(".", array_slice($components, -3));

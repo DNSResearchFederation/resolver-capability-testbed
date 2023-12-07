@@ -33,7 +33,7 @@ class TestTypeRules {
     private $timeoutSeconds = 5;
 
     const RELATIONAL_KEY_HOSTNAME = "HOSTNAME";
-    const RELATIONAL_KEY_HOSTNAME_LEAF = "HOSTNAME_LEAF";
+    const RELATIONAL_KEY_IP_ADDRESS = "IPADDRESS";
 
     /**
      * @param TestTypeDNSRules $dns

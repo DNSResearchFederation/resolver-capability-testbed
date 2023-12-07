@@ -51,7 +51,7 @@
       "expectedQueries": 2
     },
     "webserverOptional": false,
-    "relationalKey": "HOSTNAME",
+    "relationalKey": "IPADDRESS",
     "timeoutSeconds": 3
   }
 }

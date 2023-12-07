@@ -64,7 +64,7 @@ class LinuxServerTest extends TestCase {
         $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
 
         $this->assertTrue(file_exists($path));
-        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux.com"), file_get_contents($path));
+        $this->assertEquals(str_replace("NOW", date("YmdH"), file_get_contents(__DIR__ . "/test-bind-linux.com")), file_get_contents($path));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -91,7 +91,7 @@ class LinuxServerTest extends TestCase {
 
         $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
         $this->assertTrue(file_exists($path));
-        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($path));
+        $this->assertEquals(str_replace("NOW", date("YmdH"), file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com")), file_get_contents($path));
 
         $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($signedPath));
@@ -130,7 +130,7 @@ class LinuxServerTest extends TestCase {
         $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
 
         $this->assertTrue(file_exists($path));
-        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($path));
+        $this->assertEquals(str_replace("NOW", date("YmdH"), file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com")), file_get_contents($path));
 
         $unsignedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.unsigned";
         $this->assertFalse(file_exists($unsignedPath));
@@ -163,7 +163,7 @@ class LinuxServerTest extends TestCase {
 
         $zonePath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($zonePath));
-        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($zonePath));
+        $this->assertEquals(str_replace("NOW", date("YmdH"), file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com")), file_get_contents($zonePath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -194,7 +194,7 @@ class LinuxServerTest extends TestCase {
 
         $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
         $this->assertTrue(file_exists($path));
-        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec-nsec.com"), file_get_contents($path));
+        $this->assertEquals(str_replace("NOW", date("YmdH"), file_get_contents(__DIR__ . "/test-bind-linux-dnssec-nsec.com")), file_get_contents($path));
 
         $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($signedPath));
@@ -228,7 +228,7 @@ class LinuxServerTest extends TestCase {
 
         $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
         $this->assertTrue(file_exists($path));
-        $this->assertEquals(file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com"), file_get_contents($path));
+        $this->assertEquals(str_replace("NOW", date("YmdH"), file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com")), file_get_contents($path));
 
         $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($signedPath));

@@ -90,15 +90,25 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "(?i)^capability\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "prefix": "unsigned-",
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+        },
+        {
+          "prefix": "unvalidated-",
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
         }
       ]
     },
     "webserver": {
-      "expectedQueries": 1
+      "expectedQueries": 2
     },
     "webserverOptional": false,
-    "relationalKey": "HOSTNAME_OR_IPADDRESS",
+    "relationalKey": "HOSTNAME",
     "timeoutSeconds": 3
   }
 }

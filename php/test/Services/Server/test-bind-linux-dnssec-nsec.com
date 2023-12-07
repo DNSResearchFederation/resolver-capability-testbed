@@ -1,6 +1,6 @@
 $ORIGIN testdomain.com.
 @   3600 SOA  ns1.testdomain.com.  hostmaster.testdomain.com. (
-        2023061509        ; serial number
+        NOW        ; serial number
         3600              ; refresh period
         600               ; retry period
         604800            ; expire time
