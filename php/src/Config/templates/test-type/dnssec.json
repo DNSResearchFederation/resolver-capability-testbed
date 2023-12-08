@@ -105,7 +105,7 @@
       ]
     },
     "webserver": {
-      "expectedQueries": 2
+      "expectedQueries": 1
     },
     "webserverOptional": false,
     "relationalKey": "HOSTNAME",

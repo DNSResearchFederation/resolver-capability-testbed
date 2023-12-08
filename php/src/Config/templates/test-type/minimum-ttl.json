@@ -52,9 +52,9 @@
       ]
     },
     "webserver": {
-      "expectedQueries": 2
+      "expectedQueries": 4
     },
-    "webserverOptional": true,
+    "webserverOptional": false,
     "relationalKey": "HOSTNAME",
     "timeoutSeconds": 15
   }
