@@ -13,7 +13,7 @@
             "data": "IPV4_ADDRESS"
           }
         ],
-        "nameservers": "DEFAULT"
+        "nameserverSet": "DEFAULT"
       },
       {
         "prefix": "",
@@ -25,14 +25,21 @@
             "data": "IPV4_ADDRESS"
           }
         ],
-        "nameservers": "NAMESERVERS_SET"
+        "nameserverSet": "NAMESERVERS_SET"
       }
     ],
-    "webVirtualHost": {
-      "wildcard": true,
-      "content": "OK",
-      "prefix": ""
-    }
+    "webVirtualHosts": [
+      {
+        "wildcard": true,
+        "content": "OK",
+        "prefix": ""
+      },
+      {
+        "prefix": "ipv4-",
+        "wildcard": true,
+        "content": "OK"
+      }
+    ]
   },
   "rules": {
     "dns": {

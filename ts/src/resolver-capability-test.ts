@@ -14,7 +14,7 @@ export default class ResolverCapabilityTest {
         "qname-minimisation": new SingleHostQueryTestRunner(1, "qname.resolver.capability"),
         "minimum-ttl": new TtlTestRunner(),
         "dnssec": new DNSSECHostQueryTestRunner(),
-        "tcp-fallback": new SingleHostQueryTestRunner(),
+        "tcp-fallback": new SingleHostQueryTestRunner(1, "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab"),
         "aggressive-nsec": new NSECHostQueryTestRunner()
     };
 
