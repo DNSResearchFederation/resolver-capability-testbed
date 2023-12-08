@@ -9,13 +9,13 @@
       "records": [
         {
           "prefix": "apples",
-          "ttl": 60,
+          "ttl": 1,
           "type": "A",
           "data": "IPV4_ADDRESS"
         },
         {
           "prefix": "pears",
-          "ttl": 60,
+          "ttl": 1,
           "type": "A",
           "data": "IPV4_ADDRESS"
         }

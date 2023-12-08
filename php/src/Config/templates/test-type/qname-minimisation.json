@@ -44,10 +44,6 @@
         }
       ]
     },
-    "webserver": {
-      "expectedQueries": 1
-    },
-    "webserverOptional": false,
     "relationalKey": "IPADDRESS",
     "timeoutSeconds": 3
   }

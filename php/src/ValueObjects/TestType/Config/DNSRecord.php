@@ -28,16 +28,25 @@ class DNSRecord {
     private $data;
 
     /**
+     * @var boolean
+     */
+    private $anchor;
+
+
+
+    /**
      * @param string $prefix
      * @param int $ttl
      * @param string $type
      * @param string $data
+     * @param boolean $anchor
      */
-    public function __construct($prefix, $ttl, $type, $data) {
+    public function __construct($prefix, $ttl, $type, $data, $anchor = false) {
         $this->prefix = $prefix;
         $this->ttl = $ttl;
         $this->type = $type;
         $this->data = $data;
+        $this->anchor = $anchor;
     }
 
     /**
@@ -101,5 +110,21 @@ class DNSRecord {
     public function setData($data) {
         $this->data = $data;
     }
+
+    /**
+     * @return bool
+     */
+    public function isAnchor() {
+        return $this->anchor;
+    }
+
+    /**
+     * @param bool $anchor
+     */
+    public function setAnchor($anchor) {
+        $this->anchor = $anchor;
+    }
+
+
 
 }
