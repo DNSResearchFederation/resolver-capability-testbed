@@ -95,18 +95,18 @@ class LoggingServiceTest extends TestBase {
             unlink($path . "/ourKey.db");
         }
 
-        $sampleNameserverLog1 = new NameserverLog("12345.test.com", date_create("2023-06-07"), "1.2.3.4", 50, "12345.test.com IN A", "A", "-E(0)D");
-        $sampleNameserverLog2 = new NameserverLog("56789.test.com", date_create("2023-06-07"), "1.2.3.4", 50, "56789.test.com IN AAAA", "AAAA", "-E(0)D");
-        $sampleNameserverLog3 = new NameserverLog("76543.prefix-test.com", date_create("2023-06-07"), "1.2.3.4", 50, "76543.prefix-test.com IN A", "A", "-E(0)D");
-        $sampleNameserverLog4 = new NameserverLog("01234.subdomain.test.com", date_create("2023-06-07"), "5.6.7.8", 50, "01234.subdomain.test.com IN A", "A", "-E(0)D");
-        $sampleNameserverLog5 = new NameserverLog("67890.subdomain.test.com", date_create("2023-06-07"), "5.6.7.8", 50, "67890.subdomain.test.com IN AAAA", "AAAA", "-E(0)D");
+        $sampleNameserverLog1 = new NameserverLog("08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", date_create("2023-06-07"), "1.2.3.4", 50, "08dd00f2-7ead-474d-9008-aca9c51d4071.test.com IN A", "A", "-E(0)D");
+        $sampleNameserverLog2 = new NameserverLog("9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com", date_create("2023-06-07"), "1.2.3.4", 50, "9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com IN AAAA", "AAAA", "-E(0)D");
+        $sampleNameserverLog3 = new NameserverLog("16ba5fa0-7ffd-499a-9832-9770f80e4c30.prefix-test.com", date_create("2023-06-07"), "1.2.3.4", 50, "16ba5fa0-7ffd-499a-9832-9770f80e4c30.prefix-test.com IN A", "A", "-E(0)D");
+        $sampleNameserverLog4 = new NameserverLog("8E1e4931-173C-4E3E-987E-4f893FB4B982.subdomain.test.com", date_create("2023-06-07"), "5.6.7.8", 50, "8E1e4931-173C-4E3E-987E-4f893FB4B982.subdomain.test.com IN A", "A", "-E(0)D");
+        $sampleNameserverLog5 = new NameserverLog("5bd1f2b9-8447-4225-a906-2073f7d63e2a.subdomain.test.com", date_create("2023-06-07"), "5.6.7.8", 50, "5bd1f2b9-8447-4225-a906-2073f7d63e2a.subdomain.test.com IN AAAA", "AAAA", "-E(0)D");
 
         $sampleTest = new Test("ourKey", "testType", "test.com");
 
         $sampleTestType = new TestType("testType", "", null, new TestTypeRules(new TestTypeDNSRules([
-            new TestTypeExpectedQuery("A", "(?i)^[0-9]+\\.[a-z]+\\.[a-z]+$"),
+            new TestTypeExpectedQuery("A", "(?i)^[a-z0-9-]{36}\.[a-z]+\.[a-z]+$"),
             new TestTypeExpectedQuery("A", null, "prefix-"),
-            new TestTypeExpectedQuery("AAAA", "(?i)^[0-9]+\\.subdomain\\.[a-z]+\\.[a-z]+$")
+            new TestTypeExpectedQuery("AAAA", "(?i)^[a-z0-9-]{36}\\.subdomain\.[a-z]+\\.[a-z]+$")
         ]), new TestTypeWebServerRules(1), false, "HOSTNAME", null));
 
         $this->server->returnValue("processLog", $sampleNameserverLog1, ["logString1", Server::SERVICE_NAMESERVER]);
@@ -115,11 +115,11 @@ class LoggingServiceTest extends TestBase {
         $this->server->returnValue("processLog", $sampleNameserverLog4, ["logString4", Server::SERVICE_NAMESERVER]);
         $this->server->returnValue("processLog", $sampleNameserverLog5, ["logString5", Server::SERVICE_NAMESERVER]);
 
-        $this->testService->returnValue("getTestByHostname", $sampleTest, ["12345.test.com"]);
-        $this->testService->returnValue("getTestByHostname", $sampleTest, ["56789.test.com"]);
-        $this->testService->returnValue("getTestByHostname", $sampleTest, ["76543.prefix-test.com"]);
-        $this->testService->returnValue("getTestByHostname", $sampleTest, ["01234.subdomain.test.com"]);
-        $this->testService->returnValue("getTestByHostname", $sampleTest, ["67890.subdomain.test.com"]);
+        $this->testService->returnValue("getTestByHostname", $sampleTest, ["08dd00f2-7ead-474d-9008-aca9c51d4071.test.com"]);
+        $this->testService->returnValue("getTestByHostname", $sampleTest, ["9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com"]);
+        $this->testService->returnValue("getTestByHostname", $sampleTest, ["16ba5fa0-7ffd-499a-9832-9770f80e4c30.prefix-test.com"]);
+        $this->testService->returnValue("getTestByHostname", $sampleTest, ["8E1e4931-173C-4E3E-987E-4f893FB4B982.subdomain.test.com"]);
+        $this->testService->returnValue("getTestByHostname", $sampleTest, ["5bd1f2b9-8447-4225-a906-2073f7d63e2a.subdomain.test.com"]);
 
         $this->testTypeManager->returnValue("getTestTypeForTest", $sampleTestType, [$sampleTest]);
 
@@ -139,33 +139,33 @@ class LoggingServiceTest extends TestBase {
         $this->assertEquals([
             'ip_address' => '1.2.3.4',
             'port' => 50,
-            'request' => '12345.test.com IN A',
+            'request' => '08dd00f2-7ead-474d-9008-aca9c51d4071.test.com IN A',
             'record_type' => 'A',
             'flags' => '-E(0)D',
             'id' => 1,
-            'hostname' => '12345.test.com',
+            'hostname' => '08dd00f2-7ead-474d-9008-aca9c51d4071.test.com',
             'date' => '2023-06-07 00:00:00'
         ], $nameserverResultSet->nextRow());
 
         $this->assertEquals([
             'ip_address' => '1.2.3.4',
             'port' => 50,
-            'request' => '76543.prefix-test.com IN A',
+            'request' => '16ba5fa0-7ffd-499a-9832-9770f80e4c30.prefix-test.com IN A',
             'record_type' => 'A',
             'flags' => '-E(0)D',
             'id' => 2,
-            'hostname' => '76543.prefix-test.com',
+            'hostname' => '16ba5fa0-7ffd-499a-9832-9770f80e4c30.prefix-test.com',
             'date' => '2023-06-07 00:00:00'
         ], $nameserverResultSet->nextRow());
 
         $this->assertEquals([
             'ip_address' => '5.6.7.8',
             'port' => 50,
-            'request' => '67890.subdomain.test.com IN AAAA',
+            'request' => '5bd1f2b9-8447-4225-a906-2073f7d63e2a.subdomain.test.com IN AAAA',
             'record_type' => 'AAAA',
             'flags' => '-E(0)D',
             'id' => 3,
-            'hostname' => '67890.subdomain.test.com',
+            'hostname' => '5bd1f2b9-8447-4225-a906-2073f7d63e2a.subdomain.test.com',
             'date' => '2023-06-07 00:00:00'
         ], $nameserverResultSet->nextRow());
 

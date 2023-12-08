@@ -225,6 +225,11 @@ class LoggingService {
                 foreach ($uniqueUUIDS as $UUID) {
                     $UUID = $UUID["uuid"];
 
+                    // Ensure it is of correct UUID format
+                    if (!preg_match("/(?i)^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/", $UUID)) {
+                        continue;
+                    }
+
                     // Has it been dealt with?
                     for ($i = 1; $i < $expectedNSQueries + 1; $i++) {
                         if ($connection->query("SELECT * FROM combined_log WHERE `dnsResolvedHostname$i` LIKE '$UUID%'")->fetchAll()) {
