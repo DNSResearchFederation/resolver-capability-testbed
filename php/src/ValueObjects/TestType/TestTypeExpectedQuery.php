@@ -25,16 +25,23 @@ class TestTypeExpectedQuery {
      */
     private $absent;
 
+
+    /**
+     * @var bool
+     */
+    private $anchor;
+
     /**
      * @param string $type
      * @param string $value
      * @param bool $absent
      */
-    public function __construct($type = null, $value = null, $prefix = null, $absent = false) {
+    public function __construct($type = null, $value = null, $prefix = null, $absent = false, $anchor = false) {
         $this->type = $type;
         $this->value = $value;
         $this->prefix = $prefix;
         $this->absent = $absent;
+        $this->anchor = $anchor;
     }
 
     /**
@@ -85,6 +92,14 @@ class TestTypeExpectedQuery {
      */
     public function setAbsent($absent) {
         $this->absent = $absent;
+    }
+
+    public function isAnchor() {
+        return $this->anchor;
+    }
+
+    public function setAnchor($anchor) {
+        $this->anchor = $anchor;
     }
 
 }

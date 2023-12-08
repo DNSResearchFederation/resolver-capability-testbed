@@ -34,11 +34,13 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "(?i)^apples\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^apples\\.[a-z]+\\.[a-z]+",
+          "anchor": true
         },
         {
           "type": "A",
-          "value": "(?i)^pears\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^pears\\.[a-z]+\\.[a-z]+",
+          "anchor": true
         },
         {
           "type": "A",

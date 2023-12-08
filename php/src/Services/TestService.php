@@ -107,7 +107,7 @@ class TestService {
 
     /**
      * @param $test Test
-     * @return void
+     * @return Test
      */
     public function createTest($test) {
 

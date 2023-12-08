@@ -247,6 +247,12 @@ class LoggingService {
 
                     // Run the validation
                     $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
+
+                    // Ignore if anchor queries absent
+                    if ($validation[2]) {
+                        continue;
+                    }
+
                     $dnsPassed = $validation[1];
 
                     // Do webserver log validation if required
@@ -349,6 +355,10 @@ class LoggingService {
                 }
             }
 
+            if ($expectedQuery->isAnchor() && !$matched) {
+                return [null,null,true];
+            }
+
             if (!$matched && !$expectedQuery->isAbsent()) {
                 $matchedLogs[] = ["ip_address" => null, "port" => null, "request" => null, "record_type" => null, "flags" => null, "id" => null, "hostname" => null, "date" => null];
                 $passed = false;
@@ -356,7 +366,7 @@ class LoggingService {
 
         }
 
-        return [$matchedLogs, $passed];
+        return [$matchedLogs, $passed, false];
 
     }
 
