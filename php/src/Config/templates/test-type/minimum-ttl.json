@@ -33,20 +33,20 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.ttl10\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.ttl10\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.ttl10\\.[a-z]+\\.[a-z]+",
+          "value": "(?i)^[a-z0-9-]{36}\\.ttl10\\.[a-z]+\\.[a-z]+",
           "absent": true
         },
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.ttl15\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.ttl15\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.ttl15\\.[a-z]+\\.[a-z]+",
+          "value": "(?i)^[a-z0-9-]{36}\\.ttl15\\.[a-z]+\\.[a-z]+",
           "absent": true
         }
       ]

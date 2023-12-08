@@ -37,11 +37,11 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab\\.[a-z]+\\.[a-z]+"
         },
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab\\.[a-z]+\\.[a-z]+"
         }
       ]
     },

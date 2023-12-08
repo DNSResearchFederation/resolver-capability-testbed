@@ -38,11 +38,12 @@
     "dns": {
       "expectedQueries": [
         {
-          "type": "A"
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]{36}\\.[a-z]+\\.[a-z]+"
         },
         {
-          "prefix": "ipv4-",
-          "type": "A"
+          "type": "A",
+          "value": "(?i)^[a-z0-9-]{36}\\.ipv4-[a-z]+\\.[a-z]+"
         }
       ]
     },

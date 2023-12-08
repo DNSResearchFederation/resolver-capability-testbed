@@ -40,7 +40,7 @@
         },
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.qname\\.resolver\\.capability\\.[a-z]+\\.[a-z]+"
         }
       ]
     },

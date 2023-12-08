@@ -90,17 +90,15 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.[a-z]+\\.[a-z]+"
         },
         {
-          "prefix": "unsigned-",
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.unsigned-[a-z]+\\.[a-z]+"
         },
         {
-          "prefix": "unvalidated-",
           "type": "A",
-          "value": "(?i)^[a-z0-9-]+\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.unvalidated-[a-z]+\\.[a-z]+"
         }
       ]
     },
