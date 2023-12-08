@@ -6,6 +6,7 @@ use DateInterval;
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
+use Kinikit\Core\Logging\Logger;
 use Kinikit\Core\Reflection\ClassInspectorProvider;
 use Kinikit\Persistence\Database\Generator\TableDDLGenerator;
 use Kinikit\Persistence\Database\ResultSet\ResultSet;
@@ -299,6 +300,11 @@ class LoggingService {
 
                     // Run the validation
                     $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns(), true);
+
+                    // Ignore if anchor queries absent
+                    if ($validation[2]) {
+                        continue;
+                    }
 
                     $status = $validation[1] ? "Success" : "Failed";
 
