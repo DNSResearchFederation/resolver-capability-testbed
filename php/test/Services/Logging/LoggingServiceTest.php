@@ -227,7 +227,7 @@ class LoggingServiceTest extends TestBase {
             new TestTypeExpectedQuery("AAAA")
         ]);
 
-        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules);
+        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules, true);
         $expectedMatches = [
             ["hostname" => "123456789.test.com", "date" => "", "ip_address" => "", "port" => "", "request" => "", "record_type" => "A", "flags" => ""],
             ["hostname" => "123456789.other-test.com", "date" => "", "ip_address" => "", "port" => "", "request" => "", "record_type" => "A", "flags" => ""],
@@ -255,7 +255,7 @@ class LoggingServiceTest extends TestBase {
             new TestTypeExpectedQuery("AAAA", null, "other-", true)
         ]);
 
-        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules);
+        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules, true);
         $expectedMatches = [
             ["hostname" => "123456789.test.com", "date" => "", "ip_address" => "", "port" => "", "request" => "", "record_type" => "A", "flags" => ""],
             ["hostname" => "123456789.other-test.com", "date" => "", "ip_address" => "", "port" => "", "request" => "", "record_type" => "A", "flags" => ""],
@@ -280,7 +280,7 @@ class LoggingServiceTest extends TestBase {
             new TestTypeExpectedQuery("A")
         ]);
 
-        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules);
+        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules, true);
         $expectedMatches = [
             ["hostname" => "123456789.test.com", "date" => "", "ip_address" => "", "port" => "", "request" => "", "record_type" => "A", "flags" => ""],
             ["hostname" => null, "date" => null, "ip_address" => null, "port" => null, "request" => null, "record_type" => null, "flags" => null, "id" => null],
@@ -304,7 +304,7 @@ class LoggingServiceTest extends TestBase {
             new TestTypeExpectedQuery("A")
         ]);
 
-        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules);
+        $matchedLogs = $this->loggingService->validateNameserverLogs($logs, $testRules, true);
         $expectedMatches = [
             ["hostname" => "123456789.test.com", "date" => "", "ip_address" => "192.0.2.0", "port" => "", "request" => "", "record_type" => "A", "flags" => ""],
             ["hostname" => "123456789.test.com", "date" => "", "ip_address" => "192.0.2.0", "port" => "", "request" => "", "record_type" => "A", "flags" => ""],

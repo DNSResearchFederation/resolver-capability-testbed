@@ -246,7 +246,7 @@ class LoggingService {
                     }
 
                     // Run the validation
-                    $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
+                    $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns(), false);
 
                     // Ignore if anchor queries absent
                     if ($validation[2]) {
@@ -298,7 +298,7 @@ class LoggingService {
                     }
 
                     // Run the validation
-                    $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns());
+                    $validation = $this->validateNameserverLogs($matchingLogs, $testType->getRules()->getDns(), true);
 
                     $status = $validation[1] ? "Success" : "Failed";
 
@@ -327,7 +327,7 @@ class LoggingService {
      * @param TestTypeDNSRules $rules
      * @return array|bool
      */
-    public function validateNameserverLogs($logs, $rules) {
+    public function validateNameserverLogs($logs, $rules, $matchOnIpAddress) {
 
         $matchedLogs = [];
         $ipAddress = $logs[0]["ip_address"];
@@ -336,7 +336,7 @@ class LoggingService {
         foreach ($rules->getExpectedQueries() as $expectedQuery) {
             $matched = false;
             foreach ($logs as $key => $log) {
-                if ($log["ip_address"] != $ipAddress) {
+                if ($matchOnIpAddress && $log["ip_address"] != $ipAddress) {
                     unset($logs[$key]);
                     continue;
                 }
