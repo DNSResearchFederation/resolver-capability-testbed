@@ -291,11 +291,7 @@ class LoggingService {
 
                     $status = $validation[1] ? "Success" : "Failed";
 
-                    // ToDo: Do we ever care in the IP Address case? If so, how to reconcile? No UUID to use.
-
-                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [
-                        ["hostname" => "", "date" => date("Y-m-d H:i:s"), "ip_address" => "192.0.2.2", "user_agent" => "", "status_code" => 200]
-                    ], $validation[0], $status);
+                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [], $validation[0], $status);
                 }
                 break;
 

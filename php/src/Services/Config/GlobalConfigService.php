@@ -5,7 +5,6 @@ namespace ResolverTest\Services\Config;
 use Kinikit\Core\Configuration\ConfigFile;
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
-use function PHPUnit\Framework\returnValue;
 
 class GlobalConfigService extends ConfigFile {
 

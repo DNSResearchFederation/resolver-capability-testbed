@@ -506,7 +506,7 @@ class LoggingServiceTest extends TestBase {
             new TestTypeExpectedQuery("A", "this.test.com"),
             new TestTypeExpectedQuery("AAAA", "that.test.com"),
             new TestTypeExpectedQuery("A", "other.test.com", null, true)
-        ]), new TestTypeWebServerRules(2), true, TestTypeRules::RELATIONAL_KEY_IP_ADDRESS, 3);
+        ]), null, true, TestTypeRules::RELATIONAL_KEY_IP_ADDRESS, 3);
 
         $this->testTypeManager->returnValue("getTestTypeForTest", $testType, [$test]);
         $test->returnValue("getKey", "compareTest", []);
@@ -540,15 +540,7 @@ class LoggingServiceTest extends TestBase {
             'dnsResolutionTime3' => null,
             'dnsResolvedHostname3' => null,
             'dnsClientIpAddress3' => null,
-            'dnsResolverQuery3' => null,
-            'webServerRequestTime1' => $now,
-            'webServerRequestHostname1' => '',
-            'webServerClientIpAddress1' => '192.0.2.2',
-            'webServerResponseCode1' => 200,
-            'webServerRequestTime2' => null,
-            'webServerRequestHostname2' => null,
-            'webServerClientIpAddress2' => null,
-            'webServerResponseCode2' => null
+            'dnsResolverQuery3' => null
         ], $outputLogs->nextRow());
 
         $nextRow = $outputLogs->nextRow();
@@ -567,15 +559,7 @@ class LoggingServiceTest extends TestBase {
             'dnsResolutionTime3' => null,
             'dnsResolvedHostname3' => null,
             'dnsClientIpAddress3' => null,
-            'dnsResolverQuery3' => null,
-            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
-            'webServerRequestHostname1' => '',
-            'webServerClientIpAddress1' => '192.0.2.2',
-            'webServerResponseCode1' => 200,
-            'webServerRequestTime2' => null,
-            'webServerRequestHostname2' => null,
-            'webServerClientIpAddress2' => null,
-            'webServerResponseCode2' => null
+            'dnsResolverQuery3' => null
         ], $nextRow);
 
         $nextRow = $outputLogs->nextRow();
@@ -595,15 +579,7 @@ class LoggingServiceTest extends TestBase {
             'dnsResolutionTime3' => $twoSecAgo->format("Y-m-d H:i:s"),
             'dnsResolvedHostname3' => "other.test.com",
             'dnsClientIpAddress3' => "192.0.2.8",
-            'dnsResolverQuery3' => "A IN other.test.com",
-            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
-            'webServerRequestHostname1' => '',
-            'webServerClientIpAddress1' => '192.0.2.2',
-            'webServerResponseCode1' => 200,
-            'webServerRequestTime2' => null,
-            'webServerRequestHostname2' => null,
-            'webServerClientIpAddress2' => null,
-            'webServerResponseCode2' => null
+            'dnsResolverQuery3' => "A IN other.test.com"
         ], $nextRow);
 
         $nextRow = $outputLogs->nextRow();
@@ -624,15 +600,7 @@ class LoggingServiceTest extends TestBase {
             'dnsResolutionTime3' => null,
             'dnsResolvedHostname3' => null,
             'dnsClientIpAddress3' => null,
-            'dnsResolverQuery3' => null,
-            'webServerRequestTime1' => $nextRow['webServerRequestTime1'],
-            'webServerRequestHostname1' => '',
-            'webServerClientIpAddress1' => '192.0.2.2',
-            'webServerResponseCode1' => 200,
-            'webServerRequestTime2' => null,
-            'webServerRequestHostname2' => null,
-            'webServerClientIpAddress2' => null,
-            'webServerResponseCode2' => null
+            'dnsResolverQuery3' => null
         ], $nextRow);
 
         $this->assertNull($outputLogs->nextRow());

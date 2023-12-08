@@ -4,7 +4,6 @@ namespace ResolverTest\Services\Server;
 
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
-use Kinikit\Core\Stream\File\ReadOnlyFileStream;
 use Kinikit\Core\Template\MustacheTemplateParser;
 use ResolverTest\Objects\Log\BaseLog;
 use ResolverTest\Objects\Log\NameserverLog;

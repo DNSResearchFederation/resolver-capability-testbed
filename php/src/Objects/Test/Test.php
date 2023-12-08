@@ -4,7 +4,6 @@ namespace ResolverTest\Objects\Test;
 
 use Kinikit\Persistence\ORM\ActiveRecord;
 use ResolverTest\Exception\InvalidDateFormatException;
-use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Exception\InvalidTestTypeException;
 use ResolverTest\Exception\NotEnoughTestParametersException;
 use ResolverTest\Exception\StartAfterExpiryException;

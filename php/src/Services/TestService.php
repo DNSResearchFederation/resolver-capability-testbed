@@ -2,14 +2,12 @@
 
 namespace ResolverTest\Services;
 
-use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Serialisation\JSON\JSONToObjectConverter;
 use Kinikit\Core\Serialisation\JSON\ObjectToJSONConverter;
 use Kinikit\Persistence\ORM\Exception\ObjectNotFoundException;
 use ResolverTest\Exception\InvalidConfigException;
 use ResolverTest\Exception\InvalidTestKeyException;
-use ResolverTest\Exception\InvalidTestStartDateException;
 use ResolverTest\Exception\NonExistentTestException;
 use ResolverTest\Exception\TestAlreadyExistsForDomainException;
 use ResolverTest\Objects\Test\Test;
