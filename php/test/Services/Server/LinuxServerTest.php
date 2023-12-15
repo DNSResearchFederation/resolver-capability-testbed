@@ -91,13 +91,14 @@ class LinuxServerTest extends TestCase {
 
         $path = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf.unsigned";
         $this->assertTrue(file_exists($path));
+        print_r(file_get_contents($path));
         $this->assertEquals(str_replace("NOW", date("YmdH"), file_get_contents(__DIR__ . "/test-bind-linux-dnssec.com")), file_get_contents($path));
 
         $signedPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($signedPath));
 
         $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
-        $this->assertEquals("-N INCREMENT -o testdomain.com -3 - $originalPath", file_get_contents($signedPath));
+        $this->assertEquals("-T 600 -N INCREMENT -o testdomain.com -3 - $originalPath", file_get_contents($signedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -200,7 +201,7 @@ class LinuxServerTest extends TestCase {
         $this->assertTrue(file_exists($signedPath));
 
         $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
-        $this->assertEquals("-N INCREMENT -o testdomain.com $originalPath", file_get_contents($signedPath));
+        $this->assertEquals("-T 600 -N INCREMENT -o testdomain.com $originalPath", file_get_contents($signedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -234,7 +235,7 @@ class LinuxServerTest extends TestCase {
         $this->assertTrue(file_exists($signedPath));
 
         $originalPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
-        $this->assertEquals("-N INCREMENT -o testdomain.com -3 - $originalPath", file_get_contents($signedPath));
+        $this->assertEquals("-T 600 -N INCREMENT -o testdomain.com -3 - $originalPath", file_get_contents($signedPath));
 
         $this->assertStringContainsString(file_get_contents(__DIR__ . "/test-bind-zones-linux"), file_get_contents(Configuration::readParameter("server.bind.zones.path")));
 
@@ -332,7 +333,7 @@ class LinuxServerTest extends TestCase {
         // Check DNSSEC activated.
         $bindPath = Configuration::readParameter("server.bind.config.dir") . "/testdomain.com.conf";
         $this->assertTrue(file_exists($bindPath));
-        $this->assertEquals("-N INCREMENT -o testdomain.com -3 - $bindPath", file_get_contents($bindPath));
+        $this->assertEquals("-T 600 -N INCREMENT -o testdomain.com -3 - $bindPath", file_get_contents($bindPath));
 
         // Check additional info as expected as we still want DS records
         $this->assertEquals(1, sizeof($additionalInfo));

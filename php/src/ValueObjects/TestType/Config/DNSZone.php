@@ -210,6 +210,9 @@ class DNSZone implements OperationConfig {
                         $record->setData($testParameterValues[$record->getData()]);
                     }
             }
+
+            // Substitute domain name literally
+            $record->setData(str_replace("DOMAIN_NAME", $this->domainName, rtrim($record->getData(), ".")));
         }
 
 

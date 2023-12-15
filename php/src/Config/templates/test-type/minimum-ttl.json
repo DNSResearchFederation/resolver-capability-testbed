@@ -1,6 +1,6 @@
 {
   "type": "minimum-ttl",
-  "description": "Minimum TTL Allowed",
+  "description": "Test whether resolvers observe TTL values supplied in DNS records and don't make additional requests",
   "config": {
     "dnsZone": {
       "records": [

@@ -51,6 +51,8 @@ class TestTypeManagerTest extends TestCase {
         $testTypeManager1 = new TestTypeManager();
         $expected = [
             "dnssec" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/dnssec.json"), TestType::class),
+            "dnssec-unsigned" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/dnssec-unsigned.json"), TestType::class),
+            "dnssec-unvalidated" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/dnssec-unvalidated.json"), TestType::class),
             "ipv6" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/ipv6.json"), TestType::class),
             "qname-minimisation" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/qname-minimisation.json"), TestType::class),
             "minimum-ttl" => $this->jsonToObjectConverter->convert(file_get_contents(__DIR__ . "/../../../src/Config/templates/test-type/minimum-ttl.json"), TestType::class),

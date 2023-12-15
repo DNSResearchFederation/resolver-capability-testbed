@@ -1,6 +1,6 @@
 {
   "type": "qname-minimisation",
-  "description": "Test QName Minimisation",
+  "description": "Test whether resolvers are QName minimising for a defined subdomain",
   "config": {
     "dnsZone": {
       "records": [

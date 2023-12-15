@@ -1,6 +1,6 @@
 {
   "type": "ipv6",
-  "description": "IPv6 Records Defined Only for domain name",
+  "description": "Test whether resolvers lookup records for a nameserver which only has IPv6 addresses assigned for routing",
   "config": {
     "dnsZones": [
       {

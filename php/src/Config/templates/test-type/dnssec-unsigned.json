@@ -1,6 +1,6 @@
 {
-  "type": "dnssec",
-  "description": "Test whether resolvers resolve records when a zone is signed using DNSSEC and validated with DS records at the Registrar",
+  "type": "dnssec-unsigned",
+  "description": "Test whether resolvers resolve records when a zone is not signed using DNSSEC but is validated with DS records at the Registrar",
   "parameters": [
     {
       "identifier": "ALGORITHM"
@@ -15,7 +15,8 @@
       {
         "dnsSecConfig": {
           "algorithm": "ALGORITHM",
-          "keyStrength": "KEYSTRENGTH"
+          "keyStrength": "KEYSTRENGTH",
+          "signZone": false
         },
         "records": [
           {

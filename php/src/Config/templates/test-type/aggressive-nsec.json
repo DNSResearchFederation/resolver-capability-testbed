@@ -1,6 +1,6 @@
 {
   "type": "aggressive-nsec",
-  "description": "Test NSEC is acknowledged",
+  "description": "Test whether resolvers observe NSEC record responses such that a request for two consecutive records results in no further request for one in the middle.",
   "config": {
     "dnsZone": {
       "dnsSecConfig": {
@@ -9,13 +9,13 @@
       "records": [
         {
           "prefix": "apples",
-          "ttl": 1,
+          "ttl": 10,
           "type": "A",
           "data": "IPV4_ADDRESS"
         },
         {
           "prefix": "pears",
-          "ttl": 1,
+          "ttl": 10,
           "type": "A",
           "data": "IPV4_ADDRESS"
         }

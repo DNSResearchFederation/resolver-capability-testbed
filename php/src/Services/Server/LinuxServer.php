@@ -171,7 +171,7 @@ class LinuxServer implements Server {
             $dnsSECDir = Configuration::readParameter("server.bind.config.dir") . "/dnssec/" . $domainName;
             passthru($this->sudoPrefix . " mkdir -m 777 -p " . $dnsSECDir);
 
-            $keyGenArgs = " -L 3600 -a " . $dnssecConfig->getAlgorithmKey();
+            $keyGenArgs = " -L {$dnssecConfig->getTtl()} -a " . $dnssecConfig->getAlgorithmKey();
 
             // Add strength if supplied
             $keyStrength = $dnssecConfig->getKeyStrength();
@@ -422,7 +422,7 @@ class LinuxServer implements Server {
 
         // Build the sign zone command
         $signZoneCommand = Configuration::readParameter("server.dnssec.signzone.command") . " -K " . $dnsSECDir . " -d " . $dnsSECDir;
-        $signZoneCommand .= " -N INCREMENT -o " . $domainName . ($dnsSecConfig->isNsec3() ? " -3 -" : "") . " " . $configDir . "/$domainName.conf";
+        $signZoneCommand .= " -T {$dnsSecConfig->getTtl()} -N INCREMENT -o " . $domainName . ($dnsSecConfig->isNsec3() ? " -3 -" : "") . " " . $configDir . "/$domainName.conf";
 
         passthru($this->sudoPrefix . " " . $signZoneCommand);
 

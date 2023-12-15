@@ -30,6 +30,12 @@ class DNSSECConfig {
      */
     private $keyStrength;
 
+
+    /**
+     * @var integer
+     */
+    private $ttl;
+
     /**
      * @var bool
      */
@@ -54,12 +60,13 @@ class DNSSECConfig {
      * @param bool $generateDSRecords
      * @param bool $nsec3
      */
-    public function __construct($algorithm, $keyStrength = null, $signZone = true, $generateDSRecords = true, $nsec3 = true) {
+    public function __construct($algorithm, $keyStrength = null, $signZone = true, $generateDSRecords = true, $nsec3 = true, $ttl = 600) {
         $this->algorithm = $algorithm;
         $this->keyStrength = $keyStrength;
         $this->signZone = $signZone;
         $this->generateDSRecords = $generateDSRecords;
         $this->nsec3 = $nsec3;
+        $this->ttl = $ttl;
     }
 
     /**
@@ -97,6 +104,21 @@ class DNSSECConfig {
     public function setKeyStrength($keyStrength): void {
         $this->keyStrength = $keyStrength;
     }
+
+    /**
+     * @return int
+     */
+    public function getTtl(): int {
+        return $this->ttl;
+    }
+
+    /**
+     * @param int $ttl
+     */
+    public function setTtl(int $ttl): void {
+        $this->ttl = $ttl;
+    }
+
 
     /**
      * @return bool

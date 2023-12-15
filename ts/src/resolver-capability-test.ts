@@ -13,7 +13,9 @@ export default class ResolverCapabilityTest {
         "ipv6": new Ipv6HostQueryTestRunner(),
         "qname-minimisation": new SingleHostQueryTestRunner(1, "qname.resolver.capability"),
         "minimum-ttl": new TtlTestRunner(),
-        "dnssec": new DNSSECHostQueryTestRunner(),
+        "dnssec": new SingleHostQueryTestRunner(1),
+        "dnssec-unsigned": new SingleHostQueryTestRunner(1),
+        "dnssec-unvalidated": new SingleHostQueryTestRunner(1),
         "tcp-fallback": new SingleHostQueryTestRunner(1, "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab"),
         "aggressive-nsec": new NSECHostQueryTestRunner()
     };

@@ -1,26 +1,37 @@
 {
   "type": "tcp-fallback",
-  "description": "UDP falls back to TCP for large responses",
+  "description": "Test whether resolvers are falling back to TCP for large responses returned over UDP - where TC=1 is returned by nameserver",
   "config": {
     "dnsZone": {
+      "dnsSecConfig": {
+        "algorithm": "8",
+        "keyStrength": "4096",
+        "generateDSRecords": false
+      },
       "records": [
         {
           "prefix": "*.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab",
           "ttl": 10,
+          "type": "CNAME",
+          "data": "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dac.DOMAIN_NAME"
+        },
+        {
+          "prefix": "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dac",
+          "ttl": 10,
+          "type": "CNAME",
+          "data": "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dad.DOMAIN_NAME"
+        },
+        {
+          "prefix": "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dad",
+          "ttl": 10,
+          "type": "CNAME",
+          "data": "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dae.DOMAIN_NAME"
+        },
+        {
+          "prefix": "b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dae",
+          "ttl": 10,
           "type": "A",
           "data": "IPV4_ADDRESS"
-        },
-        {
-          "prefix": "*.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab",
-          "ttl": 10,
-          "type": "A",
-          "data": "10.0.0.1"
-        },
-        {
-          "prefix": "*.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab.b9599170-17cc-46ab-b01c-67c2731f8dab",
-          "ttl": 10,
-          "type": "A",
-          "data": "10.0.0.2"
         }
       ]
     },
@@ -45,6 +56,10 @@
         }
       ]
     },
+    "webserver": {
+      "expectedQueries": 1
+    },
+    "webserverOptional": false,
     "relationalKey": "HOSTNAME",
     "timeoutSeconds": 15
   }
