@@ -1,11 +1,8 @@
 <?php
 
 
-use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Testing\MockObjectProvider;
-use Kinikit\Persistence\Database\Exception\SQLException;
-use Kinikit\Persistence\Database\Vendors\SQLite3\SQLite3DatabaseConnection;
 use Kinikit\Persistence\Tools\TestDataInstaller;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Services\Server\Server;

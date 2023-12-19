@@ -7,14 +7,13 @@ use Kinikit\Core\DependencyInjection\Container;
 use Kinikit\Core\Serialisation\JSON\ObjectToJSONConverter;
 use Kinikit\Core\Testing\MockObject;
 use Kinikit\Core\Testing\MockObjectProvider;
-use PHPUnit\Framework\TestCase;
 use ResolverTest\Commands\TestUpdateCommand;
 use ResolverTest\Exception\InvalidTestKeyException;
 use ResolverTest\Objects\Test\Test;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
-use TestBase;
 use ResolverTest\ValueObjects\TestType\TestType;
+use TestBase;
 
 include_once "autoloader.php";
 
