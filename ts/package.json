@@ -1,7 +1,7 @@
 {
-  "name": "resolver-capability-test",
+  "name": "resolver-capability-testbed",
   "description": "Open source resolver capability testing framework client side website toolkit",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "DNS Research Federation",
   "url": "https://github.com/DNSResearchFederation/resolvertest",
   "files": [

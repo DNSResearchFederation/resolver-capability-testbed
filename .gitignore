@@ -5,7 +5,6 @@ php/composer.lock
 ssh
 php/src/DB
 php/test/Storage/logs/*.db
-ts/dist
 ts/node_modules
 php/test/Storage/db.log
 ts/package-lock.json
