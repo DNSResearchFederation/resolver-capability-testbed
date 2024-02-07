@@ -6,8 +6,8 @@ use ResolverTest\Exception\InvalidDateFormatException;
 use ResolverTest\Exception\InvalidTestTypeException;
 use ResolverTest\Exception\NotEnoughTestParametersException;
 use ResolverTest\Exception\StartAfterExpiryException;
-use TestBase;
 use ResolverTest\Objects\Test\Test;
+use TestBase;
 
 include_once "autoloader.php";
 

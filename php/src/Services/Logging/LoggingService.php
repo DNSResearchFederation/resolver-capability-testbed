@@ -6,7 +6,6 @@ use DateInterval;
 use Kinikit\Core\Configuration\Configuration;
 use Kinikit\Core\Configuration\FileResolver;
 use Kinikit\Core\DependencyInjection\Container;
-use Kinikit\Core\Logging\Logger;
 use Kinikit\Core\Reflection\ClassInspectorProvider;
 use Kinikit\Persistence\Database\Generator\TableDDLGenerator;
 use Kinikit\Persistence\Database\ResultSet\ResultSet;

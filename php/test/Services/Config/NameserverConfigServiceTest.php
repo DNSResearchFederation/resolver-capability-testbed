@@ -2,7 +2,6 @@
 
 namespace Services\Config;
 
-use Kinikit\Core\Configuration\Configuration;
 use PHPUnit\Framework\TestCase;
 use ResolverTest\Services\Config\NameserverConfigService;
 

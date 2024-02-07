@@ -16,12 +16,12 @@ use ResolverTest\Services\Logging\LoggingService;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\Services\TestService;
 use ResolverTest\Services\TestType\TestTypeManager;
-use TestBase;
 use ResolverTest\ValueObjects\TestType\TestType;
 use ResolverTest\ValueObjects\TestType\TestTypeDNSRules;
 use ResolverTest\ValueObjects\TestType\TestTypeExpectedQuery;
 use ResolverTest\ValueObjects\TestType\TestTypeRules;
 use ResolverTest\ValueObjects\TestType\TestTypeWebServerRules;
+use TestBase;
 
 include_once "autoloader.php";
 

@@ -14,7 +14,6 @@ use ResolverTest\Services\Config\GlobalConfigService;
 use ResolverTest\Services\Server\LinuxServer;
 use ResolverTest\Services\Server\Server;
 use ResolverTest\ValueObjects\TestType\Config\DNSRecord;
-use ResolverTest\ValueObjects\TestType\Config\DNSSECAlgorithmEnum;
 use ResolverTest\ValueObjects\TestType\Config\DNSSECConfig;
 use ResolverTest\ValueObjects\TestType\Config\DNSZone;
 use ResolverTest\ValueObjects\TestType\Config\WebServerVirtualHost;
