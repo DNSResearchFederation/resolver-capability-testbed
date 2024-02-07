@@ -42,7 +42,12 @@
       "expectedQueries": [
         {
           "type": "A",
-          "value": "(?i)^[a-z0-9-]{36}\\.[a-z]+\\.[a-z]+"
+          "value": "(?i)^[a-z0-9-]{36}\\.[a-z]+\\.[a-z]+",
+          "anchor": true
+        },
+        {
+          "type": "DNSKEY",
+          "value": "(?i)^[a-z]+\\.[a-z]+"
         }
       ]
     },
@@ -50,7 +55,7 @@
       "expectedQueries": 1
     },
     "webserverOptional": false,
-    "relationalKey": "HOSTNAME",
+    "relationalKey": "IPADDRESS",
     "timeoutSeconds": 3
   }
 }

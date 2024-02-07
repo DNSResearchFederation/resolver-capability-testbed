@@ -48,7 +48,7 @@
       ]
     },
     "webserver": {
-      "expectedQueries": 1
+      "expectedQueries": 0
     },
     "webserverOptional": false,
     "relationalKey": "HOSTNAME",
