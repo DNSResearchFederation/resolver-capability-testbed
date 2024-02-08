@@ -30,10 +30,24 @@ describe("Test entry point", function () {
     it("Should be able to run the correct test type for DNSSEC", () => {
 
         let resolverCapTest = new ResolverCapabilityTest("dnssec", "test.com", [], null);
-        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests().length).toEqual(3);
+        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests().length).toEqual(1);
         expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests()[0].hostname).toContain("test.com");
-        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests()[1].hostname).toContain("unsigned-test.com")
-        expect(resolverCapTest.installedTestTypeRunners["dnssec"].getPreviousRequests()[2].hostname).toContain("unvalidated-test.com")
+
+    });
+
+    it("Should be able to run the correct test type for DNSSEC Unsigned", () => {
+
+        let resolverCapTest = new ResolverCapabilityTest("dnssec-unsigned", "test.com", [], null);
+        expect(resolverCapTest.installedTestTypeRunners["dnssec-unsigned"].getPreviousRequests().length).toEqual(1);
+        expect(resolverCapTest.installedTestTypeRunners["dnssec-unsigned"].getPreviousRequests()[0].hostname).toContain("test.com");
+
+    });
+
+    it("Should be able to run the correct test type for DNSSEC Unvalidated", () => {
+
+        let resolverCapTest = new ResolverCapabilityTest("dnssec-unvalidated", "test.com", [], null);
+        expect(resolverCapTest.installedTestTypeRunners["dnssec-unvalidated"].getPreviousRequests().length).toEqual(1);
+        expect(resolverCapTest.installedTestTypeRunners["dnssec-unvalidated"].getPreviousRequests()[0].hostname).toContain("test.com");
 
     });
 
