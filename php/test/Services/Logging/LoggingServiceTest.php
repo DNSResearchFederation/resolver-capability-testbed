@@ -52,18 +52,12 @@ class LoggingServiceTest extends TestBase {
      */
     private $configService;
 
-    /**
-     * @var ObjectBinder
-     */
-    private $objectBinder;
-
     public function setUp(): void {
         $this->server = MockObjectProvider::instance()->getMockInstance(Server::class);
         $this->testService = MockObjectProvider::instance()->getMockInstance(TestService::class);
         $this->testTypeManager = MockObjectProvider::instance()->getMockInstance(TestTypeManager::class);
         $this->configService = MockObjectProvider::instance()->getMockInstance(GlobalConfigService::class);
         $this->loggingService = new LoggingService($this->server, $this->testService, $this->testTypeManager, $this->configService);
-        $this->objectBinder = Container::instance()->get(ObjectBinder::class);
     }
 
     public function testCanCreateLoggingDatabasesForGivenTest() {
@@ -337,11 +331,12 @@ class LoggingServiceTest extends TestBase {
             new NameserverLog("16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com", $fiveSecAgo, "192.0.2.0", 22813, "AAAA IN 16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com", "AAAA", ""),  // A - other expected query
             new NameserverLog("16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com", $tenSecAgo, "192.0.2.1", 22814, "A IN 16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com", "A", ""),         // B - same as A, but different IP
             new NameserverLog("16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com", $fiveSecAgo, "192.0.2.1", 22814, "AAAA IN 16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com", "AAAA", ""),  // B - same as A, but different IP
-            new NameserverLog("08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", $tenSecAgo, "192.0.2.8", 22815, "A IN 08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", "A", ""),        // C - timed out, expected query
+            new NameserverLog("08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", $tenSecAgo, "192.0.2.8", 22815, "A IN 08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", "A", ""),         // C - timed out, expected query
             new NameserverLog("08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", $twoSecAgo, "192.0.2.8", 22815, "A IN 08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", "A", ""),         // C - should be absent
             new NameserverLog("08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", $oneSecAgo, "192.0.2.8", 22815, "AAAA IN 08dd00f2-7ead-474d-9008-aca9c51d4071.test.com", "AAAA", ""),   // C - expected query
             new NameserverLog("9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com", $tenSecAgo, "192.0.2.10", 22816, "A IN 9a2cb532-f7e6-443a-b8f3-e9c688bc090b.test.com", "A", ""),        // D - timed out, expected query
             new NameserverLog("8e1e4931-173c-4e3e-987e-4f893fb4b982.test.com", $oneSecAgo, "192.0.2.12", 22817, "A IN 8e1e4931-173c-4e3e-987e-4f893fb4b982.test.com", "A", ""),        // E - not yet timed out
+            new NameserverLog("blahBlahBlah.test.com", $fiveSecAgo, "192.0.2.0", 22813, "A IN blahBlahBlah.test.com", "A", ""),                                                        // spurious entry without UUID
         ];
 
         $webServerLogs = [
@@ -378,8 +373,10 @@ class LoggingServiceTest extends TestBase {
         }
         $this->loggingService->compareLogsForTest($test);
 
+        // Get output and confirm is as expected
         $outputLogs = $connection->query("SELECT * FROM combined_log;");
 
+        $firstRow = $outputLogs->nextRow();
         $this->assertEquals([
             'id' => 1,
             'date' => $now,
@@ -400,7 +397,7 @@ class LoggingServiceTest extends TestBase {
             'webServerRequestHostname1' => '16ba5fa0-7ffd-499a-9832-9770f80e4c30.test.com',
             'webServerClientIpAddress1' => '192.0.2.200',
             'webServerResponseCode1' => 200
-        ], $outputLogs->nextRow());
+        ], $firstRow);
 
         $nextRow = $outputLogs->nextRow();
 
@@ -470,6 +467,7 @@ class LoggingServiceTest extends TestBase {
         $twoSecAgo = date_create()->sub(new \DateInterval("PT2S"));
         $fiveSecAgo = date_create()->sub(new \DateInterval("PT5S"));
         $tenSecAgo = date_create()->sub(new \DateInterval("PT10S"));
+        $fiveDaysAgo = date_create()->sub(new \DateInterval("P5D"));
 
         // Create test data
         $nameServerLogs = [
@@ -483,7 +481,12 @@ class LoggingServiceTest extends TestBase {
             new NameserverLog("this.test.com", $tenSecAgo, "192.0.2.10", 22816, "A IN this.test.com", "A", ""),        // D - timed out, expected query
             new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.12", 22817, "A IN this.test.com", "A", ""),        // E - not yet timed out
             new NameserverLog("this.test.com", $oneSecAgo, "192.0.2.0", 22817, "A IN this.test.com", "A", ""),         // F - same as A
-            new NameserverLog("that.test.com", $oneSecAgo, "192.0.2.0", 22817, "AAAA IN this.test.com", "AAAA", "")    // F - same as A
+            new NameserverLog("that.test.com", $oneSecAgo, "192.0.2.0", 22817, "AAAA IN this.test.com", "AAAA", ""),   // F - same as A
+            new NameserverLog("this.test.com", $fiveDaysAgo, "192.0.2.0", 22813, "A IN this.test.com", "A", ""),       // repetition
+            new NameserverLog("that.test.com", $fiveDaysAgo, "192.0.2.0", 22813, "AAAA IN that.test.com", "AAAA", ""), // repetition
+            new NameserverLog("bleh.test.com", $tenSecAgo, "192.0.2.1", 22814, "A IN bleh.test.com", "A", ""),         // recent nonsense
+            new NameserverLog("blah.test.com", $fiveDaysAgo, "192.0.2.1", 22814, "AAAA IN blah.test.com", "AAAA", ""), // old nonsense
+            new NameserverLog("this.test.com", $fiveDaysAgo, "192.0.2.8", 22815, "A IN this.test.com", "A", "")        // repetition
         ];
 
         $webServerLogs = [

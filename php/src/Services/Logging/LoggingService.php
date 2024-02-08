@@ -207,30 +207,38 @@ class LoggingService {
      */
     public function compareLogsForTest($test) {
 
+        // Establish a DB connection
         $connection = new SQLite3DatabaseConnection([
             "filename" => Configuration::readParameter("storage.root") . "/logs/{$test->getKey()}.db"
         ]);
 
+        // Get required values
         $testType = $this->testTypeManager->getTestTypeForTest($test);
         $expectedNSQueries = sizeof($testType->getRules()->getDns()->getExpectedQueries());
         $timeoutSeconds = $testType->getRules()->getTimeoutSeconds();
         $pointOfQuery = date_create();
 
+        // Do log analysis based on whether logs are matched by hostname (UUID) or ip address
         switch ($testType->getRules()->getRelationalKey()) {
             case TestTypeRules::RELATIONAL_KEY_HOSTNAME:
 
+                // Get all unique recent theorised UUIDs to begin matching process
+                // Within past 2mins since this is run once per minute
+                // We ensure they are of UUID form later
                 $twoMinsAgo = date_create()->sub(new DateInterval("PT2M"))->format("Y-m-d H:i:s");
-                $uniqueUUIDS = $connection->query("SELECT DISTINCT SUBSTR(hostname, 0, 37) `uuid` FROM nameserver_queue WHERE `date` > '{$twoMinsAgo}';")->fetchAll();
+                $uuidAndIpPairs = $connection->query("SELECT DISTINCT SUBSTR(hostname, 0, 37) `uuid`, ip_address FROM nameserver_queue WHERE `date` > '{$twoMinsAgo}';")->fetchAll();
 
-                foreach ($uniqueUUIDS as $UUID) {
-                    $UUID = $UUID["uuid"];
+                // Iterate through potential new entries
+                foreach ($uuidAndIpPairs as $pair) {
+                    $UUID = $pair["uuid"];
+                    $ipAddress = $pair["ip_address"];
 
-                    // Ensure it is of correct UUID format
+                    // Ensure it is of the correct UUID form
                     if (!preg_match("/(?i)^[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/", $UUID)) {
                         continue;
                     }
 
-                    // Has it been dealt with?
+                    // Has it already been dealt with? ie. does it appear in any previous entry
                     for ($i = 1; $i < $expectedNSQueries + 1; $i++) {
                         if ($connection->query("SELECT * FROM combined_log WHERE `dnsResolvedHostname$i` LIKE '$UUID%'")->fetchAll()) {
                             continue 2;
@@ -238,7 +246,7 @@ class LoggingService {
                     }
 
                     // Get the matching logs
-                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE `hostname` LIKE '$UUID%' ORDER BY `date`")->fetchAll();
+                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE `hostname` LIKE '$UUID%' AND `ip_address` = '$ipAddress' ORDER BY `date`")->fetchAll();
 
                     // Check if not timed out
                     if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
@@ -274,7 +282,15 @@ class LoggingService {
                 break;
 
             case TestTypeRules::RELATIONAL_KEY_IP_ADDRESS:
+                // We already know the nameserver logs have the correct domain name
+                // However, they may not be relevant
+                // We get all resolver ip addresses which have queried domain in the last 2mins
+                // For each ip address, we get all other queries from it, within the test's timeout time
+                // Then, we see if there exists a set which satisfy the expected queries, in expected order
+                // These are then logged to the combined table
 
+                // Get all unique recent theorised UUIDs to begin matching process
+                // Within past 2mins since this is run once per minute
                 $oneMinAgo = date_create()->sub(new DateInterval("PT1M"))->format("Y-m-d H:i:s");
                 $twoMinsAgo = date_create()->sub(new DateInterval("PT2M"))->format("Y-m-d H:i:s");
                 $uniqueIPs = $connection->query("SELECT DISTINCT ip_address FROM nameserver_queue WHERE `date` > '{$twoMinsAgo}';")->fetchAll();
@@ -282,17 +298,18 @@ class LoggingService {
                 foreach ($uniqueIPs as $ipAddress) {
                     $ipAddress = $ipAddress["ip_address"];
 
-                    // Has it been dealt with?
+                    // Has it already been dealt with? ie. does it appear in any previous entry in the past minute
+                    // Important: Can lead to dupes - may restrict time
                     for ($i = 1; $i < $expectedNSQueries + 1; $i++) {
-                        if ($connection->query("SELECT * FROM combined_log WHERE `dnsClientIpAddress$i` = '$ipAddress' AND 'date' > '$oneMinAgo'")->fetchAll()) {
+                        if ($connection->query("SELECT * FROM combined_log WHERE `dnsClientIpAddress$i` = '$ipAddress' AND `date` > '$oneMinAgo';")->fetchAll()) {
                             continue 2;
                         }
                     }
 
-                    // Get the matching logs
-                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE ip_address = '$ipAddress' AND 'date' > '$oneMinAgo' ORDER BY `date`")->fetchAll();
+                    // Get the matching logs in chronological order (oldest first)
+                    $matchingLogs = $connection->query("SELECT * FROM nameserver_queue WHERE ip_address = '$ipAddress' AND `date` > '$oneMinAgo' ORDER BY `date`;")->fetchAll();
 
-                    // Check if not timed out
+                    // Check if the most recent entry
                     if (date_create($matchingLogs[0]["date"])->add(new DateInterval("PT{$timeoutSeconds}S")) > $pointOfQuery) {
                         continue;
                     }
@@ -361,7 +378,7 @@ class LoggingService {
             }
 
             if ($expectedQuery->isAnchor() && !$matched) {
-                return [null,null,true];
+                return [null, null, true];
             }
 
             if (!$matched && !$expectedQuery->isAbsent()) {
