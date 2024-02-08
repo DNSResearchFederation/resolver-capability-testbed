@@ -90,7 +90,8 @@ class LoggingService {
             }
 
             if ($rules->getWebserver()) {
-                for ($i = 1; $i <= $rules->getWebserver()->getExpectedQueries(); $i++) {
+                $webserverRules = $rules->getWebserver()->getExpectedQueries() ?: 1;
+                for ($i = 1; $i <= $webserverRules; $i++) {
                     $columnsClause .= ", webServerRequestTime$i INT, webServerRequestHostname$i VARCHAR(255), webServerClientIpAddress$i VARCHAR(255), webServerResponseCode$i INT";
                 }
             }
@@ -322,9 +323,24 @@ class LoggingService {
                         continue;
                     }
 
-                    $status = $validation[1] ? "Success" : "Failed";
+                    $dnsPassed = $validation[1];
 
-                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), [], $validation[0], $status);
+
+                    // Do webserver log validation if required
+                    if ($testType->getRules()->getWebserver()) {
+
+                        // Get relevant logs
+                        $webserverLogs = $connection->query("SELECT * FROM webserver_queue WHERE `date` > '{$twoMinsAgo}';")->fetchAll();
+                        $webserverPassed = $testType->getRules()->isWebserverOptional() || $this->validateWebserverLogs($webserverLogs, $testType->getRules()->getWebserver());
+
+                    } else {
+                        $webserverLogs = [];
+                        $webserverPassed = true;
+                    }
+
+                    $status = $dnsPassed && $webserverPassed ? "Success" : "Failed";
+
+                    $this->writeCombinedLog($connection, $test->getKey(), $testType->getType(), $webserverLogs, $validation[0], $status);
                 }
                 break;
 
